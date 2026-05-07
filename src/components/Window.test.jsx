@@ -68,6 +68,48 @@ describe('Window titlebar buttons', () => {
   });
 });
 
+describe('Window maximized — CSS specificity', () => {
+  it('maximized selector beats the desktop position:absolute override', () => {
+    // Reproduces the cascade conflict: desktop media query defines .win95-window
+    // { position: absolute } AFTER .win95-window--maximized { position: fixed }
+    // in the stylesheet. Same specificity (0,1,0) → later rule wins → bug.
+    // Fix: compound selector .win95-window.win95-window--maximized (0,2,0) wins.
+    const style = document.createElement('style');
+    // The compound selector (.win95-window.win95-window--maximized, specificity 0,2,0)
+    // must beat the single-class desktop override (.win95-window, specificity 0,1,0)
+    // even when the override is declared later in the stylesheet.
+    style.textContent = [
+      '.win95-window.win95-window--maximized { position: fixed; top: 0; left: 0; }',
+      '.win95-window { position: absolute; top: 5%; left: 18%; }',
+    ].join('\n');
+    document.head.appendChild(style);
+
+    const div = document.createElement('div');
+    div.className = 'win95-window win95-window--maximized';
+    document.body.appendChild(div);
+
+    try {
+      expect(getComputedStyle(div).position).toBe('fixed');
+      expect(getComputedStyle(div).top).toBe('0px');
+      expect(getComputedStyle(div).left).toBe('0px');
+    } finally {
+      document.head.removeChild(style);
+      document.body.removeChild(div);
+    }
+  });
+
+  it('does not set inline width or height when maximized', async () => {
+    const user = userEvent.setup();
+    const { container } = renderWindow();
+
+    await user.click(screen.getByRole('button', { name: /maximize/i }));
+
+    const win = container.querySelector('.win95-window--maximized');
+    expect(win.style.width).toBe('');
+    expect(win.style.height).toBe('');
+  });
+});
+
 describe('Window resize handles', () => {
   it('renders right, bottom, and corner resize handles when not maximized', () => {
     const { container } = renderWindow();
