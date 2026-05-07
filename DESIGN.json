@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-01T00:00:00.000Z",
+  "title": "Design System: Isli Basha — Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "sky-top":        { "role": "neutral",   "displayName": "Bootup Horizon (top)",  "canonical": "#d6eaf8", "tonalRamp": ["#0a1520", "#1a2d40", "#2e4a65", "#446a8a", "#6090b0", "#91b8d4", "#b8d8ee", "#d6eaf8", "#edf5fc"] },
+      "sky-bottom":     { "role": "neutral",   "displayName": "Bootup Horizon (btm)",  "canonical": "#aed6f1", "tonalRamp": ["#081520", "#162a3e", "#274860", "#3d6a8a", "#5a8dac", "#7eb0cc", "#9dcae4", "#aed6f1", "#cee8f8"] },
+      "chrome":         { "role": "neutral",   "displayName": "POST Gray",             "canonical": "#c0c0c0", "tonalRamp": ["#1a1a1a", "#303030", "#4a4a4a", "#666666", "#808080", "#9a9a9a", "#b4b4b4", "#c0c0c0", "#dfdfdf"] },
+      "chrome-dark":    { "role": "neutral",   "displayName": "Chrome Dark",           "canonical": "#808080", "tonalRamp": ["#101010", "#222222", "#383838", "#505050", "#686868", "#808080", "#9a9a9a", "#b6b6b6", "#d0d0d0"] },
+      "chrome-darker":  { "role": "neutral",   "displayName": "Chrome Darker",         "canonical": "#404040", "tonalRamp": ["#0a0a0a", "#181818", "#282828", "#383838", "#404040", "#585858", "#707070", "#909090", "#b8b8b8"] },
+      "chrome-light":   { "role": "neutral",   "displayName": "Chrome Light",          "canonical": "#dfdfdf", "tonalRamp": ["#202020", "#383838", "#505050", "#6c6c6c", "#888888", "#a4a4a4", "#c0c0c0", "#d6d6d6", "#dfdfdf"] },
+      "chrome-lighter": { "role": "neutral",   "displayName": "Chrome Lighter",        "canonical": "#ececec", "tonalRamp": ["#242424", "#3c3c3c", "#555555", "#707070", "#8c8c8c", "#a8a8a8", "#c4c4c4", "#d8d8d8", "#ececec"] },
+      "titlebar-from":  { "role": "primary",   "displayName": "Active Window Navy",    "canonical": "#000080", "tonalRamp": ["#000010", "#000028", "#000040", "#000060", "#000080", "#1010a0", "#2828c0", "#5050d0", "#8888e0"] },
+      "titlebar-to":    { "role": "primary",   "displayName": "Active Window Azure",   "canonical": "#1084d0", "tonalRamp": ["#001428", "#002244", "#003a6a", "#005294", "#1068b0", "#1084d0", "#28a0e8", "#60c0f0", "#a0dcf8"] },
+      "accent":         { "role": "primary",   "displayName": "Accent Link Blue",      "canonical": "#1a73e8", "tonalRamp": ["#041428", "#082244", "#0c3870", "#1050a0", "#1a73e8", "#4090f0", "#70b0f8", "#a0ccfc", "#cce4ff"] },
+      "ink":            { "role": "neutral",   "displayName": "Ink",                   "canonical": "#1a1a2e", "tonalRamp": ["#0a0a10", "#111120", "#1a1a2e", "#28283e", "#404060", "#606090", "#8888b0", "#b0b0cc", "#d8d8e8"] },
+      "win-bg":         { "role": "neutral",   "displayName": "Win Background",        "canonical": "#fdfdfd", "tonalRamp": ["#181818", "#303030", "#484848", "#646464", "#828282", "#a0a0a0", "#c8c8c8", "#e4e4e4", "#fdfdfd"] },
+      "memo-canary":    { "role": "tertiary",  "displayName": "Memo Canary",           "canonical": "#fff9c4", "tonalRamp": ["#281e00", "#403200", "#604c00", "#887000", "#b09400", "#d0b800", "#ecdg60", "#f8f0a0", "#fff9c4"] },
+      "phosphor-green": { "role": "secondary", "displayName": "Phosphor Green",        "canonical": "#33ff33", "tonalRamp": ["#002800", "#004800", "#006000", "#008800", "#00b800", "#1ce81c", "#33ff33", "#80ff80", "#c0ffc0"] },
+      "term-bg":        { "role": "neutral",   "displayName": "Terminal Black",        "canonical": "#0c0c0c", "tonalRamp": ["#0c0c0c", "#141414", "#202020", "#303030", "#404040", "#585858", "#707070", "#909090", "#b4b4b4"] },
+      "panic-blue":     { "role": "tertiary",  "displayName": "Panic Blue",            "canonical": "#0000aa", "tonalRamp": ["#00000c", "#000022", "#000044", "#000066", "#000088", "#0000aa", "#1a1ac0", "#4040d0", "#8080e0"] }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display",  "purpose": "Boot splash brand text only. Never used in the running UI." },
+      "headline": { "displayName": "Headline", "purpose": "Window section headings, project card names. OS-register content identifiers." },
+      "title":    { "displayName": "Title",    "purpose": "Titlebar labels, taskbar items, clock, start menu. System chrome only." },
+      "body":     { "displayName": "Body",     "purpose": "Human-facing content — about copy, contact items. Sans register." },
+      "label":    { "displayName": "Label",    "purpose": "Stack chips, captions, terminal lines, form labels. Smallest system text." }
+    },
+    "shadows": [
+      {
+        "name": "bevel-out",
+        "value": "border: 1px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #404040; border-bottom-color: #404040; box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080",
+        "purpose": "Default raised state for windows, buttons, taskbar, start menu."
+      },
+      {
+        "name": "bevel-in",
+        "value": "border: 1px solid; border-top-color: #808080; border-left-color: #808080; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf",
+        "purpose": "Pressed or sunken state for active buttons, inputs, content areas, project cards on hover."
+      },
+      {
+        "name": "win-drop",
+        "value": "4px 4px 0px rgba(0,0,0,0.18)",
+        "purpose": "Window frames and dialogs. Pixel-offset, zero blur — maintains the hardware aesthetic."
+      },
+      {
+        "name": "sticky-note",
+        "value": "2px 3px 0 rgba(0,0,0,0.12), 5px 8px 12px rgba(0,0,0,0.1)",
+        "purpose": "The sticky note only. The sole ambient shadow in the system."
+      }
+    ],
+    "motion": [
+      { "name": "win-boot",      "value": "cubic-bezier(0.2, 0.8, 0.25, 1) 300ms",  "purpose": "Window entry — scales from 0.92 to 1. Decisive, no ease-in." },
+      { "name": "taskbar-land",  "value": "cubic-bezier(0.25, 1.2, 0.5, 1) 220ms",  "purpose": "Taskbar entry when window opens. Subtle overshoot." },
+      { "name": "start-up",      "value": "ease-out 140ms",                          "purpose": "Start menu fly-up. Fast, no drama." },
+      { "name": "overlay-fade",  "value": "ease-out 120ms",                          "purpose": "Dialog overlay fade-in." },
+      { "name": "cursor-blink",  "value": "steps(1) 1s infinite",                   "purpose": "Terminal cursor. Hard step — no crossfade." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "0px",    "purpose": "Stacked layout, no tilt, no absolute positioning." },
+      { "name": "desktop","value": "1024px", "purpose": "OS shell mode: locked viewport, absolutely-positioned windows, internal window scrolling." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Win95 Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Mechanical push-button with bevel-out chrome. Presses in on active with a 1px padding shift — no transition.",
+      "html": "<button class=\"ds-win-btn\">Send Message</button>",
+      "css": ".ds-win-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 70px; padding: 4px 12px; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 0.875rem; color: #1a1a2e; background: #c0c0c0; border: 1px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #404040; border-bottom-color: #404040; box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080; cursor: pointer; } .ds-win-btn:hover { background: #dfdfdf; } .ds-win-btn:active { padding: 5px 11px 3px 13px; border-top-color: #404040; border-left-color: #404040; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #dfdfdf; } .ds-win-btn:focus-visible { outline: 1px dotted #000080; outline-offset: -3px; }"
+    },
+    {
+      "name": "Win95 Input Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Sunken input well. Bevel-in border signals receptacle. Dotted focus ring in titlebar navy.",
+      "html": "<input class=\"ds-win-field\" type=\"text\" placeholder=\"Type here…\" />",
+      "css": ".ds-win-field { width: 100%; padding: 4px 6px; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 0.875rem; color: #1a1a2e; background: #fdfdfd; border: 1px solid; border-top-color: #808080; border-left-color: #808080; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf; outline: none; } .ds-win-field:focus-visible { outline: 1px dotted #000080; outline-offset: -3px; }"
+    },
+    {
+      "name": "Win95 Window",
+      "kind": "custom",
+      "refersTo": "button-primary",
+      "description": "The signature component. Draggable window frame with navy titlebar gradient, bevel-out chrome, and win drop shadow.",
+      "html": "<div class=\"ds-win95-window\"><div class=\"ds-win95-titlebar\"><span class=\"ds-win95-title\">about.txt</span><div class=\"ds-win95-btns\"><button class=\"ds-titlebar-btn\">_</button><button class=\"ds-titlebar-btn\">□</button><button class=\"ds-titlebar-btn ds-titlebar-btn--close\">✕</button></div></div><div class=\"ds-win95-content\"><p style=\"margin:0;font-size:0.9375rem;line-height:1.55;color:#1a1a2e;font-family:'IBM Plex Sans',sans-serif\">I build software end-to-end — from the database schema up to the pixel on screen.</p></div></div>",
+      "css": ".ds-win95-window { background: #c0c0c0; border: 1px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #404040; border-bottom-color: #404040; box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080, 4px 4px 0 rgba(0,0,0,0.18); display: flex; flex-direction: column; width: 320px; } .ds-win95-titlebar { display: flex; align-items: center; gap: 0.5rem; padding: 2px 2px 2px 6px; margin: 2px; background: linear-gradient(90deg, #000080 0%, #1084d0 100%); color: #ffffff; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 0.8125rem; letter-spacing: 0.02em; } .ds-win95-title { flex: 1; } .ds-win95-btns { display: flex; gap: 2px; } .ds-titlebar-btn { width: 14px; height: 14px; padding: 0; display: grid; place-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #1a1a2e; background: #c0c0c0; border: 1px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #404040; border-bottom-color: #404040; box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080; cursor: pointer; font-weight: 700; } .ds-titlebar-btn:hover { background: #dfdfdf; } .ds-titlebar-btn--close:hover { background: #dd4444; color: #ffffff; } .ds-titlebar-btn:active { border-top-color: #404040; border-left-color: #404040; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #dfdfdf; } .ds-win95-content { margin: 0 2px 2px; padding: 1rem; background: #fdfdfd; border: 1px solid; border-top-color: #808080; border-left-color: #808080; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf; }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "project-card",
+      "description": "Raised panel that presses in on hover — bevel-out to bevel-in. The hover is the interaction, not a decoration.",
+      "html": "<div class=\"ds-project-card\"><div class=\"ds-project-name\">Kode</div><div class=\"ds-project-desc\">Real-time collaborative code editor.</div><div class=\"ds-project-stack\"><span class=\"ds-stack-pill\">Next.js</span><span class=\"ds-stack-pill\">tRPC</span><span class=\"ds-stack-pill\">Yjs</span></div></div>",
+      "css": ".ds-project-card { background: #ececec; padding: 12px; border: 1px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #404040; border-bottom-color: #404040; box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080; display: flex; flex-direction: column; gap: 8px; min-height: 140px; transition: none; cursor: default; } .ds-project-card:hover { border-top-color: #404040; border-left-color: #404040; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #dfdfdf; } .ds-project-name { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1rem; color: #1a1a2e; } .ds-project-desc { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.8125rem; color: #333344; line-height: 1.45; } .ds-project-stack { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; } .ds-stack-pill { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #1a1a2e; background: #fdfdfd; padding: 2px 6px; border: 1px solid; border-top-color: #808080; border-left-color: #808080; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf; white-space: nowrap; }"
+    },
+    {
+      "name": "Sticky Note",
+      "kind": "custom",
+      "refersTo": "button-primary",
+      "description": "The hero introduction. The only warm, human element on the desktop. Rotated, torn, deliberately off-system.",
+      "html": "<div class=\"ds-sticky-note\"><div class=\"ds-sticky-name\">Isli Basha</div><div class=\"ds-sticky-role\">Full-Stack Developer</div><div class=\"ds-sticky-line\">Tirana, Albania</div><div class=\"ds-sticky-line\">Fast, minimal, useful things.</div></div>",
+      "css": ".ds-sticky-note { background: #fff9c4; color: #1a1a2e; font-family: 'IBM Plex Mono', monospace; padding: 14px 16px 22px; box-shadow: 2px 3px 0 rgba(0,0,0,0.12), 5px 8px 12px rgba(0,0,0,0.1); transform: rotate(3deg); line-height: 1.45; font-size: 0.875rem; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), 94% 100%, 86% calc(100% - 6px), 76% 100%, 65% calc(100% - 4px), 54% calc(100% - 10px), 42% calc(100% - 2px), 30% calc(100% - 8px), 18% calc(100% - 1px), 8% calc(100% - 6px), 0 calc(100% - 2px)); max-width: 240px; display: flex; flex-direction: column; gap: 3px; } .ds-sticky-name { font-weight: 700; font-size: 1.125rem; } .ds-sticky-role { font-weight: 500; color: #555570; } .ds-sticky-line { font-size: 0.8125rem; }"
+    },
+    {
+      "name": "Terminal Block",
+      "kind": "custom",
+      "refersTo": "button-primary",
+      "description": "Phosphor CRT display for the stack window. High contrast, monospaced, blinking cursor.",
+      "html": "<div class=\"ds-terminal\"><pre class=\"ds-terminal-body\">C:\\ISLI\\STACK\n|\n|-- languages/\n|   |-- TypeScript\n|   |-- Go\n|   |-- Rust<span class=\"ds-cursor\"> </span></pre></div>",
+      "css": ".ds-terminal { background: #0c0c0c; border: 1px solid #404040; box-shadow: inset 1px 1px 0 rgba(0,0,0,0.6); padding: 14px 16px; } .ds-terminal-body { margin: 0; color: #33ff33; font-family: 'IBM Plex Mono', ui-monospace, Consolas, monospace; font-size: 0.8125rem; line-height: 1.55; white-space: pre; } .ds-cursor { display: inline-block; width: 8px; height: 1em; background: #33ff33; vertical-align: -2px; animation: ds-cursor-blink 1s steps(1) infinite; margin-left: 2px; } @keyframes ds-cursor-blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }"
+    },
+    {
+      "name": "Desktop Icon",
+      "kind": "custom",
+      "refersTo": "button-primary",
+      "description": "OS desktop shortcut. Transparent at rest, navy tint on hover. White text with text-shadow for legibility against the sky.",
+      "html": "<button class=\"ds-desktop-icon\"><svg class=\"ds-icon-glyph\" viewBox=\"0 0 32 32\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"4\" y=\"4\" width=\"24\" height=\"20\" rx=\"1\" fill=\"#c0c0c0\" stroke=\"#404040\" stroke-width=\"1\"/><rect x=\"6\" y=\"6\" width=\"20\" height=\"14\" fill=\"#fdfdfd\"/><rect x=\"6\" y=\"24\" width=\"20\" height=\"4\" fill=\"#c0c0c0\" stroke=\"#404040\" stroke-width=\"1\"/></svg><span>projects</span></button>",
+      "css": ".ds-desktop-icon { width: 72px; padding: 4px; background: transparent; border: 1px dotted transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: #ffffff; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; text-align: center; text-shadow: 1px 1px 0 #000000, 0 0 2px rgba(0,0,0,0.5); } .ds-desktop-icon:hover, .ds-desktop-icon:focus-visible { border: 1px dotted #ffffff; background: rgba(0,0,128,0.25); outline: none; } .ds-desktop-icon:active { background: rgba(0,0,128,0.45); } .ds-icon-glyph { width: 32px; height: 32px; display: block; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Ghost in the Machine",
+    "overview": "This is a 1990s operating system shell running on modern React, fully aware of what it is. The portfolio does not simulate Windows 95 as a novelty trick — it commits to the metaphor completely: draggable windows, a functioning taskbar, a boot sequence, a BSOD, Minesweeper, Snake. The visitor is not looking at a portfolio with a retro skin. They are using a machine.\n\nThe design system is built from the bevel. Every surface — buttons, windows, inputs, cards, the taskbar — uses the same four-layer double-border technique that Win95 used. Elevation is theatrical, not ambient: shadows exist because they are part of the performance. Typography follows a strict split: IBM Plex Mono for anything that belongs to the OS and IBM Plex Sans for anything that is human-facing content. One font family, two registers, complete discipline.",
+    "keyCharacteristics": [
+      "Bevel-based elevation — four-layer double-border + inset shadow for every raised or sunken surface",
+      "Zero border radius — all OS chrome is pixel-sharp",
+      "Two-font discipline — Mono for the system, Sans for the person",
+      "Sky blue desktop gradient as the primary environment",
+      "Theatrical motion — animation is part of the OS illusion"
+    ],
+    "rules": [
+      { "name": "The One Focus Rule",       "body": "Active Window Blue (#000080 to #1084d0) appears in exactly one place: the window titlebar gradient. Its power comes from its exclusivity.", "section": "colors" },
+      { "name": "The No-Pure-Extreme Rule", "body": "No pure #000000 or #ffffff in any surface or text role. Every neutral is tinted.", "section": "colors" },
+      { "name": "The System/Human Split Rule", "body": "IBM Plex Mono is the OS speaking. IBM Plex Sans is the person. Any new element that belongs to OS chrome uses Mono. Any element that is content uses Sans. No exceptions.", "section": "typography" },
+      { "name": "The Bevel-Only Rule",      "body": "All elevation is expressed through the bevel system. Do not add blurred box-shadow values to new OS-chrome components.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use the bevel system for all new components with raised or pressed states.",
+      "Do use IBM Plex Mono for OS chrome and IBM Plex Sans for human-facing content.",
+      "Do keep all OS chrome at 0px border-radius.",
+      "Do use Active Window Blue exclusively on window titlebars and system focus rings.",
+      "Do include prefers-reduced-motion overrides for any new animation.",
+      "Do ask whether a new feature fits as a window, desktop icon, taskbar item, or dialog before inventing a new pattern.",
+      "Do animate with transform and opacity only, using ease-out-expo curves."
+    ],
+    "donts": [
+      "Don't add border-radius to OS chrome components.",
+      "Don't add blurred box-shadow values to new components.",
+      "Don't ship a generic dark-mode portfolio with hero sections and glowing stack badges.",
+      "Don't use gradient text (background-clip: text + gradient background).",
+      "Don't use Active Window Blue as a decorative accent outside titlebars and focus rings.",
+      "Don't add a border-left or border-right stripe larger than 1px as a colored accent.",
+      "Don't animate layout properties — transform and opacity only.",
+      "Don't use bounce or elastic easing.",
+      "Don't add content that reads as AI-assembled with no specific context."
+    ]
+  }
+}

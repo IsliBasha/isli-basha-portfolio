@@ -1,0 +1,151 @@
+@import "tailwindcss";
+@import "./styles/win95.css";
+@import "./styles/boot.css";
+
+@theme {
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-accent: #1a73e8;
+  --color-ink: #1a1a2e;
+}
+
+:root {
+  color-scheme: light;
+  --c-sky-top: #d6eaf8;
+  --c-sky-bottom: #aed6f1;
+  --c-gray: #c0c0c0;
+  --c-gray-dark: #808080;
+  --c-gray-darker: #404040;
+  --c-gray-light: #dfdfdf;
+  --c-gray-lighter: #ececec;
+  --c-title-from: #000080;
+  --c-title-to: #1084d0;
+  --c-accent: #1a73e8;
+  --c-text: #1a1a2e;
+  --c-win-bg: #fdfdfd;
+  --c-note: #fff9c4;
+  --c-term-bg: #0c0c0c;
+  --c-term-fg: #33ff33;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --shadow-win: 4px 4px 0px rgba(0, 0, 0, 0.18);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--c-text);
+  background: linear-gradient(180deg, var(--c-sky-top) 0%, var(--c-sky-bottom) 100%);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Desktop: lock the page so it behaves like a real OS shell.
+   Windows scroll their own content; the desktop never scrolls. */
+@media (min-width: 1024px) {
+  html,
+  body {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  #root {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+}
+
+:focus-visible {
+  outline: 1px dotted var(--c-title-from);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--c-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--c-gray);
+  color: var(--c-text);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  z-index: 10000;
+  transition: top 120ms ease;
+}
+
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+/* CRT monitor overlay: scanlines + edge vignette.
+   position: fixed + pointer-events: none keeps it above all UI
+   without intercepting any clicks or keyboard events. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    rgba(0, 0, 0, 0.05) 1px,
+    rgba(0, 0, 0, 0.05) 2px
+  );
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 80% at 50% 50%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.22) 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
