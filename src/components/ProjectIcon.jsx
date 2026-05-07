@@ -49,7 +49,32 @@ function ChatIcon() {
   );
 }
 
-const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon };
+function NetworkIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      {/* city skyline */}
+      <rect x="2" y="18" width="5" height="12" fill="#808080" stroke="#404040" strokeWidth="1"/>
+      <rect x="4" y="14" width="3" height="5" fill="#c0c0c0" stroke="#404040" strokeWidth="1"/>
+      <rect x="11" y="16" width="6" height="14" fill="#808080" stroke="#404040" strokeWidth="1"/>
+      <rect x="22" y="20" width="8" height="10" fill="#808080" stroke="#404040" strokeWidth="1"/>
+      {/* windows */}
+      <rect x="3" y="19" width="1" height="1" fill="#ffff44"/>
+      <rect x="5" y="19" width="1" height="1" fill="#ffff44"/>
+      <rect x="13" y="17" width="1" height="1" fill="#ffff44"/>
+      <rect x="15" y="17" width="1" height="1" fill="#ffff44"/>
+      <rect x="24" y="21" width="1" height="1" fill="#ffff44"/>
+      <rect x="26" y="21" width="1" height="1" fill="#ffff44"/>
+      {/* radar rings */}
+      <circle cx="23" cy="8" r="7" fill="none" stroke="#33ff33" strokeWidth="1" opacity="0.6"/>
+      <circle cx="23" cy="8" r="4" fill="none" stroke="#33ff33" strokeWidth="1" opacity="0.4"/>
+      <circle cx="23" cy="8" r="1.5" fill="#33ff33"/>
+      {/* sweep line (threat detection) */}
+      <line x1="23" y1="8" x2="27" y2="3" stroke="#ff3333" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon };
 
 export function ProjectIcon({ type }) {
   const Icon = ICONS[type] ?? ICONS.chat;
