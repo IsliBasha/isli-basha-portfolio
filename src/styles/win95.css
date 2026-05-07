@@ -137,7 +137,7 @@
     );
 }
 
-.win95-window--maximized {
+.win95-window.win95-window--maximized {
   position: fixed;
   top: 0;
   left: 0;
@@ -153,7 +153,7 @@
   z-index: 8500;
 }
 
-.win95-window--maximized .win95-window__content {
+.win95-window.win95-window--maximized .win95-window__content {
   height: calc(100vh - 34px - 26px);
   overflow: auto;
 }
