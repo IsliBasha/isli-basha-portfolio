@@ -74,7 +74,29 @@ function NetworkIcon() {
   );
 }
 
-const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon };
+function RustIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      {/* gear teeth */}
+      <rect x="14" y="2" width="4" height="4" fill="#c87941" stroke="#804020" strokeWidth="0.5"/>
+      <rect x="14" y="26" width="4" height="4" fill="#c87941" stroke="#804020" strokeWidth="0.5"/>
+      <rect x="2" y="14" width="4" height="4" fill="#c87941" stroke="#804020" strokeWidth="0.5"/>
+      <rect x="26" y="14" width="4" height="4" fill="#c87941" stroke="#804020" strokeWidth="0.5"/>
+      <rect x="5.5" y="5.5" width="3" height="3" fill="#c87941" stroke="#804020" strokeWidth="0.5" transform="rotate(45 7 7)"/>
+      <rect x="23.5" y="5.5" width="3" height="3" fill="#c87941" stroke="#804020" strokeWidth="0.5" transform="rotate(45 25 7)"/>
+      <rect x="5.5" y="23.5" width="3" height="3" fill="#c87941" stroke="#804020" strokeWidth="0.5" transform="rotate(45 7 25)"/>
+      <rect x="23.5" y="23.5" width="3" height="3" fill="#c87941" stroke="#804020" strokeWidth="0.5" transform="rotate(45 25 25)"/>
+      {/* gear body */}
+      <circle cx="16" cy="16" r="9" fill="#c87941" stroke="#804020" strokeWidth="1"/>
+      {/* inner hole */}
+      <circle cx="16" cy="16" r="4.5" fill="#1a1a2e" stroke="#804020" strokeWidth="0.8"/>
+      {/* lightning bolt — edge/speed */}
+      <polygon points="17.5,9 13,16 16.5,16 14.5,23 19,16 15.5,16" fill="#ffdd44" stroke="#cc9900" strokeWidth="0.4"/>
+    </svg>
+  );
+}
+
+const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon, rust: RustIcon };
 
 export function ProjectIcon({ type }) {
   const Icon = ICONS[type] ?? ICONS.chat;

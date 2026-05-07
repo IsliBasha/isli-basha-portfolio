@@ -24,6 +24,15 @@ export const projects = [
     iconType: 'chat',
   },
   {
+    id: 'cf-worker-rust',
+    name: 'cf-worker-rust',
+    description:
+      'Edge JWT validator and per-IP rate limiter running on Cloudflare Workers. Rust/WASM via workers-rs, supports HS256 and RS256. KV-backed sliding-window rate limiting.',
+    stack: ['Rust', 'WASM', 'Cloudflare Workers', 'JWT'],
+    href: 'https://github.com/IsliBasha/cf-worker-rust',
+    iconType: 'rust',
+  },
+  {
     id: 'hamster',
     name: 'HamsterFaceRecognition',
     description: 'Face recognition model trained on hamster images. DeepFace + OpenCV applied to a deeply unserious dataset.',
