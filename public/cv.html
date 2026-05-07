@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isli Basha — CV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0f0f14;
+      --muted:   #5a5a6e;
+      --accent:  #1a1a8c;
+      --rule:    #d0d0de;
+      --bg:      #ffffff;
+      --mono:    'IBM Plex Mono', ui-monospace, monospace;
+      --sans:    'IBM Plex Sans', system-ui, sans-serif;
+    }
+
+    html { font-size: 10.5pt; }
+
+    body {
+      font-family: var(--sans);
+      color: var(--ink);
+      background: var(--bg);
+      padding: 2.8rem 3rem 2.8rem 3rem;
+      max-width: 780px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ── Header ─────────────────────────────────────── */
+    .cv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--ink);
+      margin-bottom: 1.4rem;
+    }
+
+    .cv-header__name {
+      font-family: var(--mono);
+      font-size: 22pt;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .cv-header__title {
+      font-family: var(--mono);
+      font-size: 10pt;
+      color: var(--muted);
+      margin-top: 0.35rem;
+      letter-spacing: 0.04em;
+    }
+
+    .cv-header__contact {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 8.5pt;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .cv-header__contact a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── Section ─────────────────────────────────────── */
+    section { margin-bottom: 1.25rem; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 0.25rem;
+      margin-bottom: 0.65rem;
+    }
+
+    /* ── Summary ─────────────────────────────────────── */
+    .summary {
+      font-size: 9.5pt;
+      color: var(--ink);
+      line-height: 1.6;
+      max-width: 66ch;
+    }
+
+    /* ── Skills ──────────────────────────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 0.3rem 0.75rem;
+      font-size: 9pt;
+    }
+
+    .skills-grid dt {
+      font-family: var(--mono);
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 8.5pt;
+      padding-top: 0.05rem;
+    }
+
+    .skills-grid dd {
+      color: var(--ink);
+    }
+
+    /* ── Projects ────────────────────────────────────── */
+    .project { margin-bottom: 0.9rem; }
+    .project:last-child { margin-bottom: 0; }
+
+    .project__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .project__name {
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: 9.5pt;
+      color: var(--ink);
+    }
+
+    .project__link {
+      font-family: var(--mono);
+      font-size: 7.5pt;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .project__desc {
+      font-size: 9pt;
+      color: var(--ink);
+      line-height: 1.5;
+      margin-bottom: 0.2rem;
+    }
+
+    .project__stack {
+      font-family: var(--mono);
+      font-size: 7.5pt;
+      color: var(--muted);
+    }
+
+    /* ── Education ───────────────────────────────────── */
+    .edu-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .edu-row__degree {
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: 9.5pt;
+    }
+
+    .edu-row__meta {
+      font-family: var(--mono);
+      font-size: 8pt;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .edu-note {
+      font-size: 9pt;
+      color: var(--muted);
+    }
+
+    /* ── Print ───────────────────────────────────────── */
+    @media print {
+      html { font-size: 10pt; }
+      body { padding: 1.8cm 2cm; max-width: none; }
+      a { color: var(--accent) !important; }
+      @page { size: A4; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="cv-header">
+    <div>
+      <div class="cv-header__name">Isli Basha</div>
+      <div class="cv-header__title">Full-Stack Developer &mdash; Tirana, Albania</div>
+    </div>
+    <div class="cv-header__contact">
+      <a href="mailto:islibasha1@gmail.com">islibasha1@gmail.com</a><br/>
+      <a href="https://github.com/IsliBasha" target="_blank">github.com/IsliBasha</a><br/>
+      <a href="https://linkedin.com/in/islibasha" target="_blank">linkedin.com/in/islibasha</a><br/>
+      <a href="https://isli-basha-portfolio.vercel.app" target="_blank">isli-basha-portfolio.vercel.app</a>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-label">Summary</div>
+    <p class="summary">
+      I build software end-to-end — from database schema to pixel on screen.
+      I care about the layers that make software feel fast: caching, indexing, bundle size,
+      render cost. Currently finishing a bachelor thesis on cyber-physical threat detection
+      in smart-city digital twins, and exploring edge computing and WebAssembly.
+    </p>
+  </section>
+
+  <section>
+    <div class="section-label">Skills</div>
+    <dl class="skills-grid">
+      <dt>Languages</dt>
+      <dd>TypeScript &middot; Go &middot; Rust &middot; Python &middot; Kotlin &middot; JavaScript</dd>
+
+      <dt>Frontend</dt>
+      <dd>React / Next.js &middot; Svelte / SvelteKit &middot; Tailwind CSS &middot; Three.js</dd>
+
+      <dt>Backend</dt>
+      <dd>Node.js &middot; Fiber (Go) &middot; Hono &middot; tRPC &middot; GraphQL</dd>
+
+      <dt>Infra</dt>
+      <dd>Docker &middot; Vercel &middot; Cloudflare Workers &middot; PostgreSQL &middot; Redis &middot; GitHub Actions</dd>
+    </dl>
+  </section>
+
+  <section>
+    <div class="section-label">Projects</div>
+
+    <div class="project">
+      <div class="project__header">
+        <span class="project__name">ME-DT Framework</span>
+        <a class="project__link" href="https://github.com/IsliBasha/me-dt-framework">github.com/IsliBasha/me-dt-framework</a>
+      </div>
+      <p class="project__desc">
+        Bachelor thesis &mdash; Mythos-Enhanced Digital Twin for smart-city cyber-physical threat detection.
+        Isolation Forest anomaly detection, MITRE ATT&amp;CK threat mapping, and a real-time Flask dashboard
+        visualising network anomalies across simulated city infrastructure layers.
+      </p>
+      <div class="project__stack">Python &middot; Flask &middot; Isolation Forest &middot; MITRE ATT&amp;CK &middot; JavaScript</div>
+    </div>
+
+    <div class="project">
+      <div class="project__header">
+        <span class="project__name">FloraCare</span>
+        <a class="project__link" href="https://github.com/IsliBasha/FloraCare">github.com/IsliBasha/FloraCare</a>
+      </div>
+      <p class="project__desc">
+        Android plant care companion. Species identification and care data via Perenual API,
+        personalised watering schedules, and weather-aware care reminders via OpenWeatherMap.
+      </p>
+      <div class="project__stack">Kotlin &middot; Android &middot; Perenual API &middot; OpenWeatherMap</div>
+    </div>
+
+    <div class="project">
+      <div class="project__header">
+        <span class="project__name">Whatsapp-Chatbot</span>
+        <a class="project__link" href="https://github.com/IsliBasha/Whatsapp-Chatbot">github.com/IsliBasha/Whatsapp-Chatbot</a>
+      </div>
+      <p class="project__desc">
+        AI-powered Albanian product chatbot running on WhatsApp. Claude AI intent parsing,
+        fuzzy product search, per-session state management, HMAC-SHA256 webhook verification,
+        and per-IP rate limiting. 95%+ test coverage.
+      </p>
+      <div class="project__stack">JavaScript &middot; Node.js &middot; Claude AI &middot; PostgreSQL</div>
+    </div>
+
+    <div class="project">
+      <div class="project__header">
+        <span class="project__name">HamsterFaceRecognition</span>
+        <a class="project__link" href="https://github.com/IsliBasha/HamsterFaceRecognition">github.com/IsliBasha/HamsterFaceRecognition</a>
+      </div>
+      <p class="project__desc">
+        Face recognition pipeline trained on hamster images using DeepFace and OpenCV.
+        A deliberately unserious application of production-grade computer vision tooling.
+      </p>
+      <div class="project__stack">Python &middot; OpenCV &middot; DeepFace</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Education</div>
+    <div class="edu-row">
+      <span class="edu-row__degree">Bachelor&rsquo;s in Computer Science</span>
+      <span class="edu-row__meta">Tirana &mdash; 2026</span>
+    </div>
+    <p class="edu-note">
+      Thesis: Mythos-Enhanced Digital Twin for smart-city cyber-physical threat detection (ME-DT Framework)
+    </p>
+  </section>
+
+</body>
+</html>
