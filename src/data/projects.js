@@ -40,4 +40,12 @@ export const projects = [
     href: 'https://github.com/IsliBasha/HamsterFaceRecognition',
     iconType: 'python',
   },
+  {
+    id: 'albanian-study-app',
+    name: 'Albanian Study App',
+    description: 'AI study companion for Albanian students. Upload PDFs, auto-generate flashcards and quizzes, get step-by-step AI tutor explanations, and track progress with an analytics dashboard.',
+    stack: ['PyQt6', 'FastAPI', 'Claude AI', 'SQLite'],
+    href: 'https://github.com/IsliBasha/albanian-study-app',
+    iconType: 'python',
+  },
 ];
