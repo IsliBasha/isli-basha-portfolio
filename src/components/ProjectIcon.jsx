@@ -96,7 +96,32 @@ function RustIcon() {
   );
 }
 
-const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon, rust: RustIcon };
+function BookIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      {/* book spine */}
+      <rect x="5" y="4" width="4" height="24" fill="#808080" stroke="#404040" strokeWidth="1"/>
+      {/* book cover */}
+      <rect x="9" y="4" width="18" height="24" fill="#000080" stroke="#404040" strokeWidth="1"/>
+      {/* highlight */}
+      <line x1="9" y1="5" x2="26" y2="5" stroke="#4040c0" strokeWidth="1"/>
+      <line x1="9" y1="5" x2="9" y2="27" stroke="#4040c0" strokeWidth="1"/>
+      {/* pages (right edge) */}
+      <rect x="25" y="5" width="2" height="22" fill="#dfdfdf" stroke="#808080" strokeWidth="0.5"/>
+      {/* lines of text */}
+      <line x1="12" y1="11" x2="23" y2="11" stroke="#33ff33" strokeWidth="1" strokeLinecap="square"/>
+      <line x1="12" y1="14" x2="23" y2="14" stroke="#33ff33" strokeWidth="1" strokeLinecap="square"/>
+      <line x1="12" y1="17" x2="23" y2="17" stroke="#33ff33" strokeWidth="1" strokeLinecap="square"/>
+      <line x1="12" y1="20" x2="19" y2="20" stroke="#33ff33" strokeWidth="1" strokeLinecap="square"/>
+      {/* graduation cap */}
+      <polygon points="16,4 22,7 16,10 10,7" fill="#ffdd44" stroke="#cc9900" strokeWidth="0.5"/>
+      <line x1="22" y1="7" x2="22" y2="10" stroke="#cc9900" strokeWidth="1"/>
+      <circle cx="22" cy="10" r="1" fill="#cc9900"/>
+    </svg>
+  );
+}
+
+const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon, rust: RustIcon, book: BookIcon };
 
 export function ProjectIcon({ type }) {
   const Icon = ICONS[type] ?? ICONS.chat;
