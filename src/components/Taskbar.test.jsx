@@ -23,6 +23,44 @@ function getTaskbar() {
   return screen.getByRole('navigation', { name: /taskbar/i });
 }
 
+describe('Start button Win95 logo', () => {
+  it('renders the logo SVG with crispEdges rendering', () => {
+    render(<Harness />);
+    const startBtn = screen.getByRole('button', { name: /^start$/i });
+    const svg = startBtn.querySelector('svg.win95-start-btn__icon');
+    expect(svg).toBeInTheDocument();
+    // jsdom normalises SVG attribute names to lower-case, so check both forms
+    const rendering = svg.getAttribute('shapeRendering') ?? svg.getAttribute('shaperendering');
+    expect(rendering).toBe('crispEdges');
+  });
+
+  it('hides the logo from assistive technology', () => {
+    render(<Harness />);
+    const startBtn = screen.getByRole('button', { name: /^start$/i });
+    const svg = startBtn.querySelector('svg.win95-start-btn__icon');
+    expect(svg).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('uses polygon shapes for the perspective-warped flag look', () => {
+    render(<Harness />);
+    const startBtn = screen.getByRole('button', { name: /^start$/i });
+    const svg = startBtn.querySelector('svg.win95-start-btn__icon');
+    const polygons = svg.querySelectorAll('polygon');
+    expect(polygons.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it('renders the four Win95 muted-palette quadrant colors', () => {
+    render(<Harness />);
+    const startBtn = screen.getByRole('button', { name: /^start$/i });
+    const svg = startBtn.querySelector('svg.win95-start-btn__icon');
+    const fills = Array.from(svg.querySelectorAll('[fill]')).map(el => el.getAttribute('fill'));
+    expect(fills).toContain('#bf1700'); // brick red
+    expect(fills).toContain('#1e7800'); // forest green
+    expect(fills).toContain('#1040c0'); // deep blue
+    expect(fills).toContain('#cc9800'); // amber yellow
+  });
+});
+
 describe('Taskbar always-on tasks', () => {
   it('renders a task button for every open window on initial mount', () => {
     render(<Harness />);
