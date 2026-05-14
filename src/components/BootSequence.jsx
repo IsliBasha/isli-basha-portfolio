@@ -157,12 +157,21 @@ Memory Test: ${padded}K OK
 function SplashScreen() {
   return (
     <div className="boot-splash">
-      <div className="boot-splash__cloud" aria-hidden="true">
-        <span className="boot-splash__pane boot-splash__pane--r" />
-        <span className="boot-splash__pane boot-splash__pane--g" />
-        <span className="boot-splash__pane boot-splash__pane--b" />
-        <span className="boot-splash__pane boot-splash__pane--y" />
-      </div>
+      <svg
+        className="boot-splash__logo"
+        viewBox="0 0 16 15"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <polygon points="1,0 7,0 7,6 0,7"     fill="#bf1700" />
+        <polygon points="8,0 14,0 14,6 8,6"    fill="#1e7800" />
+        <polygon points="0,8 7,7 7,13 0,13"    fill="#1040c0" />
+        <polygon points="8,8 14,8 14,14 8,14"  fill="#cc9800" />
+        <rect x="7"  y="0" width="1" height="14" fill="#c0b890" />
+        <rect x="0"  y="7" width="7" height="1"  fill="#c0b890" />
+        <rect x="8"  y="7" width="6" height="1"  fill="#c0b890" />
+        <rect x="1"  y="14" width="13" height="1" fill="rgba(0,0,0,0.4)" />
+      </svg>
       <p className="boot-splash__tag">Starting Windows 95...</p>
       <div className="boot-splash__bar" aria-hidden="true">
         <span />
