@@ -649,7 +649,7 @@
   bottom: 4rem;
   right: 1rem;
   z-index: 1;
-  background: #111111;
+  background: var(--c-gray);
   border: 1px solid;
   border-top-color: #ffffff;
   border-left-color: #ffffff;
@@ -659,26 +659,47 @@
     inset 1px 1px 0 var(--c-gray-light),
     inset -1px -1px 0 var(--c-gray-dark),
     var(--shadow-win);
-  padding: 6px 8px 8px;
+  padding: 2px;
   cursor: pointer;
-  min-width: 0;
-  text-align: center;
   font-family: var(--font-mono);
   line-height: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  min-width: 0;
 }
 
 .visitor-led:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.05);
+}
+
+.visitor-led__titlebar {
+  background: linear-gradient(90deg, var(--c-title-from) 0%, var(--c-title-to) 100%);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 1px 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 2px;
+  user-select: none;
+}
+
+.visitor-led__screen {
+  background: #111111;
+  padding: 4px 6px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
 }
 
 .visitor-led__label {
-  font-size: 0.5625rem;
-  letter-spacing: 0.12em;
-  color: #888888;
+  font-size: 0.5rem;
+  letter-spacing: 0.16em;
+  color: #555555;
   text-transform: uppercase;
 }
 
@@ -704,6 +725,16 @@
 .visitor-led__digit--off {
   color: #2a1000;
   text-shadow: none;
+}
+
+.visitor-led__statusbar {
+  font-size: 0.5rem;
+  letter-spacing: 0.05em;
+  color: var(--c-gray-darker);
+  text-align: left;
+  padding: 1px 4px;
+  margin-top: 2px;
+  border-top: 1px solid var(--c-gray-dark);
 }
 
 /* ============================================================
@@ -1419,6 +1450,49 @@
   overflow-wrap: break-word;
   word-break: break-all;
   min-width: 0;
+}
+
+.contact-form {
+  margin-top: 0.75rem;
+}
+
+.contact-form__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-gray-darker);
+  margin-bottom: 4px;
+}
+
+textarea.win-field {
+  resize: vertical;
+  min-height: 64px;
+  max-height: 120px;
+  line-height: 1.5;
+}
+
+.contact-msg-meta {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2px;
+}
+
+.contact-msg-counter {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--c-gray-dark);
+}
+
+.contact-msg-counter--near {
+  color: #996600;
+}
+
+.contact-msg-counter--full {
+  color: #cc0000;
+  font-weight: 700;
 }
 
 /* Project card icon */

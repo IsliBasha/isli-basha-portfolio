@@ -159,13 +159,16 @@ function ProjectsExplorer({ projects: projectList }) {
   );
 }
 
+const CONTACT_MAX = 280;
+
 function ContactForm() {
   const [status, setStatus] = useState('idle'); // idle | sending | ok | error
-  const inputRef = useRef(null);
+  const [charCount, setCharCount] = useState(0);
+  const textareaRef = useRef(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const message = inputRef.current?.value?.trim();
+    const message = textareaRef.current?.value?.trim();
     if (!message) return;
 
     setStatus('sending');
@@ -177,34 +180,47 @@ function ContactForm() {
       });
       if (!r.ok) throw new Error('non-ok');
       setStatus('ok');
-      if (inputRef.current) inputRef.current.value = '';
+      if (textareaRef.current) {
+        textareaRef.current.value = '';
+        setCharCount(0);
+      }
     } catch {
       setStatus('error');
     }
   };
 
+  const counterClass = [
+    'contact-msg-counter',
+    charCount >= CONTACT_MAX
+      ? 'contact-msg-counter--full'
+      : charCount >= Math.floor(CONTACT_MAX * 0.8)
+        ? 'contact-msg-counter--near'
+        : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-3">
-        <label
-          htmlFor="contact-msg"
-          className="text-xs uppercase tracking-wider text-[color:var(--c-gray-darker)]"
-          style={{ fontFamily: 'var(--font-mono)' }}
-        >
+      <form onSubmit={handleSubmit} className="contact-form">
+        <label htmlFor="contact-msg" className="contact-form__label">
           Quick Message
         </label>
-        <input
-          ref={inputRef}
+        <textarea
+          ref={textareaRef}
           id="contact-msg"
           name="message"
-          type="text"
           className="win-field"
-          placeholder="Type and press send…"
-          maxLength={120}
+          placeholder="Type your message…"
+          maxLength={CONTACT_MAX}
           required
           disabled={status === 'sending'}
+          onChange={(e) => setCharCount(e.target.value.length)}
         />
-        <div className="flex justify-end">
+        <div className="contact-msg-meta">
+          <span className={counterClass}>{charCount} / {CONTACT_MAX}</span>
+        </div>
+        <div className="flex justify-end mt-2">
           <button type="submit" className="win-btn" disabled={status === 'sending'}>
             {status === 'sending' ? 'Sending…' : 'Send Message'}
           </button>
