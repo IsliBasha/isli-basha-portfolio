@@ -642,13 +642,14 @@
 }
 
 /* ============================================================
-   Visitor counter — Variant A (LED widget)
+   Visitor counter — SiteCounter (Win95 mini-app widget)
    ============================================================ */
-.visitor-led {
+.visitor-win {
   position: absolute;
   bottom: 4rem;
   right: 1rem;
   z-index: 1;
+  width: 152px;
   background: var(--c-gray);
   border: 1px solid;
   border-top-color: #ffffff;
@@ -659,80 +660,140 @@
     inset 1px 1px 0 var(--c-gray-light),
     inset -1px -1px 0 var(--c-gray-dark),
     var(--shadow-win);
-  padding: 2px;
-  cursor: pointer;
-  font-family: var(--font-mono);
-  line-height: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  font-family: var(--font-sans);
+  color: var(--c-text);
 }
 
-.visitor-led:hover {
-  filter: brightness(1.05);
-}
-
-.visitor-led__titlebar {
+.visitor-win__titlebar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 2px 2px 4px;
+  margin: 2px 2px 0;
   background: linear-gradient(90deg, var(--c-title-from) 0%, var(--c-title-to) 100%);
   color: #ffffff;
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  padding: 1px 3px;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  margin-bottom: 2px;
   user-select: none;
 }
 
-.visitor-led__screen {
-  background: #000040;
-  padding: 4px 6px 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
+.visitor-win__icon {
+  font-size: 0.625rem;
+  opacity: 0.85;
+  flex-shrink: 0;
 }
 
-.visitor-led__label {
-  font-size: 0.5rem;
-  letter-spacing: 0.16em;
-  color: #4040a0;
-  text-transform: uppercase;
+.visitor-win__title-text {
+  flex: 1;
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.visitor-led__display {
+.visitor-win__btns {
   display: flex;
   gap: 2px;
 }
 
-.visitor-led__digit {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.visitor-win__ctrl {
+  display: grid;
+  place-items: center;
   width: 14px;
-  height: 20px;
-  font-size: 0.9375rem;
+  height: 14px;
+  font-size: 9px;
+  line-height: 1;
   font-weight: 700;
-  color: #ffffff;
-  background: #000028;
-  border: 1px solid #001060;
+  font-family: var(--font-mono);
+  color: var(--c-text);
+  background: var(--c-gray);
+  border: 1px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: var(--c-gray-darker);
+  border-bottom-color: var(--c-gray-darker);
+  box-shadow:
+    inset 1px 1px 0 var(--c-gray-light),
+    inset -1px -1px 0 var(--c-gray-dark);
+  user-select: none;
 }
 
-.visitor-led__digit--off {
-  color: #001060;
-}
-
-.visitor-led__statusbar {
-  font-size: 0.5rem;
-  letter-spacing: 0.05em;
-  color: var(--c-gray-darker);
+.visitor-win__body {
+  display: block;
+  width: 100%;
+  padding: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   text-align: left;
-  padding: 1px 4px;
-  margin-top: 2px;
+}
+
+.visitor-win__body:hover .visitor-win__panel,
+.visitor-win__body:focus-visible .visitor-win__panel {
+  background: var(--c-gray-lighter);
+}
+
+.visitor-win__body:focus-visible {
+  outline: 1px dotted var(--c-title-from);
+  outline-offset: -2px;
+}
+
+.visitor-win__panel {
+  background: var(--c-win-bg);
+  border: 1px solid;
+  border-top-color: var(--c-gray-dark);
+  border-left-color: var(--c-gray-dark);
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  box-shadow:
+    inset 1px 1px 0 var(--c-gray-darker),
+    inset -1px -1px 0 var(--c-gray-light);
+  padding: 5px 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.visitor-win__label {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: var(--c-gray-darker);
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+.visitor-win__count {
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--c-text);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.visitor-win__status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 6px;
+  margin: 0 2px 2px;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  color: var(--c-gray-darker);
   border-top: 1px solid var(--c-gray-dark);
+  box-shadow: inset 0 1px 0 #ffffff;
+}
+
+.visitor-win__status-dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  background: #008000;
+  border: 1px solid var(--c-gray-dark);
 }
 
 /* ============================================================
@@ -1564,8 +1625,8 @@ textarea.win-field {
     max-width: 120px;
   }
 
-  /* Hide the LED desktop widget on mobile — it's absolutely positioned */
-  .visitor-led {
+  /* Hide the visitor widget on mobile — it's absolutely positioned */
+  .visitor-win {
     display: none;
   }
 }
