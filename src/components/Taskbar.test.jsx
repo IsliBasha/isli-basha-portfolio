@@ -29,8 +29,11 @@ describe('Start button Win95 logo', () => {
     const startBtn = screen.getByRole('button', { name: /^start$/i });
     const svg = startBtn.querySelector('svg.win95-start-btn__icon');
     expect(svg).toBeInTheDocument();
-    // jsdom normalises SVG attribute names to lower-case, so check both forms
-    const rendering = svg.getAttribute('shapeRendering') ?? svg.getAttribute('shaperendering');
+    // React serialises shapeRendering to shape-rendering in the DOM; jsdom may lower-case it
+    const rendering =
+      svg.getAttribute('shapeRendering') ??
+      svg.getAttribute('shaperendering') ??
+      svg.getAttribute('shape-rendering');
     expect(rendering).toBe('crispEdges');
   });
 

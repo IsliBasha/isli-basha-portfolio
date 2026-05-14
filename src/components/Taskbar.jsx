@@ -15,14 +15,21 @@ function StartIcon() {
   return (
     <svg
       className="win95-start-btn__icon"
-      viewBox="0 0 14 14"
+      viewBox="0 0 16 15"
       shapeRendering="crispEdges"
       aria-hidden="true"
     >
-      <rect x="0" y="0" width="6" height="6" fill="#ee2323" />
-      <rect x="7" y="0" width="6" height="6" fill="#1bbf1b" />
-      <rect x="0" y="7" width="6" height="6" fill="#1b8dff" />
-      <rect x="7" y="7" width="6" height="6" fill="#ffcc00" />
+      {/* Win95 waving-flag perspective — left column leans slightly */}
+      <polygon points="1,0 7,0 7,6 0,7"    fill="#bf1700" /> {/* brick red   */}
+      <polygon points="8,0 14,0 14,6 8,6"   fill="#1e7800" /> {/* forest green */}
+      <polygon points="0,8 7,7 7,13 0,13"   fill="#1040c0" /> {/* deep blue   */}
+      <polygon points="8,8 14,8 14,14 8,14" fill="#cc9800" /> {/* amber yellow */}
+      {/* 1-px cream divider cross */}
+      <rect x="7"  y="0" width="1" height="14" fill="#c0b890" />
+      <rect x="0"  y="7" width="7" height="1"  fill="#c0b890" />
+      <rect x="8"  y="7" width="6" height="1"  fill="#c0b890" />
+      {/* 1-px drop shadow at bottom-right for depth */}
+      <rect x="1"  y="14" width="13" height="1" fill="rgba(0,0,0,0.35)" />
     </svg>
   );
 }
