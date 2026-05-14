@@ -576,17 +576,33 @@
 /* ============================================================
    Sticky note (hero)
    ============================================================ */
+.sticky-note__pin {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.38));
+}
+
 .sticky-note {
-  background: var(--c-note);
+  background:
+    repeating-linear-gradient(
+      transparent 0px,
+      transparent 25px,
+      rgba(140, 180, 220, 0.48) 25px,
+      rgba(140, 180, 220, 0.48) 26px
+    ),
+    #fff9c4;
   color: var(--c-text);
-  font-family: var(--font-mono);
-  padding: 0.875rem 1rem 1.4rem;
+  font-family: var(--font-hand);
+  padding: 1rem 1rem 1.5rem;
   box-shadow:
     2px 3px 0 rgba(0, 0, 0, 0.12),
-    5px 8px 12px rgba(0, 0, 0, 0.1);
+    5px 8px 14px rgba(0, 0, 0, 0.11);
   transform: rotate(3deg);
-  line-height: 1.45;
-  font-size: 0.875rem;
+  line-height: 1.5;
+  font-size: 1rem;
   clip-path: polygon(
     0 0,
     100% 0,
@@ -607,18 +623,20 @@
 
 .sticky-note__name {
   font-weight: 700;
-  font-size: 1.125rem;
-  margin-bottom: 0.1rem;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  margin-bottom: 0.15rem;
 }
 
 .sticky-note__role {
-  font-weight: 500;
-  color: #555570;
-  margin-bottom: 0.4rem;
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: #5c5070;
+  margin-bottom: 0.35rem;
 }
 
 .sticky-note__line {
-  font-size: 0.8125rem;
+  font-size: 1rem;
   color: var(--c-text);
 }
 
@@ -805,7 +823,7 @@
 
   .sticky-note-wrap {
     position: absolute;
-    top: 1rem;
+    top: 1.75rem;
     right: 1.5rem;
     z-index: 1;
   }
@@ -1349,8 +1367,10 @@
   }
 
   .sticky-note-wrap {
+    position: relative;
     display: flex;
     justify-content: flex-end;
+    margin-top: 0.75rem;
     margin-bottom: 0.5rem;
   }
 

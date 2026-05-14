@@ -11,6 +11,7 @@
 
 :root {
   color-scheme: light;
+  --font-hand: 'Caveat', cursive;
   --c-sky-top: #d6eaf8;
   --c-sky-bottom: #aed6f1;
   --c-gray: #c0c0c0;
