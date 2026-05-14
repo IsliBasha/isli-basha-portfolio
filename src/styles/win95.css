@@ -688,7 +688,7 @@
 }
 
 .visitor-led__screen {
-  background: #111111;
+  background: #000040;
   padding: 4px 6px 5px;
   display: flex;
   flex-direction: column;
@@ -699,7 +699,7 @@
 .visitor-led__label {
   font-size: 0.5rem;
   letter-spacing: 0.16em;
-  color: #555555;
+  color: #4040a0;
   text-transform: uppercase;
 }
 
@@ -716,15 +716,13 @@
   height: 20px;
   font-size: 0.9375rem;
   font-weight: 700;
-  color: #ff4500;
-  background: #0a0a0a;
-  border: 1px solid #1e1e1e;
-  text-shadow: 0 0 4px rgba(255, 69, 0, 0.7);
+  color: #ffffff;
+  background: #000028;
+  border: 1px solid #001060;
 }
 
 .visitor-led__digit--off {
-  color: #2a1000;
-  text-shadow: none;
+  color: #001060;
 }
 
 .visitor-led__statusbar {
