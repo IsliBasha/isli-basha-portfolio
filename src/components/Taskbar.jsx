@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useClock } from '../hooks/useClock.js';
 import { useWindowStack } from '../context/windowStackContext.js';
 import { clearWindowPositions } from '../hooks/useWindowPosition.js';
+import { AppGlyph } from '../lib/AppGlyph.jsx';
 
 const MENU_ITEMS = [
   { id: 'about', label: 'About', icon: 'info' },
@@ -216,6 +217,9 @@ export function Taskbar() {
                 aria-pressed={entry.active && !entry.hidden}
                 onClick={() => handleTaskClick(entry)}
               >
+                <span className="win95-taskbar__task-icon" aria-hidden="true">
+                  <AppGlyph kind={entry.id} size={16} />
+                </span>
                 <span className="win95-taskbar__task-label">{entry.title}</span>
               </button>
             </li>
