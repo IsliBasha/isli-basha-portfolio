@@ -926,6 +926,7 @@
     top: 44%;
     right: 4%;
     width: 26%;
+    height: 52%;
     --tilt: 1.2deg;
   }
 
@@ -1389,6 +1390,35 @@
   padding: 0.75rem 1rem;
   font-size: 0.9375rem;
   line-height: 1.55;
+}
+
+.contact-links {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.contact-links li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.contact-links__label {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  flex-shrink: 0;
+  width: 72px;
+}
+
+.contact-links a {
+  overflow-wrap: break-word;
+  word-break: break-all;
+  min-width: 0;
 }
 
 /* Project card icon */

@@ -91,43 +91,20 @@ function ContactExe() {
         ))}
       </div>
       <div className="contact-body">
-        <ul className="list-none m-0 p-0 flex flex-col gap-1.5">
+        <ul className="contact-links">
           <li>
-            <span
-              className="inline-block w-[76px]"
-              style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}
-            >
-              Email:
-            </span>
+            <span className="contact-links__label">Email:</span>
             <a href="mailto:islibasha1@gmail.com">islibasha1@gmail.com</a>
           </li>
           <li>
-            <span
-              className="inline-block w-[76px]"
-              style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}
-            >
-              GitHub:
-            </span>
-            <a
-              href="https://github.com/IsliBasha"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
+            <span className="contact-links__label">GitHub:</span>
+            <a href="https://github.com/IsliBasha" target="_blank" rel="noreferrer noopener">
               github.com/IsliBasha
             </a>
           </li>
           <li>
-            <span
-              className="inline-block w-[76px]"
-              style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}
-            >
-              LinkedIn:
-            </span>
-            <a
-              href="https://linkedin.com/in/islibasha"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
+            <span className="contact-links__label">LinkedIn:</span>
+            <a href="https://linkedin.com/in/islibasha" target="_blank" rel="noreferrer noopener">
               linkedin.com/in/islibasha
             </a>
           </li>
