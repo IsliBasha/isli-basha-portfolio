@@ -14,7 +14,7 @@ import { BootSequence } from './components/BootSequence.jsx';
 import { Screensaver } from './components/Screensaver.jsx';
 import { ContextMenu } from './components/ContextMenu.jsx';
 import { ResumeViewer } from './components/ResumeViewer.jsx';
-import { VisitorCounterLed } from './components/VisitorCounter.jsx';
+import { VisitorCounterContent } from './components/VisitorCounter.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
 import { projects } from './data/projects.js';
 
@@ -23,6 +23,7 @@ const WINDOW_ORDER = [
   'projects',
   'stack',
   'contact',
+  'stats',
   'resume',
   'minesweeper',
   'snake',
@@ -32,6 +33,7 @@ const INITIALLY_CLOSED = [
   'projects',
   'stack',
   'contact',
+  'stats',
   'resume',
   'minesweeper',
   'snake',
@@ -289,7 +291,6 @@ function App() {
           <StickyNote />
         </div>
 
-        <VisitorCounterLed />
 
         <Window
           id="about"
@@ -329,6 +330,16 @@ function App() {
           contentClassName="win-contact__content"
         >
           <ContactExe />
+        </Window>
+
+        <Window
+          id="stats"
+          title="SiteCounter.exe"
+          className="win-stats"
+          bootDelayMs={0}
+          contentClassName="win-stats__content"
+        >
+          <VisitorCounterContent />
         </Window>
 
         <Window

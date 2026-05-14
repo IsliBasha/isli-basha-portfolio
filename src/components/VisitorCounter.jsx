@@ -8,53 +8,40 @@ function formatCount(count) {
   return `${s.slice(0, 3)},${s.slice(3)}`;
 }
 
-export function VisitorCounterLed() {
+export function VisitorCounterContent() {
   const count = useVisitorCount();
   const [dialog, setDialog] = useState(false);
 
   return (
     <>
-      <div
-        className="visitor-win"
-        role="complementary"
-        aria-label="Site visitor count"
-      >
-        <div className="visitor-win__titlebar">
-          <span className="visitor-win__icon" aria-hidden="true">▣</span>
-          <span className="visitor-win__title-text">SiteCounter</span>
-          <div className="visitor-win__btns" aria-hidden="true">
-            <span className="visitor-win__ctrl">_</span>
-            <span className="visitor-win__ctrl">×</span>
-          </div>
-        </div>
-
-        <div className="explorer-menubar" aria-hidden="true">
-          {['File', 'View', 'Help'].map((m) => (
-            <button key={m} type="button" className="explorer-menu-item" tabIndex={-1}>
-              {m}
-            </button>
-          ))}
-        </div>
-
-        <button
-          type="button"
-          className="visitor-win__body"
-          onClick={() => count != null && setDialog(true)}
-          aria-label={`${count ?? 'loading'} site visits — click for details`}
-        >
-          <div className="visitor-win__panel">
-            <span className="visitor-win__label">SITE VISITS</span>
-            <span className="visitor-win__count" aria-live="polite">
-              {formatCount(count)}
-            </span>
-          </div>
-        </button>
-
-        <div className="visitor-win__status" aria-hidden="true">
-          <span className="visitor-win__status-dot" />
-          Online
-        </div>
+      <div className="explorer-menubar" role="menubar">
+        {['File', 'View', 'Help'].map((item) => (
+          <button
+            key={item}
+            type="button"
+            className="explorer-menu-item"
+            role="menuitem"
+          >
+            {item}
+          </button>
+        ))}
       </div>
+
+      <button
+        type="button"
+        className="visitor-win__body"
+        onClick={() => count != null && setDialog(true)}
+        aria-label={`${count ?? 'loading'} site visits — click for details`}
+      >
+        <div className="visitor-win__panel">
+          <span className="visitor-win__label">SITE VISITS</span>
+          <span className="visitor-win__count" aria-live="polite">
+            {formatCount(count)}
+          </span>
+        </div>
+      </button>
+
+      <div className="explorer-statusbar">Online</div>
 
       <SystemDialog
         open={dialog}

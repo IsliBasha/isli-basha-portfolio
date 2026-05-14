@@ -78,6 +78,18 @@ export function AppGlyph({ kind, size = 32 }) {
       </svg>
     );
   }
+  if (kind === 'stats') {
+    return (
+      <svg {...props}>
+        <rect x="2" y="4" width="28" height="24" fill="#c0c0c0" stroke="#000000" />
+        <rect x="5" y="19" width="4" height="7" fill="#000080" />
+        <rect x="11" y="13" width="4" height="13" fill="#000080" />
+        <rect x="17" y="9" width="4" height="17" fill="#000080" />
+        <rect x="23" y="16" width="4" height="10" fill="#000080" />
+        <rect x="4" y="26" width="25" height="1" fill="#808080" />
+      </svg>
+    );
+  }
   if (kind === 'snake') {
     return (
       <svg {...props}>

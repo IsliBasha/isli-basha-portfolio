@@ -9,6 +9,7 @@ const MENU_ITEMS = [
   { id: 'projects', label: 'Projects', icon: 'folder' },
   { id: 'stack', label: 'Stack', icon: 'term' },
   { id: 'contact', label: 'Contact', icon: 'mail' },
+  { id: 'stats', label: 'SiteCounter', icon: 'stats' },
 ];
 
 function StartIcon() {
@@ -60,6 +61,17 @@ function MenuGlyph({ kind }) {
         <text x="3" y="11" fontFamily="monospace" fontSize="7" fill="#33ff33">
           &gt;_
         </text>
+      </svg>
+    );
+  }
+  if (kind === 'stats') {
+    return (
+      <svg viewBox="0 0 18 18" shapeRendering="crispEdges" aria-hidden="true">
+        <rect x="1" y="1" width="16" height="16" fill="#c0c0c0" stroke="#000000" />
+        <rect x="3" y="12" width="2" height="4" fill="#000080" />
+        <rect x="7" y="9" width="2" height="7" fill="#000080" />
+        <rect x="11" y="6" width="2" height="10" fill="#000080" />
+        <rect x="2" y="15" width="14" height="1" fill="#808080" />
       </svg>
     );
   }
