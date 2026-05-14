@@ -33,7 +33,6 @@ const INITIALLY_CLOSED = [
   'projects',
   'stack',
   'contact',
-  'stats',
   'resume',
   'minesweeper',
   'snake',
