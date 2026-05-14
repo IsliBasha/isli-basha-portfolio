@@ -3,6 +3,7 @@ import { useClock } from '../hooks/useClock.js';
 import { useWindowStack } from '../context/windowStackContext.js';
 import { clearWindowPositions } from '../hooks/useWindowPosition.js';
 import { AppGlyph } from '../lib/AppGlyph.jsx';
+import { VisitorCounterTray, VisitorCounterStats } from './VisitorCounter.jsx';
 
 const MENU_ITEMS = [
   { id: 'about', label: 'About', icon: 'info' },
@@ -184,6 +185,7 @@ export function Taskbar() {
                 </button>
               </li>
             ))}
+            <VisitorCounterStats />
             <li role="separator" className="win95-start-menu__sep" />
             <li>
               <button
@@ -226,6 +228,7 @@ export function Taskbar() {
           );
         })}
       </ul>
+      <VisitorCounterTray />
       <div
         className="win95-taskbar__clock"
         aria-label={`Current time ${time}`}

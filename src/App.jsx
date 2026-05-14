@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { WindowStackProvider } from './context/WindowStack.jsx';
 import { Window } from './components/Window.jsx';
 import { Taskbar } from './components/Taskbar.jsx';
@@ -14,6 +14,7 @@ import { BootSequence } from './components/BootSequence.jsx';
 import { Screensaver } from './components/Screensaver.jsx';
 import { ContextMenu } from './components/ContextMenu.jsx';
 import { ResumeViewer } from './components/ResumeViewer.jsx';
+import { VisitorCounterLed } from './components/VisitorCounter.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
 import { projects } from './data/projects.js';
 
@@ -182,11 +183,27 @@ function ProjectsExplorer({ projects: projectList }) {
 }
 
 function ContactForm() {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle | sending | ok | error
+  const inputRef = useRef(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setDialogOpen(true);
+    const message = inputRef.current?.value?.trim();
+    if (!message) return;
+
+    setStatus('sending');
+    try {
+      const r = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message }),
+      });
+      if (!r.ok) throw new Error('non-ok');
+      setStatus('ok');
+      if (inputRef.current) inputRef.current.value = '';
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
@@ -200,6 +217,7 @@ function ContactForm() {
           Quick Message
         </label>
         <input
+          ref={inputRef}
           id="contact-msg"
           name="message"
           type="text"
@@ -207,18 +225,26 @@ function ContactForm() {
           placeholder="Type and press send…"
           maxLength={120}
           required
+          disabled={status === 'sending'}
         />
         <div className="flex justify-end">
-          <button type="submit" className="win-btn">
-            Send Message
+          <button type="submit" className="win-btn" disabled={status === 'sending'}>
+            {status === 'sending' ? 'Sending…' : 'Send Message'}
           </button>
         </div>
       </form>
+
       <SystemDialog
-        open={dialogOpen}
+        open={status === 'ok'}
         title="Message"
         message="Message sent. Thank you."
-        onClose={() => setDialogOpen(false)}
+        onClose={() => setStatus('idle')}
+      />
+      <SystemDialog
+        open={status === 'error'}
+        title="Error"
+        message="Could not send message. Please try again."
+        onClose={() => setStatus('idle')}
       />
     </>
   );
@@ -269,6 +295,8 @@ function App() {
         <div className="sticky-note-wrap">
           <StickyNote />
         </div>
+
+        <VisitorCounterLed />
 
         <Window
           id="about"

@@ -641,6 +641,161 @@
 }
 
 /* ============================================================
+   Visitor counter — Variant A (LED widget)
+   ============================================================ */
+.visitor-led {
+  position: absolute;
+  bottom: 4rem;
+  left: 1rem;
+  z-index: 1;
+  background: #111111;
+  border: 1px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: var(--c-gray-darker);
+  border-bottom-color: var(--c-gray-darker);
+  box-shadow:
+    inset 1px 1px 0 var(--c-gray-light),
+    inset -1px -1px 0 var(--c-gray-dark),
+    var(--shadow-win);
+  padding: 6px 8px 8px;
+  cursor: pointer;
+  min-width: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.visitor-led:hover {
+  filter: brightness(1.1);
+}
+
+.visitor-led__label {
+  font-size: 0.5625rem;
+  letter-spacing: 0.12em;
+  color: #888888;
+  text-transform: uppercase;
+}
+
+.visitor-led__display {
+  display: flex;
+  gap: 2px;
+}
+
+.visitor-led__digit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 20px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #ff4500;
+  background: #0a0a0a;
+  border: 1px solid #1e1e1e;
+  text-shadow: 0 0 4px rgba(255, 69, 0, 0.7);
+}
+
+.visitor-led__digit--off {
+  color: #2a1000;
+  text-shadow: none;
+}
+
+/* ============================================================
+   Visitor counter — Variant B (taskbar tray chip)
+   ============================================================ */
+.visitor-tray {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--c-text);
+  background: var(--c-gray);
+  border: 1px solid;
+  border-top-color: var(--c-gray-dark);
+  border-left-color: var(--c-gray-dark);
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  box-shadow:
+    inset 1px 1px 0 var(--c-gray-darker),
+    inset -1px -1px 0 var(--c-gray-light);
+  height: 26px;
+  white-space: nowrap;
+}
+
+.visitor-tray__eye {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.visitor-tray__count {
+  min-width: 2ch;
+}
+
+/* ============================================================
+   Visitor counter — Variant C (stats dialog)
+   ============================================================ */
+.visitor-stats-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visitor-stats-dialog {
+  min-width: 280px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--c-text);
+  box-shadow: var(--shadow-win), 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.visitor-stats-body {
+  padding: 0.875rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--c-gray);
+}
+
+.visitor-stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.visitor-stats-row--highlight {
+  font-weight: 700;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--c-gray-dark);
+}
+
+.visitor-stats-label {
+  color: var(--c-gray-darker);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.visitor-stats-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 0.75rem 0.75rem;
+  background: var(--c-gray);
+  border-top: 1px solid var(--c-gray-dark);
+}
+
+/* ============================================================
    Project card
    ============================================================ */
 .project-card {
@@ -1395,6 +1550,11 @@
 
   .win95-taskbar__task {
     max-width: 120px;
+  }
+
+  /* Hide the LED desktop widget on mobile — it's absolutely positioned */
+  .visitor-led {
+    display: none;
   }
 }
 
