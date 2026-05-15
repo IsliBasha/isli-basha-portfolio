@@ -6,331 +6,365 @@
   <title>Isli Basha — CV</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink:     #0f0f14;
-      --muted:   #5a5a6e;
-      --accent:  #1a1a8c;
-      --rule:    #d0d0de;
-      --bg:      #ffffff;
-      --mono:    'IBM Plex Mono', ui-monospace, monospace;
-      --sans:    'IBM Plex Sans', system-ui, sans-serif;
+      --ink:   #0f0f0f;
+      --muted: #555;
+      --dash:  #c8c8c8;
+      --bg:    #fff;
+      --sans:  'Inter', system-ui, sans-serif;
     }
 
-    html { font-size: 10.5pt; }
+    html { font-size: 10pt; }
 
     body {
       font-family: var(--sans);
       color: var(--ink);
       background: var(--bg);
-      padding: 2.8rem 3rem 2.8rem 3rem;
-      max-width: 780px;
+      padding: 2rem 2.5rem 2.5rem;
+      max-width: 840px;
       margin: 0 auto;
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
-    /* ── Header ─────────────────────────────────────── */
-    .cv-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--ink);
-      margin-bottom: 1.4rem;
-    }
-
-    .cv-header__name {
-      font-family: var(--mono);
-      font-size: 22pt;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--ink);
+    /* ── Header ───────────────────────────────────────── */
+    .cv-name {
+      font-size: 38pt;
+      font-weight: 800;
+      letter-spacing: -0.01em;
       line-height: 1;
-    }
-
-    .cv-header__title {
-      font-family: var(--mono);
-      font-size: 10pt;
-      color: var(--muted);
-      margin-top: 0.35rem;
-      letter-spacing: 0.04em;
-    }
-
-    .cv-header__contact {
-      text-align: right;
-      font-family: var(--mono);
-      font-size: 8.5pt;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .cv-header__contact a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    /* ── Section ─────────────────────────────────────── */
-    section { margin-bottom: 1.25rem; }
-
-    .section-label {
-      font-family: var(--mono);
-      font-size: 7.5pt;
-      font-weight: 600;
-      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--accent);
-      border-bottom: 1px solid var(--rule);
-      padding-bottom: 0.25rem;
-      margin-bottom: 0.65rem;
     }
 
-    /* ── Summary ─────────────────────────────────────── */
-    .summary {
-      font-size: 9.5pt;
-      color: var(--ink);
-      line-height: 1.6;
-      max-width: 66ch;
+    .cv-title {
+      font-size: 11pt;
+      font-weight: 700;
+      margin-top: 0.2rem;
     }
 
-    /* ── Skills ──────────────────────────────────────── */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 0.3rem 0.75rem;
-      font-size: 9pt;
-    }
-
-    .skills-grid dt {
-      font-family: var(--mono);
-      font-weight: 600;
-      color: var(--muted);
-      font-size: 8.5pt;
-      padding-top: 0.05rem;
-    }
-
-    .skills-grid dd {
-      color: var(--ink);
-    }
-
-    /* ── Projects ────────────────────────────────────── */
-    .project { margin-bottom: 0.9rem; }
-    .project:last-child { margin-bottom: 0; }
-
-    .project__header {
+    .cv-contact {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .project__name {
-      font-family: var(--mono);
-      font-weight: 600;
-      font-size: 9.5pt;
-      color: var(--ink);
-    }
-
-    .project__link {
-      font-family: var(--mono);
-      font-size: 7.5pt;
-      color: var(--accent);
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .project__desc {
-      font-size: 9pt;
-      color: var(--ink);
-      line-height: 1.5;
-      margin-bottom: 0.2rem;
-    }
-
-    .project__stack {
-      font-family: var(--mono);
-      font-size: 7.5pt;
-      color: var(--muted);
-    }
-
-    /* ── Education ───────────────────────────────────── */
-    .edu-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .edu-row__degree {
-      font-family: var(--mono);
-      font-weight: 600;
-      font-size: 9.5pt;
-    }
-
-    .edu-row__meta {
-      font-family: var(--mono);
+      flex-wrap: wrap;
+      gap: 0.15rem 1.4rem;
+      margin-top: 0.45rem;
       font-size: 8pt;
-      color: var(--muted);
+      color: var(--ink);
+    }
+
+    .cv-contact a { color: var(--ink); text-decoration: none; }
+    .cv-contact a:hover { text-decoration: underline; }
+
+    .cv-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .cv-contact-icon {
+      font-style: normal;
+      font-size: 9pt;
+    }
+
+    .header-rule {
+      border: none;
+      border-top: 1px solid #d0d0d0;
+      margin: 0.75rem 0 0;
+    }
+
+    /* ── Two-column body ──────────────────────────────── */
+    .cv-body {
+      display: grid;
+      grid-template-columns: 1fr 0.58fr;
+      gap: 0 2rem;
+      align-items: start;
+      margin-top: 0.9rem;
+    }
+
+    /* ── Section title ────────────────────────────────── */
+    .section-title {
+      font-size: 14pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      border-bottom: 3px solid var(--ink);
+      padding-bottom: 0.15rem;
+      margin-bottom: 0.7rem;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    section { margin-bottom: 1.1rem; }
+
+    /* ── Dashed divider ───────────────────────────────── */
+    .dash { border: none; border-top: 1px dashed var(--dash); margin: 0.6rem 0; }
+
+    /* ── Project / experience entry ───────────────────── */
+    .entry-role   { font-size: 9.5pt; font-weight: 400; color: var(--ink); }
+    .entry-org    { font-size: 10pt;  font-weight: 700; color: var(--ink); margin-top: 0.1rem; }
+    .entry-meta   { font-size: 8pt;   color: var(--muted); margin: 0.15rem 0 0.35rem; }
+    .entry-stack  { font-size: 7.5pt; color: var(--muted); margin-top: 0.25rem; }
+
+    .entry-bullets {
+      list-style: disc;
+      padding-left: 1.2rem;
+      font-size: 9pt;
+    }
+    .entry-bullets li { margin-bottom: 0.18rem; }
+
+    /* ── Tags ─────────────────────────────────────────── */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+    .tag {
+      border: 1px solid var(--ink);
+      padding: 0.08rem 0.55rem;
+      font-size: 8.5pt;
+      border-radius: 2px;
+    }
+
+    /* ── Education ────────────────────────────────────── */
+    .edu-inst   { font-size: 10pt; font-weight: 400; }
+    .edu-degree { font-size: 10pt; font-weight: 700; margin-top: 0.1rem; }
+    .edu-meta   { font-size: 8pt;  color: var(--muted); margin: 0.15rem 0 0.25rem; }
+    .edu-note   { font-size: 8.5pt; color: var(--ink); list-style: disc; margin-left: 1.2rem; }
+
+    /* ── Skill dot bars ───────────────────────────────── */
+    .skills-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .skills-table td { padding: 0.18rem 0; vertical-align: middle; }
+    .skill-name { font-size: 9.5pt; font-weight: 700; }
+    .skill-dots {
+      text-align: right;
+      font-size: 11pt;
+      letter-spacing: 1px;
       white-space: nowrap;
     }
+    .skill-dots .filled { color: var(--ink); }
+    .skill-dots .empty  { color: #ccc; }
 
-    .edu-note {
+    /* ── Framework list ───────────────────────────────── */
+    .fw-list {
+      list-style: disc;
+      padding-left: 1.2rem;
       font-size: 9pt;
-      color: var(--muted);
     }
+    .fw-list li { margin-bottom: 0.2rem; }
 
-    /* ── Print ───────────────────────────────────────── */
+    /* ── Print ────────────────────────────────────────── */
     @media print {
-      html { font-size: 10pt; }
-      body { padding: 1.8cm 2cm; max-width: none; }
-      a { color: var(--accent) !important; }
+      html { font-size: 9pt; }
+      body { padding: 1.4cm 1.8cm; max-width: none; }
       @page { size: A4; margin: 0; }
     }
   </style>
 </head>
 <body>
 
-  <header class="cv-header">
+  <!-- ── Header ── -->
+  <div class="cv-header">
+    <div class="cv-name">Isli Basha</div>
+    <div class="cv-title">Full-Stack Developer</div>
+    <div class="cv-contact">
+      <span class="cv-contact-item">
+        <i class="cv-contact-icon">&#9993;</i>
+        <a href="mailto:islibasha1@gmail.com">islibasha1@gmail.com</a>
+      </span>
+      <span class="cv-contact-item">
+        <i class="cv-contact-icon">&#9737;</i>
+        Tirana, Albania
+      </span>
+      <span class="cv-contact-item">
+        <i class="cv-contact-icon">in</i>
+        <a href="https://linkedin.com/in/islibasha" target="_blank">linkedin.com/in/islibasha</a>
+      </span>
+      <span class="cv-contact-item">
+        <i class="cv-contact-icon">&#9652;</i>
+        <a href="https://github.com/IsliBasha" target="_blank">github.com/IsliBasha</a>
+      </span>
+      <span class="cv-contact-item">
+        <i class="cv-contact-icon">&#9741;</i>
+        <a href="https://isli-basha-portfolio.vercel.app" target="_blank">isli-basha-portfolio.vercel.app</a>
+      </span>
+    </div>
+  </div>
+  <hr class="header-rule" />
+
+  <!-- ── Two-column body ── -->
+  <div class="cv-body">
+
+    <!-- LEFT COLUMN -->
     <div>
-      <div class="cv-header__name">Isli Basha</div>
-      <div class="cv-header__title">Full-Stack Developer &mdash; Tirana, Albania</div>
-    </div>
-    <div class="cv-header__contact">
-      <a href="mailto:islibasha1@gmail.com">islibasha1@gmail.com</a><br/>
-      <a href="https://github.com/IsliBasha" target="_blank">github.com/IsliBasha</a><br/>
-      <a href="https://linkedin.com/in/islibasha" target="_blank">linkedin.com/in/islibasha</a><br/>
-      <a href="https://isli-basha-portfolio.vercel.app" target="_blank">isli-basha-portfolio.vercel.app</a>
-    </div>
-  </header>
 
-  <section>
-    <div class="section-label">Summary</div>
-    <p class="summary">
-      Full-stack developer with hands-on experience across the entire delivery stack —
-      backend services, data pipelines, and production-grade UIs. Comfortable moving between
-      TypeScript, Go, Python, and Kotlin depending on what the problem needs.
-      Final-year Computer Science student at Polis University, with a thesis in
-      cyber-physical threat detection for smart-city infrastructure.
-      Looking for a role where quality of engineering is taken seriously.
-    </p>
-  </section>
+      <section>
+        <div class="section-title">Projects</div>
 
-  <section>
-    <div class="section-label">Skills</div>
-    <dl class="skills-grid">
-      <dt>Languages</dt>
-      <dd>TypeScript &middot; Go &middot; Rust &middot; Python &middot; Kotlin &middot; JavaScript</dd>
+        <!-- ME-DT Framework -->
+        <div class="entry-role">Bachelor Thesis</div>
+        <div class="entry-org">ME-DT Framework</div>
+        <div class="entry-meta">&#128197; 2025 &ndash; 2026 &nbsp;&nbsp; &#9655; Polis University, Tirana</div>
+        <ul class="entry-bullets">
+          <li>Anomaly detection across simulated smart-city infrastructure layers (transport, energy, water, comms) using Isolation Forest with a DOS-bias fix.</li>
+          <li>MITRE ATT&amp;CK threat mapping and real-time Flask dashboard visualising network anomalies. 68 TDD tests.</li>
+        </ul>
+        <div class="entry-stack">Python &middot; Flask &middot; Isolation Forest &middot; MITRE ATT&amp;CK &middot; JavaScript</div>
 
-      <dt>Frontend</dt>
-      <dd>React / Next.js &middot; Svelte / SvelteKit &middot; Tailwind CSS &middot; Three.js</dd>
+        <hr class="dash" />
 
-      <dt>Backend</dt>
-      <dd>Node.js &middot; FastAPI &middot; Fiber (Go) &middot; Hono &middot; tRPC &middot; GraphQL</dd>
+        <!-- mira-study -->
+        <div class="entry-role">AI Study Companion</div>
+        <div class="entry-org">mira-study</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/mira-study</div>
+        <ul class="entry-bullets">
+          <li>Desktop app for Albanian students: upload a PDF, auto-generate flashcards and multiple-choice quizzes via Claude AI.</li>
+          <li>Step-by-step tutor explanations for wrong answers; analytics dashboard tracking score trends and weak topics. Albanian&thinsp;/&thinsp;English UI toggle.</li>
+          <li>PDF parsing via PyMuPDF, pdfplumber, and Tesseract OCR; FastAPI backend; SQLite via SQLAlchemy.</li>
+        </ul>
+        <div class="entry-stack">Python &middot; PyQt6 &middot; FastAPI &middot; Claude AI &middot; SQLite &middot; Tesseract OCR</div>
 
-      <dt>Infra</dt>
-      <dd>Docker &middot; Vercel &middot; Cloudflare Workers &middot; PostgreSQL &middot; Redis &middot; GitHub Actions</dd>
-    </dl>
-  </section>
+        <hr class="dash" />
 
-  <section>
-    <div class="section-label">Projects</div>
+        <!-- Whatsapp-Chatbot -->
+        <div class="entry-role">WhatsApp Business Bot</div>
+        <div class="entry-org">Whatsapp-Chatbot</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/Whatsapp-Chatbot</div>
+        <ul class="entry-bullets">
+          <li>AI-powered Albanian product chatbot: Claude AI NLP intent parsing and fuzzy product search.</li>
+          <li>Odoo XML-RPC product sync, per-session state management, HMAC-SHA256 webhook verification, and per-IP rate limiting.</li>
+          <li>95%+ test coverage across unit, integration, and webhook test suites.</li>
+        </ul>
+        <div class="entry-stack">JavaScript &middot; Node.js &middot; Claude AI &middot; Odoo XML-RPC &middot; PostgreSQL</div>
 
-    <div class="project">
-      <div class="project__header">
-        <span class="project__name">ME-DT Framework</span>
-        <a class="project__link" href="https://github.com/IsliBasha/me-dt-framework">github.com/IsliBasha/me-dt-framework</a>
-      </div>
-      <p class="project__desc">
-        Bachelor thesis &mdash; Mythos-Enhanced Digital Twin for smart-city cyber-physical threat detection.
-        Isolation Forest anomaly detection, MITRE ATT&amp;CK threat mapping, and a real-time Flask dashboard
-        visualising network anomalies across simulated city infrastructure layers.
-      </p>
-      <div class="project__stack">Python &middot; Flask &middot; Isolation Forest &middot; MITRE ATT&amp;CK &middot; JavaScript</div>
-    </div>
+        <hr class="dash" />
 
-    <div class="project">
-      <div class="project__header">
-        <span class="project__name">FloraCare</span>
-        <a class="project__link" href="https://github.com/IsliBasha/FloraCare">github.com/IsliBasha/FloraCare</a>
-      </div>
-      <p class="project__desc">
-        Android plant care companion. Species identification and care data via Perenual API,
-        personalised watering schedules, and weather-aware care reminders via OpenWeatherMap.
-      </p>
-      <div class="project__stack">Kotlin &middot; Jetpack Compose &middot; Android &middot; Perenual API &middot; OpenWeatherMap</div>
-    </div>
+        <!-- cf-worker-rust -->
+        <div class="entry-role">Edge Security Worker</div>
+        <div class="entry-org">cf-worker-rust</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/cf-worker-rust</div>
+        <ul class="entry-bullets">
+          <li>JWT validator (HS256&thinsp;/&thinsp;RS256) and per-IP sliding-window rate limiter running at the Cloudflare edge.</li>
+          <li>Rust compiled to WASM via workers-rs; rate-limit state backed by Cloudflare KV.</li>
+        </ul>
+        <div class="entry-stack">Rust &middot; WASM &middot; Cloudflare Workers &middot; JWT &middot; Cloudflare KV</div>
 
-    <div class="project">
-      <div class="project__header">
-        <span class="project__name">Whatsapp-Chatbot</span>
-        <a class="project__link" href="https://github.com/IsliBasha/Whatsapp-Chatbot">github.com/IsliBasha/Whatsapp-Chatbot</a>
-      </div>
-      <p class="project__desc">
-        AI-powered Albanian product chatbot running on WhatsApp. Claude AI intent parsing,
-        fuzzy product search, per-session state management, HMAC-SHA256 webhook verification,
-        and per-IP rate limiting. 95%+ test coverage.
-      </p>
-      <div class="project__stack">JavaScript &middot; Node.js &middot; Claude AI &middot; Odoo XML-RPC &middot; PostgreSQL</div>
+        <hr class="dash" />
+
+        <!-- FloraCare -->
+        <div class="entry-role">Android App</div>
+        <div class="entry-org">FloraCare</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/FloraCare</div>
+        <ul class="entry-bullets">
+          <li>Plant care companion with species identification via Perenual API and personalised watering schedules.</li>
+          <li>Weather-aware care reminders via OpenWeatherMap; built with Jetpack Compose.</li>
+        </ul>
+        <div class="entry-stack">Kotlin &middot; Jetpack Compose &middot; Android &middot; Perenual API &middot; OpenWeatherMap</div>
+
+        <hr class="dash" />
+
+        <!-- HamsterFaceRecognition -->
+        <div class="entry-role">Computer Vision</div>
+        <div class="entry-org">HamsterFaceRecognition</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/HamsterFaceRecognition</div>
+        <ul class="entry-bullets">
+          <li>Face recognition pipeline trained on hamster images; identifies individual hamsters from webcam or photo input.</li>
+          <li>A deliberately unserious application of production-grade computer vision tooling.</li>
+        </ul>
+        <div class="entry-stack">Python &middot; OpenCV &middot; DeepFace</div>
+      </section>
+
     </div>
 
-    <div class="project">
-      <div class="project__header">
-        <span class="project__name">cf-worker-rust</span>
-        <a class="project__link" href="https://github.com/IsliBasha/cf-worker-rust">github.com/IsliBasha/cf-worker-rust</a>
-      </div>
-      <p class="project__desc">
-        Edge JWT validator and per-IP rate limiter on Cloudflare Workers.
-        Rust compiled to WASM via workers-rs. Supports HS256 and RS256 tokens;
-        sliding-window rate limiting backed by Cloudflare KV.
-      </p>
-      <div class="project__stack">Rust &middot; WASM &middot; Cloudflare Workers &middot; JWT</div>
-    </div>
+    <!-- RIGHT COLUMN -->
+    <div>
 
-    <div class="project">
-      <div class="project__header">
-        <span class="project__name">mira-study</span>
-        <a class="project__link" href="https://github.com/IsliBasha/mira-study">github.com/IsliBasha/mira-study</a>
-      </div>
-      <p class="project__desc">
-        AI study companion for Albanian students. Upload a PDF to auto-generate flashcards and
-        multiple-choice quizzes; get step-by-step tutor explanations for wrong answers via Claude AI.
-        Analytics dashboard tracks score trends and weak topics. Albanian / English UI toggle.
-      </p>
-      <div class="project__stack">Python &middot; PyQt6 &middot; FastAPI &middot; Claude AI &middot; SQLite &middot; PyMuPDF &middot; Tesseract OCR</div>
-    </div>
+      <!-- Profile -->
+      <section>
+        <div class="section-title">Profile</div>
+        <p style="font-size:9pt;line-height:1.6;">
+          Full-stack developer comfortable across the entire delivery stack — backend services, data pipelines, and production-grade UIs. Moves between TypeScript, Python, Kotlin, and Rust depending on what the problem needs. Final-year CS student at Polis University with a thesis in cyber-physical threat detection for smart-city infrastructure.
+        </p>
+      </section>
 
-    <div class="project">
-      <div class="project__header">
-        <span class="project__name">HamsterFaceRecognition</span>
-        <a class="project__link" href="https://github.com/IsliBasha/HamsterFaceRecognition">github.com/IsliBasha/HamsterFaceRecognition</a>
-      </div>
-      <p class="project__desc">
-        Face recognition pipeline trained on hamster images using DeepFace and OpenCV.
-        A deliberately unserious application of production-grade computer vision tooling.
-      </p>
-      <div class="project__stack">Python &middot; OpenCV &middot; DeepFace</div>
-    </div>
-  </section>
+      <!-- Areas of Interest -->
+      <section>
+        <div class="section-title">Areas of Interest</div>
+        <div class="tags">
+          <span class="tag">Full-Stack Dev</span>
+          <span class="tag">Systems &amp; Edge</span>
+          <span class="tag">AI / LLMs</span>
+          <span class="tag">Android</span>
+          <span class="tag">Security</span>
+          <span class="tag">Data Pipelines</span>
+        </div>
+      </section>
 
-  <section>
-    <div class="section-label">Education</div>
-    <div class="edu-row">
-      <span class="edu-row__degree">Bachelor&rsquo;s in Computer Science</span>
-      <span class="edu-row__meta">Polis University, Tirana &mdash; 2026</span>
-    </div>
-    <p class="edu-note">
-      Thesis: Mythos-Enhanced Digital Twin for smart-city cyber-physical threat detection (ME-DT Framework)
-    </p>
+      <!-- Education -->
+      <section>
+        <div class="section-title">Education</div>
 
-    <div class="edu-row" style="margin-top: 0.6rem;">
-      <span class="edu-row__degree">High School Diploma &mdash; Electronics</span>
-      <span class="edu-row__meta">Harry T. Fultz, Tirana &mdash; 2018 &ndash; 2022</span>
+        <div class="edu-inst">Polis University, Tirana</div>
+        <div class="edu-degree">Bachelor&rsquo;s in Computer Science</div>
+        <div class="edu-meta">&#128197; 2026</div>
+        <ul style="list-style:disc;padding-left:1.2rem;font-size:8.5pt;">
+          <li>Thesis: ME-DT Framework &mdash; cyber-physical threat detection for smart-city infrastructure</li>
+        </ul>
+
+        <hr class="dash" />
+
+        <div class="edu-inst">Harry T. Fultz, Tirana</div>
+        <div class="edu-degree">High School Diploma &mdash; Electronics</div>
+        <div class="edu-meta">&#128197; 2018 &ndash; 2022</div>
+      </section>
+
+      <!-- Technical Skills -->
+      <section>
+        <div class="section-title">Technical Skills</div>
+        <table class="skills-table">
+          <tbody>
+            <tr>
+              <td class="skill-name">JavaScript</td>
+              <td class="skill-dots"><span class="filled">●●●●●</span></td>
+            </tr>
+            <tr>
+              <td class="skill-name">TypeScript</td>
+              <td class="skill-dots"><span class="filled">●●●●</span><span class="empty">○</span></td>
+            </tr>
+            <tr>
+              <td class="skill-name">Python</td>
+              <td class="skill-dots"><span class="filled">●●●●</span><span class="empty">○</span></td>
+            </tr>
+            <tr>
+              <td class="skill-name">Kotlin</td>
+              <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
+            </tr>
+            <tr>
+              <td class="skill-name">Go</td>
+              <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
+            </tr>
+            <tr>
+              <td class="skill-name">Rust</td>
+              <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Frameworks / Tools -->
+      <section>
+        <div class="section-title">Frameworks / Tools</div>
+        <ul class="fw-list">
+          <li>React / Next.js &middot; Svelte / SvelteKit</li>
+          <li>Node.js &middot; FastAPI &middot; Fiber (Go) &middot; Hono</li>
+          <li>Docker &middot; Vercel &middot; Cloudflare Workers</li>
+          <li>PostgreSQL &middot; Redis &middot; SQLite</li>
+          <li>GitHub Actions &middot; Tailwind CSS &middot; Three.js</li>
+        </ul>
+      </section>
+
     </div>
-  </section>
+  </div>
 
 </body>
 </html>
