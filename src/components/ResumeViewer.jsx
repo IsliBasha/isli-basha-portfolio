@@ -29,13 +29,15 @@ function PrinterIcon() {
   );
 }
 
+const openPrint = () => window.open('/cv.html?print=1', '_blank');
+
 export function ResumeViewer() {
   const handlePrint = () => {
     const iframe = document.getElementById('resume-pdf-iframe');
     try {
       iframe?.contentWindow?.print();
     } catch {
-      window.open('/resume.pdf', '_blank');
+      openPrint();
     }
   };
 
@@ -54,15 +56,15 @@ export function ResumeViewer() {
         ))}
       </div>
       <div className="pdf-toolbar" role="toolbar" aria-label="PDF controls">
-        <a
-          href="/resume.pdf"
-          download="isli-basha-resume.pdf"
+        <button
+          type="button"
           className="pdf-toolbar-btn"
           title="Save a Copy"
-          aria-label="Download resume PDF"
+          aria-label="Save resume as PDF"
+          onClick={openPrint}
         >
           <FloppyIcon />
-        </a>
+        </button>
         <span className="pdf-toolbar-sep" aria-hidden="true" />
         <button
           type="button"
@@ -78,19 +80,15 @@ export function ResumeViewer() {
         <iframe
           id="resume-pdf-iframe"
           className="pdf-viewer-iframe"
-          src="/resume.pdf"
-          title="Resume PDF"
+          src="/cv.html"
+          title="Resume"
         />
       </div>
       <div className="pdf-statusbar">
         <span>resume.pdf</span>
-        <a
-          href="/resume.pdf"
-          download="isli-basha-resume.pdf"
-          className="pdf-download-link"
-        >
+        <button type="button" className="pdf-download-link" onClick={openPrint}>
           Save a Copy
-        </a>
+        </button>
       </div>
     </>
   );
