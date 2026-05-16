@@ -1740,6 +1740,11 @@ textarea.win-field {
 }
 
 .pdf-download-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
   color: var(--c-title-from);
   text-decoration: none;
   font-size: 0.75rem;
