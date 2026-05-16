@@ -155,9 +155,16 @@
 
     /* ── Print ────────────────────────────────────────── */
     @media print {
-      html { font-size: 9pt; }
-      body { padding: 1.4cm 1.8cm; max-width: none; }
+      html { font-size: 8.5pt; }
+      body { padding: 1cm 1.6cm; max-width: none; }
       @page { size: A4; margin: 0; }
+      .cv-name { font-size: 26pt; }
+      .cv-body { margin-top: 0.5rem; gap: 0 1.6rem; }
+      section { margin-bottom: 0.65rem; }
+      .dash { margin: 0.35rem 0; }
+      .entry-bullets li { margin-bottom: 0.1rem; }
+      .fw-list li { margin-bottom: 0.1rem; }
+      .header-rule { margin: 0.5rem 0 0; }
     }
   </style>
 </head>
@@ -220,7 +227,6 @@
         <ul class="entry-bullets">
           <li>Desktop app for Albanian students: upload a PDF, auto-generate flashcards and multiple-choice quizzes via Claude AI.</li>
           <li>Step-by-step tutor explanations for wrong answers; analytics dashboard tracking score trends and weak topics. Albanian&thinsp;/&thinsp;English UI toggle.</li>
-          <li>PDF parsing via PyMuPDF, pdfplumber, and Tesseract OCR; FastAPI backend; SQLite via SQLAlchemy.</li>
         </ul>
         <div class="entry-stack">Python &middot; PyQt6 &middot; FastAPI &middot; Claude AI &middot; SQLite &middot; Tesseract OCR</div>
 
@@ -232,8 +238,7 @@
         <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/Whatsapp-Chatbot</div>
         <ul class="entry-bullets">
           <li>AI-powered Albanian product chatbot: Claude AI NLP intent parsing and fuzzy product search.</li>
-          <li>Odoo XML-RPC product sync, per-session state management, HMAC-SHA256 webhook verification, and per-IP rate limiting.</li>
-          <li>95%+ test coverage across unit, integration, and webhook test suites.</li>
+          <li>Odoo XML-RPC sync, HMAC-SHA256 webhook auth, per-session state, per-IP rate limiting. 95%+ test coverage.</li>
         </ul>
         <div class="entry-stack">JavaScript &middot; Node.js &middot; Claude AI &middot; Odoo XML-RPC &middot; PostgreSQL</div>
 
@@ -256,22 +261,10 @@
         <div class="entry-org">FloraCare</div>
         <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/FloraCare</div>
         <ul class="entry-bullets">
-          <li>Plant care companion with species identification via Perenual API and personalised watering schedules.</li>
-          <li>Weather-aware care reminders via OpenWeatherMap; built with Jetpack Compose.</li>
+          <li>Plant care companion with species ID via Perenual API, personalised watering schedules, and weather-aware reminders via OpenWeatherMap.</li>
         </ul>
         <div class="entry-stack">Kotlin &middot; Jetpack Compose &middot; Android &middot; Perenual API &middot; OpenWeatherMap</div>
 
-        <hr class="dash" />
-
-        <!-- HamsterFaceRecognition -->
-        <div class="entry-role">Computer Vision</div>
-        <div class="entry-org">HamsterFaceRecognition</div>
-        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/HamsterFaceRecognition</div>
-        <ul class="entry-bullets">
-          <li>Face recognition pipeline trained on hamster images; identifies individual hamsters from webcam or photo input.</li>
-          <li>A deliberately unserious application of production-grade computer vision tooling.</li>
-        </ul>
-        <div class="entry-stack">Python &middot; OpenCV &middot; DeepFace</div>
       </section>
 
     </div>
