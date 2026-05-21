@@ -48,4 +48,12 @@ export const projects = [
     href: 'https://github.com/IsliBasha/albanian-study-app',
     iconType: 'book',
   },
+  {
+    id: 'rust-scraper',
+    name: 'rust-scraper',
+    description: 'Production-grade Rust web scraper — hybrid HTTP/headless rendering, recursive crawler, CSS + XPath extraction, live TUI, web dashboard, SQLite persistence, single self-contained binary.',
+    stack: ['Rust', 'SQLite', 'ratatui', 'XPath'],
+    href: 'https://github.com/IsliBasha/rust-scraper',
+    iconType: 'rust',
+  },
 ];
