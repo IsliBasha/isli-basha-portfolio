@@ -121,7 +121,88 @@ function BookIcon() {
   );
 }
 
-const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon, rust: RustIcon, book: BookIcon };
+function TerminalIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      {/* outer frame */}
+      <rect x="2" y="4" width="28" height="24" fill="#1a1a1a" stroke="#808080" strokeWidth="1"/>
+      <line x1="2" y1="4" x2="29" y2="4" stroke="#c0c0c0" strokeWidth="1"/>
+      <line x1="2" y1="4" x2="2" y2="27" stroke="#c0c0c0" strokeWidth="1"/>
+      {/* title bar */}
+      <rect x="3" y="5" width="26" height="4" fill="#000080"/>
+      <rect x="4" y="6" width="3" height="2" fill="#c0c0c0"/>
+      <line x1="4" y1="6" x2="6" y2="6" stroke="#ffffff" strokeWidth="0.5"/>
+      {/* terminal area */}
+      <rect x="3" y="10" width="26" height="17" fill="#000000"/>
+      {/* prompt caret + command */}
+      <path d="M6 15L9 17L6 19" stroke="#33ff33" strokeWidth="1.2" fill="none" strokeLinecap="square"/>
+      <line x1="11" y1="17" x2="17" y2="17" stroke="#33ff33" strokeWidth="1.5" strokeLinecap="square"/>
+      {/* cursor block */}
+      <rect x="18" y="15.5" width="2" height="3" fill="#33ff33"/>
+      {/* output lines */}
+      <line x1="6" y1="22" x2="22" y2="22" stroke="#33ff33" strokeWidth="1" opacity="0.5" strokeLinecap="square"/>
+      <line x1="6" y1="25" x2="14" y2="25" stroke="#33ff33" strokeWidth="1" opacity="0.3" strokeLinecap="square"/>
+    </svg>
+  );
+}
+
+function TypeScriptIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      {/* badge */}
+      <rect x="2" y="2" width="28" height="28" fill="#3178c6" stroke="#1a5a9a" strokeWidth="1"/>
+      <line x1="2" y1="3" x2="29" y2="3" stroke="#6aabff" strokeWidth="1"/>
+      <line x1="2" y1="3" x2="2" y2="29" stroke="#6aabff" strokeWidth="1"/>
+      {/* T */}
+      <rect x="4" y="10" width="11" height="2" fill="#ffffff"/>
+      <rect x="8" y="12" width="3" height="10" fill="#ffffff"/>
+      {/* S — pixel art */}
+      <rect x="18" y="10" width="8" height="2" fill="#ffffff"/>
+      <rect x="18" y="12" width="3" height="2" fill="#ffffff"/>
+      <rect x="18" y="14" width="8" height="2" fill="#ffffff"/>
+      <rect x="23" y="16" width="3" height="2" fill="#ffffff"/>
+      <rect x="18" y="18" width="8" height="2" fill="#ffffff"/>
+    </svg>
+  );
+}
+
+function ChipIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      {/* chip body */}
+      <rect x="8" y="8" width="16" height="16" fill="#c0c0c0" stroke="#404040" strokeWidth="1"/>
+      <line x1="8" y1="9" x2="23" y2="9" stroke="#ffffff" strokeWidth="1"/>
+      <line x1="8" y1="9" x2="8" y2="23" stroke="#ffffff" strokeWidth="1"/>
+      {/* inner die */}
+      <rect x="11" y="11" width="10" height="10" fill="#1a1a2e" stroke="#555" strokeWidth="0.5"/>
+      {/* circuit grid */}
+      <line x1="13" y1="13" x2="19" y2="13" stroke="#33ff33" strokeWidth="0.8"/>
+      <line x1="13" y1="16" x2="19" y2="16" stroke="#33ff33" strokeWidth="0.8"/>
+      <line x1="13" y1="19" x2="19" y2="19" stroke="#33ff33" strokeWidth="0.8"/>
+      <line x1="13" y1="13" x2="13" y2="19" stroke="#33ff33" strokeWidth="0.8"/>
+      <line x1="16" y1="13" x2="16" y2="19" stroke="#33ff33" strokeWidth="0.8"/>
+      <line x1="19" y1="13" x2="19" y2="19" stroke="#33ff33" strokeWidth="0.8"/>
+      {/* pins — top */}
+      <line x1="11" y1="8" x2="11" y2="4" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      <line x1="16" y1="8" x2="16" y2="4" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      <line x1="21" y1="8" x2="21" y2="4" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      {/* pins — bottom */}
+      <line x1="11" y1="24" x2="11" y2="28" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      <line x1="16" y1="24" x2="16" y2="28" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      <line x1="21" y1="24" x2="21" y2="28" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      {/* pins — left */}
+      <line x1="8" y1="11" x2="4" y2="11" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      <line x1="8" y1="16" x2="4" y2="16" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      <line x1="8" y1="21" x2="4" y2="21" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      {/* pins — right */}
+      <line x1="24" y1="11" x2="28" y2="11" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      <line x1="24" y1="16" x2="28" y2="16" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+      <line x1="24" y1="21" x2="28" y2="21" stroke="#808080" strokeWidth="2" strokeLinecap="square"/>
+    </svg>
+  );
+}
+
+const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon, rust: RustIcon, book: BookIcon, terminal: TerminalIcon, typescript: TypeScriptIcon, chip: ChipIcon };
 
 export function ProjectIcon({ type }) {
   const Icon = ICONS[type] ?? ICONS.chat;

@@ -2,19 +2,19 @@ import { describe, it, expect } from 'vitest';
 import { projects } from './projects.js';
 
 describe('projects data', () => {
-  it('includes the albanian-study-app project', () => {
+  it('includes the mira-study project', () => {
     const ids = projects.map((p) => p.id);
-    expect(ids).toContain('albanian-study-app');
+    expect(ids).toContain('mira-study');
   });
 
-  it('albanian-study-app has a valid GitHub href', () => {
-    const p = projects.find((p) => p.id === 'albanian-study-app');
+  it('mira-study has a valid GitHub href', () => {
+    const p = projects.find((p) => p.id === 'mira-study');
     expect(p).toBeDefined();
-    expect(p.href).toBe('https://github.com/IsliBasha/albanian-study-app');
+    expect(p.href).toBe('https://github.com/IsliBasha/mira-study');
   });
 
-  it('albanian-study-app lists PyQt6 in its stack', () => {
-    const p = projects.find((p) => p.id === 'albanian-study-app');
+  it('mira-study lists PyQt6 in its stack', () => {
+    const p = projects.find((p) => p.id === 'mira-study');
     expect(p.stack).toContain('PyQt6');
   });
 
