@@ -279,7 +279,7 @@ function App() {
         <div className="desktop-icons" aria-label="Desktop shortcuts">
           <DesktopIcon kind="about"       label="about.txt"       target="about"       defaultPos={{ x: 16, y: 16  }} />
           <DesktopIcon kind="projects"    label="projects"        target="projects"    defaultPos={{ x: 16, y: 96  }} />
-          <DesktopIcon kind="stack"       label="stack.cmd"       target="stack"       defaultPos={{ x: 16, y: 176 }} />
+          <DesktopIcon kind="stack"       label="cmd"             target="stack"       defaultPos={{ x: 16, y: 176 }} />
           <DesktopIcon kind="contact"     label="contact.exe"     target="contact"     defaultPos={{ x: 16, y: 256 }} />
           <DesktopIcon kind="resume"      label="resume.pdf"      target="resume"      defaultPos={{ x: 16, y: 336 }} />
           <DesktopIcon kind="minesweeper" label="minesweeper.exe" target="minesweeper" defaultPos={{ x: 16, y: 416 }} />
@@ -313,7 +313,7 @@ function App() {
 
         <Window
           id="stack"
-          title="stack.cmd"
+          title="cmd"
           className="win-stack"
           bootDelayMs={240}
           contentClassName="win-stack__content"

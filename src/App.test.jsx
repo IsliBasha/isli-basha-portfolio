@@ -59,17 +59,17 @@ describe('App initial desktop state', () => {
       screen.queryByRole('region', { name: 'projects' }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('region', { name: 'stack.cmd' }),
+      screen.queryByRole('region', { name: 'cmd' }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('region', { name: 'contact.exe' }),
     ).not.toBeInTheDocument();
   });
 
-  it('renders a stack.cmd icon on the desktop', () => {
+  it('renders a cmd icon on the desktop', () => {
     render(<App />);
     expect(
-      screen.getByRole('button', { name: 'stack.cmd' }),
+      screen.getByRole('button', { name: 'cmd' }),
     ).toBeInTheDocument();
   });
 
@@ -82,12 +82,12 @@ describe('App initial desktop state', () => {
     ).toBeInTheDocument();
   });
 
-  it('opens the stack window only after the stack.cmd icon is clicked', async () => {
+  it('opens the stack window only after the cmd icon is clicked', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: 'stack.cmd' }));
+    await user.click(screen.getByRole('button', { name: 'cmd' }));
     expect(
-      screen.getByRole('region', { name: 'stack.cmd' }),
+      screen.getByRole('region', { name: 'cmd' }),
     ).toBeInTheDocument();
   });
 });
