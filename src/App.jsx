@@ -3,7 +3,6 @@ import { WindowStackProvider } from './context/WindowStack.jsx';
 import { Window } from './components/Window.jsx';
 import { Taskbar } from './components/Taskbar.jsx';
 import { DesktopIcon } from './components/DesktopIcon.jsx';
-import { ProjectCard } from './components/ProjectCard.jsx';
 import { StackCmd } from './components/StackCmd.jsx';
 import { StickyNote } from './components/StickyNote.jsx';
 import { SystemDialog } from './components/SystemDialog.jsx';
@@ -17,11 +16,9 @@ import { ResumeViewer } from './components/ResumeViewer.jsx';
 import { VisitorCounterContent } from './components/VisitorCounter.jsx';
 import { MyWorkExplorer } from './components/MyWorkExplorer.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
-import { projects } from './data/projects.js';
 
 const WINDOW_ORDER = [
   'about',
-  'projects',
   'stack',
   'contact',
   'stats',
@@ -32,7 +29,6 @@ const WINDOW_ORDER = [
 ];
 const INITIALLY_CLOSED = [
   'about',
-  'projects',
   'stack',
   'contact',
   'resume',
@@ -116,49 +112,6 @@ function ContactExe() {
         <ContactForm />
       </div>
       <div className="explorer-statusbar">Ready</div>
-    </>
-  );
-}
-
-function ProjectsExplorer({ projects: projectList }) {
-  return (
-    <>
-      <div className="explorer-menubar" role="menubar">
-        {['File', 'Edit', 'View', 'Help'].map((item) => (
-          <button
-            key={item}
-            type="button"
-            className="explorer-menu-item"
-            role="menuitem"
-          >
-            {item}
-          </button>
-        ))}
-      </div>
-      <div className="explorer-address-bar">
-        <span className="explorer-address-label">Address</span>
-        <div
-          className="explorer-address-field"
-          aria-label="Current location: C:\ISLI\PROJECTS"
-        >
-          C:\ISLI\PROJECTS
-        </div>
-      </div>
-      <div className="explorer-body">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {projectList.map((p) => (
-            <ProjectCard
-              key={p.id}
-              name={p.name}
-              description={p.description}
-              stack={p.stack}
-              href={p.href}
-              iconType={p.iconType}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="explorer-statusbar">{projectList.length} object(s)</div>
     </>
   );
 }
@@ -281,13 +234,12 @@ function App() {
       <main className="desktop-area" onContextMenu={handleContextMenu}>
         <div className="desktop-icons" aria-label="Desktop shortcuts">
           <DesktopIcon kind="about"       label="about.txt"       target="about"       defaultPos={{ x: 16, y: 16  }} />
-          <DesktopIcon kind="projects"    label="projects"        target="projects"    defaultPos={{ x: 16, y: 96  }} />
-          <DesktopIcon kind="stack"       label="cmd"             target="stack"       defaultPos={{ x: 16, y: 176 }} />
-          <DesktopIcon kind="contact"     label="contact.exe"     target="contact"     defaultPos={{ x: 16, y: 256 }} />
-          <DesktopIcon kind="resume"      label="resume.pdf"      target="resume"      defaultPos={{ x: 16, y: 336 }} />
-          <DesktopIcon kind="minesweeper" label="minesweeper.exe" target="minesweeper" defaultPos={{ x: 16, y: 416 }} />
-          <DesktopIcon kind="snake"       label="snake.exe"       target="snake"       defaultPos={{ x: 16, y: 496 }} />
-          <DesktopIcon kind="mywork"      label="my work"         target="mywork"      defaultPos={{ x: 16, y: 576 }} />
+          <DesktopIcon kind="stack"       label="cmd"             target="stack"       defaultPos={{ x: 16, y: 96  }} />
+          <DesktopIcon kind="contact"     label="contact.exe"     target="contact"     defaultPos={{ x: 16, y: 176 }} />
+          <DesktopIcon kind="resume"      label="resume.pdf"      target="resume"      defaultPos={{ x: 16, y: 256 }} />
+          <DesktopIcon kind="minesweeper" label="minesweeper.exe" target="minesweeper" defaultPos={{ x: 16, y: 336 }} />
+          <DesktopIcon kind="snake"       label="snake.exe"       target="snake"       defaultPos={{ x: 16, y: 416 }} />
+          <DesktopIcon kind="mywork"      label="my work"         target="mywork"      defaultPos={{ x: 16, y: 496 }} />
         </div>
 
         <div className="sticky-note-wrap">
@@ -303,16 +255,6 @@ function App() {
           contentClassName="win-about__content"
         >
           <NotepadAbout />
-        </Window>
-
-        <Window
-          id="projects"
-          title="projects"
-          className="win-projects"
-          bootDelayMs={120}
-          contentClassName="win-projects__content"
-        >
-          <ProjectsExplorer projects={projects} />
         </Window>
 
         <Window

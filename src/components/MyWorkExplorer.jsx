@@ -1,14 +1,16 @@
 import { useState } from 'react';
 
 const PROJECTS = [
+  // ── Client / Delivered ──────────────────────────────────────────────────
   {
     id: 'stani',
     name: 'Stani i Hoxhës',
     category: 'web',
     type: 'Web · Client',
-    desc: 'Mountain lodge in Kukës, Albania. Bilingual (SQ/EN), animated hero, gallery, and reservation contact form.',
+    desc: 'Mountain lodge in Kukës, Albania. Bilingual SQ/EN, animated hero, gallery, and reservation contact form.',
     stack: ['Astro', 'CSS', 'i18n'],
     link: 'https://stani-hoxhes-website.pages.dev/',
+    linkLabel: 'Visit →',
     icon: '🌐',
     screenshot: '/stani-screenshot.jpeg',
   },
@@ -17,53 +19,209 @@ const PROJECTS = [
     name: 'warehouse-inventory',
     category: 'app',
     type: 'App · Mobile',
-    desc: 'Mobile-first inventory management app. Tracks stock levels, movements, and locations.',
+    desc: 'Mobile-first inventory management app built during a work placement. Tracks stock levels, movements, and locations.',
     stack: ['Ionic', 'Angular', 'Capacitor'],
     link: '',
+    linkLabel: '',
     icon: '📦',
     screenshot: null,
   },
   {
-    id: 'ionic',
+    id: 'ionic-work',
     name: 'ionic-project-work-1',
     category: 'app',
     type: 'App · Mobile',
     desc: 'Ionic/Angular hybrid app built during a work placement. Compiled to native iOS and Android targets.',
     stack: ['Ionic', 'Angular', 'Capacitor'],
     link: '',
+    linkLabel: '',
     icon: '📱',
+    screenshot: null,
+  },
+  // ── Open Source / GitHub ─────────────────────────────────────────────────
+  {
+    id: 'medt',
+    name: 'ME-DT Framework',
+    category: 'research',
+    type: 'Research · Thesis',
+    desc: 'Bachelor thesis: Mythos-Enhanced Digital Twin for smart-city cyber-physical threat detection. Isolation Forest anomaly detection, MITRE ATT&CK mapping, real-time Flask dashboard.',
+    stack: ['Python', 'Flask', 'Isolation Forest', 'MITRE ATT&CK'],
+    link: 'https://github.com/IsliBasha/me-dt-framework',
+    linkLabel: 'GitHub →',
+    icon: '🔬',
+    screenshot: null,
+  },
+  {
+    id: 'floracare',
+    name: 'FloraCare',
+    category: 'app',
+    type: 'App · Android',
+    desc: 'Android plant care companion. Species lookup via Perenual API, watering schedules, and weather-aware care reminders.',
+    stack: ['Kotlin', 'Android', 'Perenual API', 'OpenWeatherMap'],
+    link: 'https://github.com/IsliBasha/FloraCare',
+    linkLabel: 'GitHub →',
+    icon: '🌿',
     screenshot: null,
   },
   {
     id: 'wabot',
-    name: 'WhatsApp Bot',
+    name: 'Whatsapp-Chatbot',
     category: 'tool',
     type: 'Tool · Backend',
-    desc: 'Product chatbot via the Meta WhatsApp Cloud API. Express backend with Excel as the data layer.',
-    stack: ['Node.js', 'Express', 'WhatsApp API'],
-    link: '',
+    desc: 'AI-powered Albanian product chatbot on WhatsApp. Claude AI intent parsing, fuzzy product search, session state, HMAC webhook verification, and rate limiting.',
+    stack: ['JavaScript', 'Node.js', 'Claude AI', 'PostgreSQL'],
+    link: 'https://github.com/IsliBasha/Whatsapp-Chatbot',
+    linkLabel: 'GitHub →',
     icon: '🤖',
     screenshot: null,
   },
   {
-    id: 'publer',
-    name: 'publer-mcp',
+    id: 'cf-worker-rust',
+    name: 'cf-worker-rust',
+    category: 'tool',
+    type: 'Tool · Edge',
+    desc: 'Edge JWT validator and per-IP rate limiter on Cloudflare Workers. Rust/WASM via workers-rs, supports HS256 and RS256. KV-backed sliding-window rate limiting.',
+    stack: ['Rust', 'WASM', 'Cloudflare Workers', 'JWT'],
+    link: 'https://github.com/IsliBasha/cf-worker-rust',
+    linkLabel: 'GitHub →',
+    icon: '⚡',
+    screenshot: null,
+  },
+  {
+    id: 'hamster',
+    name: 'HamsterFaceRecognition',
+    category: 'research',
+    type: 'Research · ML',
+    desc: 'Face recognition model trained on hamster images. DeepFace + OpenCV applied to a deeply unserious dataset.',
+    stack: ['Python', 'OpenCV', 'DeepFace'],
+    link: 'https://github.com/IsliBasha/HamsterFaceRecognition',
+    linkLabel: 'GitHub →',
+    icon: '🐹',
+    screenshot: null,
+  },
+  {
+    id: 'mira-study',
+    name: 'Mira Study',
+    category: 'app',
+    type: 'App · Desktop',
+    desc: 'AI study companion. Upload PDFs, auto-generate flashcards and quizzes, get step-by-step AI tutor explanations, and track progress with an analytics dashboard.',
+    stack: ['PyQt6', 'FastAPI', 'Claude AI', 'SQLite'],
+    link: 'https://github.com/IsliBasha/mira-study',
+    linkLabel: 'GitHub →',
+    icon: '📚',
+    screenshot: null,
+  },
+  {
+    id: 'rust-scraper',
+    name: 'rust-scraper',
+    category: 'tool',
+    type: 'Tool · CLI',
+    desc: 'Production-grade Rust web scraper — hybrid HTTP/headless rendering, recursive crawler, CSS + XPath extraction, live TUI, web dashboard, SQLite persistence, single binary.',
+    stack: ['Rust', 'SQLite', 'ratatui', 'XPath'],
+    link: 'https://github.com/IsliBasha/rust-scraper',
+    linkLabel: 'GitHub →',
+    icon: '🕷️',
+    screenshot: null,
+  },
+  {
+    id: 'linkedin-banner',
+    name: 'LinkedIn Banner',
+    category: 'tool',
+    type: 'Tool · Automation',
+    desc: 'Auto-generates a LinkedIn cover photo from live GitHub stats — dark terminal aesthetic with contribution graph, language breakdown, and streak metrics. Refreshed daily via GitHub Actions.',
+    stack: ['Python', 'Pillow', 'GitHub Actions', 'GitHub API'],
+    link: 'https://github.com/IsliBasha/linkedin-banner',
+    linkLabel: 'GitHub →',
+    icon: '🎨',
+    screenshot: null,
+  },
+  {
+    id: 'publer-mcp',
+    name: 'Publer MCP Server',
     category: 'tool',
     type: 'Tool · MCP',
-    desc: "MCP server exposing Publer's full scheduling and analytics API as tools for AI agents.",
-    stack: ['MCP', 'TypeScript', 'Publer API'],
-    link: '',
+    desc: "AI-powered social media management via Model Context Protocol. Exposes Publer's full scheduling and analytics API as MCP tools for direct AI assistant integration.",
+    stack: ['TypeScript', 'MCP', 'Publer API', 'Turborepo'],
+    link: 'https://github.com/IsliBasha/publer-mcp',
+    linkLabel: 'GitHub →',
     icon: '🔧',
+    screenshot: null,
+  },
+  {
+    id: 'mips-voting',
+    name: 'MIPS Voting System',
+    category: 'research',
+    type: 'Research · Systems',
+    desc: 'Electronic voting system simulator in MIPS Assembly for the MARS simulator. Vote casting, live statistics, winner detection, MMIO simulation, and timer-based live updates.',
+    stack: ['MIPS Assembly', 'MARS Simulator', 'MMIO'],
+    link: 'https://github.com/IsliBasha/mips-voting-system',
+    linkLabel: 'GitHub →',
+    icon: '💾',
+    screenshot: null,
+  },
+  {
+    id: 'copycat',
+    name: 'Copycat',
+    category: 'tool',
+    type: 'Tool · Agent',
+    desc: 'AI screen automation agent — captures the screen, asks Claude what to do next, and executes actions with human-like timing. Autonomous GUI interaction driven by vision and language.',
+    stack: ['Python', 'Claude AI', 'PyAutoGUI', 'Pillow'],
+    link: 'https://github.com/IsliBasha/copycat',
+    linkLabel: 'GitHub →',
+    icon: '🖥️',
     screenshot: null,
   },
 ];
 
 const CATEGORIES = [
-  { id: 'all',  label: 'All Projects', icon: '🗂️' },
-  { id: 'web',  label: 'Web',          icon: '🌐' },
-  { id: 'app',  label: 'App',          icon: '📱' },
-  { id: 'tool', label: 'Tool',         icon: '🔧' },
+  { id: 'all',      label: 'All',      icon: '🗂️' },
+  { id: 'web',      label: 'Web',      icon: '🌐' },
+  { id: 'app',      label: 'App',      icon: '📱' },
+  { id: 'tool',     label: 'Tool',     icon: '🔧' },
+  { id: 'research', label: 'Research', icon: '🔬' },
 ];
+
+function folderItemStyle(active) {
+  return {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '3px 8px',
+    cursor: 'default',
+    background: active ? '#000080' : 'transparent',
+    color: active ? '#ffffff' : 'inherit',
+    border: 'none',
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: 'inherit',
+    fontSize: 'inherit',
+  };
+}
+
+function tileStyle(selected) {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '4px',
+    padding: '6px 4px',
+    cursor: 'default',
+    border: '1px solid transparent',
+    background: selected ? '#000080' : 'transparent',
+    fontFamily: 'inherit',
+  };
+}
+
+function tileLabelStyle(selected) {
+  return {
+    fontSize: '0.65rem',
+    textAlign: 'center',
+    color: selected ? '#ffffff' : '#1a1a2e',
+    lineHeight: 1.3,
+    maxWidth: '100px',
+    wordBreak: 'break-word',
+  };
+}
 
 const chrome = {
   root: {
@@ -115,7 +273,7 @@ const chrome = {
   grid: {
     background: '#fdfdfd',
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
     alignContent: 'start',
     gap: '2px',
     padding: '8px',
@@ -151,9 +309,13 @@ const chrome = {
   },
   detailDesc: {
     fontFamily: 'var(--font-sans, "IBM Plex Sans", system-ui, sans-serif)',
-    fontSize: '0.75rem',
+    fontSize: '0.72rem',
     lineHeight: 1.4,
     color: '#1a1a2e',
+    overflow: 'hidden',
+    display: '-webkit-box',
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: 'vertical',
   },
   detailMeta: { fontSize: '0.65rem', color: '#404040' },
   tags: { display: 'flex', flexWrap: 'wrap', gap: '3px' },
@@ -191,48 +353,6 @@ const chrome = {
     gap: '12px',
   },
 };
-
-function folderItemStyle(active) {
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '3px 8px',
-    cursor: 'default',
-    background: active ? '#000080' : 'transparent',
-    color: active ? '#ffffff' : 'inherit',
-    border: 'none',
-    width: '100%',
-    textAlign: 'left',
-    fontFamily: 'inherit',
-    fontSize: 'inherit',
-  };
-}
-
-function tileStyle(selected) {
-  return {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '4px',
-    padding: '6px 4px',
-    cursor: 'default',
-    border: '1px solid transparent',
-    background: selected ? '#000080' : 'transparent',
-    fontFamily: 'inherit',
-  };
-}
-
-function tileLabelStyle(selected) {
-  return {
-    fontSize: '0.68rem',
-    textAlign: 'center',
-    color: selected ? '#ffffff' : '#1a1a2e',
-    lineHeight: 1.3,
-    maxWidth: '100px',
-    wordBreak: 'break-word',
-  };
-}
 
 export function MyWorkExplorer() {
   const [filter, setFilter] = useState('all');
@@ -277,7 +397,7 @@ export function MyWorkExplorer() {
               style={tileStyle(selected?.id === p.id)}
               onClick={() => setSelected(p)}
             >
-              <span style={{ fontSize: '24px', lineHeight: 1 }}>{p.icon}</span>
+              <span style={{ fontSize: '22px', lineHeight: 1 }}>{p.icon}</span>
               <span style={tileLabelStyle(selected?.id === p.id)}>{p.name}</span>
             </button>
           ))}
@@ -305,9 +425,14 @@ export function MyWorkExplorer() {
                   href={selected.link}
                   target="_blank"
                   rel="noopener"
-                  style={{ ...chrome.btn, background: '#1a73e8', color: '#fff', borderColor: '#0d47a1' }}
+                  style={{
+                    ...chrome.btn,
+                    background: selected.linkLabel?.startsWith('GitHub') ? '#1a1a2e' : '#1a73e8',
+                    color: '#fff',
+                    borderColor: selected.linkLabel?.startsWith('GitHub') ? '#000' : '#0d47a1',
+                  }}
                 >
-                  Visit →
+                  {selected.linkLabel}
                 </a>
               )}
             </div>
