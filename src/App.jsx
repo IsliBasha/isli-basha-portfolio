@@ -15,6 +15,7 @@ import { Screensaver } from './components/Screensaver.jsx';
 import { ContextMenu } from './components/ContextMenu.jsx';
 import { ResumeViewer } from './components/ResumeViewer.jsx';
 import { VisitorCounterContent } from './components/VisitorCounter.jsx';
+import { MyWorkExplorer } from './components/MyWorkExplorer.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
 import { projects } from './data/projects.js';
 
@@ -27,6 +28,7 @@ const WINDOW_ORDER = [
   'resume',
   'minesweeper',
   'snake',
+  'mywork',
 ];
 const INITIALLY_CLOSED = [
   'about',
@@ -36,6 +38,7 @@ const INITIALLY_CLOSED = [
   'resume',
   'minesweeper',
   'snake',
+  'mywork',
 ];
 
 function NotepadAbout() {
@@ -284,6 +287,7 @@ function App() {
           <DesktopIcon kind="resume"      label="resume.pdf"      target="resume"      defaultPos={{ x: 16, y: 336 }} />
           <DesktopIcon kind="minesweeper" label="minesweeper.exe" target="minesweeper" defaultPos={{ x: 16, y: 416 }} />
           <DesktopIcon kind="snake"       label="snake.exe"       target="snake"       defaultPos={{ x: 16, y: 496 }} />
+          <DesktopIcon kind="mywork"      label="my work"         target="mywork"      defaultPos={{ x: 16, y: 576 }} />
         </div>
 
         <div className="sticky-note-wrap">
@@ -369,6 +373,16 @@ function App() {
           contentClassName="win-snake__content"
         >
           <Snake />
+        </Window>
+
+        <Window
+          id="mywork"
+          title="my work"
+          className="win-mywork"
+          bootDelayMs={0}
+          contentClassName="win-mywork__content"
+        >
+          <MyWorkExplorer />
         </Window>
       </main>
       <Taskbar />

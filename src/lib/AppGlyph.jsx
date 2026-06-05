@@ -104,5 +104,18 @@ export function AppGlyph({ kind, size = 32 }) {
       </svg>
     );
   }
+  if (kind === 'mywork') {
+    return (
+      <svg {...props}>
+        <rect x="2" y="8" width="28" height="20" fill="#f4c430" stroke="#000000" />
+        <rect x="2" y="5" width="13" height="4" fill="#f4c430" stroke="#000000" />
+        <rect x="4" y="10" width="24" height="1" fill="#a8861e" />
+        <rect x="10" y="14" width="12" height="9" fill="#c0c0c0" stroke="#000000" />
+        <rect x="13" y="12" width="6" height="3" fill="none" stroke="#000000" />
+        <rect x="10" y="19" width="12" height="1" fill="#808080" />
+        <rect x="15" y="14" width="2" height="9" fill="#808080" />
+      </svg>
+    );
+  }
   return null;
 }
