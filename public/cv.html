@@ -100,7 +100,7 @@
     /* ── Dashed divider ───────────────────────────────── */
     .dash { border: none; border-top: 1px dashed var(--dash); margin: 0.6rem 0; }
 
-    /* ── Project / experience entry ───────────────────── */
+    /* ── Entry ────────────────────────────────────────── */
     .entry-role   { font-size: 9.5pt; font-weight: 400; color: var(--ink); }
     .entry-org    { font-size: 10pt;  font-weight: 700; color: var(--ink); margin-top: 0.1rem; }
     .entry-meta   { font-size: 8pt;   color: var(--muted); margin: 0.15rem 0 0.35rem; }
@@ -127,13 +127,9 @@
     .edu-inst   { font-size: 10pt; font-weight: 400; }
     .edu-degree { font-size: 10pt; font-weight: 700; margin-top: 0.1rem; }
     .edu-meta   { font-size: 8pt;  color: var(--muted); margin: 0.15rem 0 0.25rem; }
-    .edu-note   { font-size: 8.5pt; color: var(--ink); list-style: disc; margin-left: 1.2rem; }
 
     /* ── Skill dot bars ───────────────────────────────── */
-    .skills-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    .skills-table { width: 100%; border-collapse: collapse; }
     .skills-table td { padding: 0.18rem 0; vertical-align: middle; }
     .skill-name { font-size: 9.5pt; font-weight: 700; }
     .skill-dots {
@@ -155,16 +151,44 @@
 
     /* ── Print ────────────────────────────────────────── */
     @media print {
-      html { font-size: 8.5pt; }
-      body { padding: 1cm 1.6cm; max-width: none; }
+      html { font-size: 7pt; line-height: 1.28; }
+      body { padding: 0.55cm 1.35cm; max-width: none; line-height: 1.28; }
       @page { size: A4; margin: 0; }
-      .cv-name { font-size: 26pt; }
-      .cv-body { margin-top: 0.5rem; gap: 0 1.6rem; }
-      section { margin-bottom: 0.65rem; }
-      .dash { margin: 0.35rem 0; }
-      .entry-bullets li { margin-bottom: 0.1rem; }
-      .fw-list li { margin-bottom: 0.1rem; }
-      .header-rule { margin: 0.5rem 0 0; }
+
+      .cv-name  { font-size: 20pt; }
+      .cv-title { font-size: 9.5pt; margin-top: 0.08rem; }
+      .cv-contact { font-size: 6.8pt; margin-top: 0.2rem; gap: 0.06rem 0.85rem; }
+      .header-rule { margin: 0.3rem 0 0; }
+
+      .cv-body { margin-top: 0.28rem; gap: 0 1.3rem; }
+      section  { margin-bottom: 0.28rem; }
+
+      .section-title { font-size: 10pt; margin-bottom: 0.28rem; padding-bottom: 0.06rem; }
+      .dash { margin: 0.1rem 0; }
+
+      .entry-role  { font-size: 7.8pt; }
+      .entry-org   { font-size: 8.2pt; }
+      .entry-meta  { font-size: 6.5pt; margin: 0.04rem 0 0.12rem; }
+      .entry-stack { font-size: 6.2pt; margin-top: 0.07rem; }
+
+      .entry-bullets { font-size: 7.3pt; padding-left: 0.9rem; }
+      .entry-bullets li { margin-bottom: 0.02rem; }
+
+      .edu-inst   { font-size: 8.2pt; }
+      .edu-degree { font-size: 8.2pt; }
+      .edu-meta   { font-size: 6.5pt; margin: 0.04rem 0 0.12rem; }
+
+      .skill-name { font-size: 7.8pt; }
+      .skill-dots { font-size: 8.8pt; }
+      .skills-table td { padding: 0.08rem 0; }
+
+      .fw-list { font-size: 7.3pt; padding-left: 0.9rem; }
+      .fw-list li { margin-bottom: 0.02rem; }
+
+      .tags { gap: 0.12rem; }
+      .tag  { font-size: 6.5pt; padding: 0.03rem 0.28rem; }
+
+      p { font-size: 7.5pt; line-height: 1.42; }
     }
   </style>
 </head>
@@ -205,30 +229,56 @@
     <!-- LEFT COLUMN -->
     <div>
 
+      <!-- Experience -->
+      <section>
+        <div class="section-title">Experience</div>
+
+        <div class="entry-role">Freelance Web Developer</div>
+        <div class="entry-org">Self-Employed</div>
+        <div class="entry-meta">&#128197; 2022&ndash;2024</div>
+        <ul class="entry-bullets">
+          <li>Designed and delivered web projects for independent clients — landing pages, portfolio sites, and small e-commerce builds — managing requirements, timelines, and revisions end to end.</li>
+          <li>Integrated third-party APIs and payment services, built responsive layouts with HTML/CSS/JavaScript, and deployed to cloud hosting — picking up React and Node.js on live projects where clients needed dynamic functionality.</li>
+        </ul>
+        <div class="entry-stack">HTML &middot; CSS &middot; JavaScript &middot; React &middot; Node.js &middot; Git</div>
+
+        <hr class="dash" />
+
+        <div class="entry-role">Web Developer</div>
+        <div class="entry-org">BS Concept</div>
+        <div class="entry-meta">&#128197; 2021</div>
+        <ul class="entry-bullets">
+          <li>Shipped front-end features for client web projects using HTML, CSS, and JavaScript, working within a small team and meeting production deadlines.</li>
+          <li>Tracked down cross-browser rendering bugs via dev tools inspection and iterative testing; contributed to project delivery through pull requests, code reviews, and sprint task tracking.</li>
+        </ul>
+        <div class="entry-stack">HTML &middot; CSS &middot; JavaScript &middot; Git</div>
+      </section>
+
+      <!-- Projects -->
       <section>
         <div class="section-title">Projects</div>
 
         <!-- ME-DT Framework -->
         <div class="entry-role">Bachelor Thesis</div>
         <div class="entry-org">ME-DT Framework</div>
-        <div class="entry-meta">&#128197; 2025 &ndash; 2026 &nbsp;&nbsp; &#9655; Polis University, Tirana</div>
+        <div class="entry-meta">&#128197; 2025&ndash;2026 &nbsp;&nbsp; &#9655; Polis University, Tirana</div>
         <ul class="entry-bullets">
-          <li>Anomaly detection across simulated smart-city infrastructure layers (transport, energy, water, comms) using Isolation Forest with a DOS-bias fix.</li>
-          <li>MITRE ATT&amp;CK threat mapping and real-time Flask dashboard visualising network anomalies. 68 TDD tests.</li>
+          <li>Designed and built a multi-domain anomaly detection system across transport, energy, water, and communications infrastructure using Isolation Forest &mdash; custom correction applied to reduce DOS-event false positives, detections surfaced through a Flask REST API.</li>
+          <li>Mapped findings to MITRE ATT&amp;CK categories and visualised live anomaly data on a real-time dashboard. 68 TDD tests passing across the backend pipeline and API layer.</li>
         </ul>
-        <div class="entry-stack">Python &middot; Flask &middot; Isolation Forest &middot; MITRE ATT&amp;CK &middot; JavaScript</div>
+        <div class="entry-stack">Python &middot; Flask &middot; REST API &middot; Isolation Forest &middot; MITRE ATT&amp;CK &middot; JavaScript</div>
 
         <hr class="dash" />
 
-        <!-- mira-study -->
-        <div class="entry-role">AI Study Companion</div>
-        <div class="entry-org">mira-study</div>
-        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/mira-study</div>
+        <!-- rust-scraper -->
+        <div class="entry-role">Rust / Systems</div>
+        <div class="entry-org">rust-scraper</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/rust-scraper</div>
         <ul class="entry-bullets">
-          <li>Desktop app for Albanian students: upload a PDF, auto-generate flashcards and multiple-choice quizzes via Claude AI.</li>
-          <li>Step-by-step tutor explanations for wrong answers; analytics dashboard tracking score trends and weak topics. Albanian&thinsp;/&thinsp;English UI toggle.</li>
+          <li>Architected an 11-crate Cargo workspace for a production Rust web scraper &mdash; hybrid HTTP and headless rendering, CSS selector and XPath extraction engines, a tokio async worker pool, and per-host token-bucket rate limiting via governor.</li>
+          <li>Shipped two parallel UI surfaces: a ratatui live terminal dashboard and an axum SSE web dashboard with embedded HTML; SQLite WAL-mode persistence with crash-safe frontier recovery. 33 tests across 7 crates, 9 MB self-contained binary.</li>
         </ul>
-        <div class="entry-stack">Python &middot; PyQt6 &middot; FastAPI &middot; Claude AI &middot; SQLite &middot; Tesseract OCR</div>
+        <div class="entry-stack">Rust &middot; Tokio &middot; Axum &middot; Ratatui &middot; SQLite &middot; WebAssembly</div>
 
         <hr class="dash" />
 
@@ -237,10 +287,31 @@
         <div class="entry-org">Whatsapp-Chatbot</div>
         <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/Whatsapp-Chatbot</div>
         <ul class="entry-bullets">
-          <li>AI-powered Albanian product chatbot: Claude AI NLP intent parsing and fuzzy product search.</li>
-          <li>Odoo XML-RPC sync, HMAC-SHA256 webhook auth, per-session state, per-IP rate limiting. 95%+ test coverage.</li>
+          <li>Built and deployed a production webhook service connecting WhatsApp Business to an Odoo inventory backend over XML-RPC; requests authenticated via HMAC-SHA256, rate-limited per IP, and handled by Claude AI for intent parsing and fuzzy product search. Test coverage at 95%+.</li>
         </ul>
-        <div class="entry-stack">JavaScript &middot; Node.js &middot; Claude AI &middot; Odoo XML-RPC &middot; PostgreSQL</div>
+        <div class="entry-stack">JavaScript &middot; Node.js &middot; Express &middot; Claude AI &middot; Odoo XML-RPC &middot; PostgreSQL</div>
+
+        <hr class="dash" />
+
+        <!-- stani-hoxhes-website -->
+        <div class="entry-role">Client Website</div>
+        <div class="entry-org">stani-hoxhes-website</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/stani-hoxhes-website</div>
+        <ul class="entry-bullets">
+          <li>Designed and delivered a full marketing website for a real hotel client in Kukës, Albania &mdash; Astro 4 with content collections, bilingual Albanian/English i18n routing, a static availability widget wired to an email inquiry form, and honeypot anti-spam. Deployed to Cloudflare Pages.</li>
+        </ul>
+        <div class="entry-stack">Astro &middot; TypeScript &middot; CSS &middot; i18n &middot; Web3Forms &middot; Cloudflare Pages</div>
+
+        <hr class="dash" />
+
+        <!-- publer-mcp -->
+        <div class="entry-role">MCP Server</div>
+        <div class="entry-org">publer-mcp</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/publer-mcp</div>
+        <ul class="entry-bullets">
+          <li>Developed a TypeScript MCP server exposing 13 tools against the Publer REST API &mdash; three-package pnpm monorepo with a dedicated API client layer, Zod-validated shared types, and a full mock mode for testing without live credentials.</li>
+        </ul>
+        <div class="entry-stack">TypeScript &middot; Node.js &middot; MCP SDK &middot; Zod &middot; pnpm Workspaces &middot; Claude AI</div>
 
         <hr class="dash" />
 
@@ -249,21 +320,9 @@
         <div class="entry-org">cf-worker-rust</div>
         <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/cf-worker-rust</div>
         <ul class="entry-bullets">
-          <li>JWT validator (HS256&thinsp;/&thinsp;RS256) and per-IP sliding-window rate limiter running at the Cloudflare edge.</li>
-          <li>Rust compiled to WASM via workers-rs; rate-limit state backed by Cloudflare KV.</li>
+          <li>Wrote a Rust security service, compiled it to WebAssembly, and deployed it to Cloudflare Workers &mdash; JWT validation (HS256 and RS256) and sliding-window rate limiting at the network edge, with rate-limit state in Cloudflare KV and no cold-start penalty.</li>
         </ul>
-        <div class="entry-stack">Rust &middot; WASM &middot; Cloudflare Workers &middot; JWT &middot; Cloudflare KV</div>
-
-        <hr class="dash" />
-
-        <!-- FloraCare -->
-        <div class="entry-role">Android App</div>
-        <div class="entry-org">FloraCare</div>
-        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/FloraCare</div>
-        <ul class="entry-bullets">
-          <li>Plant care companion with species ID via Perenual API, personalised watering schedules, and weather-aware reminders via OpenWeatherMap.</li>
-        </ul>
-        <div class="entry-stack">Kotlin &middot; Jetpack Compose &middot; Android &middot; Perenual API &middot; OpenWeatherMap</div>
+        <div class="entry-stack">Rust &middot; WebAssembly &middot; Cloudflare Workers &middot; JWT &middot; Cloudflare KV</div>
 
       </section>
 
@@ -276,20 +335,20 @@
       <section>
         <div class="section-title">Profile</div>
         <p style="font-size:9pt;line-height:1.6;">
-          Full-stack developer comfortable across the entire delivery stack — backend services, data pipelines, and production-grade UIs. Moves between TypeScript, Python, Kotlin, and Rust depending on what the problem needs. Final-year CS student at Polis University with a thesis in cyber-physical threat detection for smart-city infrastructure.
+          CS graduate with three years of hands-on development experience across backend services, full-stack web, systems programming, and real client delivery. Works across TypeScript, Python, Rust, Go, and Kotlin &mdash; picking the right tool per problem rather than defaulting to one stack. Has shipped production webhook services, 11-crate Rust workspaces, Astro sites for real clients, and MCP API integrations. Comfortable taking a feature from spec to deployed, tested code and integrating cleanly into an existing team and codebase.
         </p>
       </section>
 
-      <!-- Areas of Interest -->
+      <!-- Interests -->
       <section>
-        <div class="section-title">Areas of Interest</div>
+        <div class="section-title">Interests</div>
         <div class="tags">
           <span class="tag">Full-Stack Dev</span>
-          <span class="tag">Systems &amp; Edge</span>
+          <span class="tag">Backend APIs</span>
+          <span class="tag">Edge &amp; Cloud</span>
           <span class="tag">AI / LLMs</span>
           <span class="tag">Android</span>
-          <span class="tag">Security</span>
-          <span class="tag">Data Pipelines</span>
+          <span class="tag">Automation</span>
         </div>
       </section>
 
@@ -307,8 +366,8 @@
         <hr class="dash" />
 
         <div class="edu-inst">Harry T. Fultz, Tirana</div>
-        <div class="edu-degree">High School Diploma &mdash; Electronics</div>
-        <div class="edu-meta">&#128197; 2018 &ndash; 2022</div>
+        <div class="edu-degree">High School &mdash; Electronics</div>
+        <div class="edu-meta">&#128197; 2018&ndash;2022</div>
       </section>
 
       <!-- Technical Skills -->
@@ -317,27 +376,23 @@
         <table class="skills-table">
           <tbody>
             <tr>
-              <td class="skill-name">JavaScript</td>
+              <td class="skill-name">JavaScript / TS</td>
               <td class="skill-dots"><span class="filled">●●●●●</span></td>
-            </tr>
-            <tr>
-              <td class="skill-name">TypeScript</td>
-              <td class="skill-dots"><span class="filled">●●●●</span><span class="empty">○</span></td>
             </tr>
             <tr>
               <td class="skill-name">Python</td>
               <td class="skill-dots"><span class="filled">●●●●</span><span class="empty">○</span></td>
             </tr>
             <tr>
-              <td class="skill-name">Kotlin</td>
-              <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
-            </tr>
-            <tr>
               <td class="skill-name">Go</td>
               <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
             </tr>
             <tr>
-              <td class="skill-name">Rust</td>
+              <td class="skill-name">Kotlin</td>
+              <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
+            </tr>
+            <tr>
+              <td class="skill-name">Rust / WASM</td>
               <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
             </tr>
           </tbody>
@@ -348,11 +403,11 @@
       <section>
         <div class="section-title">Frameworks / Tools</div>
         <ul class="fw-list">
-          <li>React / Next.js &middot; Svelte / SvelteKit</li>
-          <li>Node.js &middot; FastAPI &middot; Fiber (Go) &middot; Hono</li>
-          <li>Docker &middot; Vercel &middot; Cloudflare Workers</li>
-          <li>PostgreSQL &middot; Redis &middot; SQLite</li>
-          <li>GitHub Actions &middot; Tailwind CSS &middot; Three.js</li>
+          <li>React &middot; Next.js &middot; Astro &middot; Svelte</li>
+          <li>Node.js &middot; Express &middot; FastAPI &middot; Axum (Rust)</li>
+          <li>Docker &middot; Vercel &middot; Cloudflare Workers &middot; Pages</li>
+          <li>PostgreSQL &middot; SQLite &middot; Redis</li>
+          <li>GitHub Actions &middot; pnpm &middot; Tailwind CSS</li>
         </ul>
       </section>
 
