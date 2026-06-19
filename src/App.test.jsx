@@ -96,7 +96,7 @@ describe('App desktop labels', () => {
   it('labels desktop icons with the rebranded filenames', () => {
     render(<App />);
     expect(screen.getByRole('button', { name: 'about.txt' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'projects' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'my work' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'about.exe' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'projects.exe' })).not.toBeInTheDocument();
   });
@@ -112,10 +112,10 @@ describe('Menu bar items — decorative only', () => {
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
   });
 
-  it('clicking a menu item in the projects window does not open a dialog', async () => {
+  it('clicking a menu item in the my work window does not open a dialog', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: 'projects' }));
+    await user.click(screen.getByRole('button', { name: 'my work' }));
     const [first] = screen.getAllByRole('menuitem');
     await user.click(first);
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();

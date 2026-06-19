@@ -171,6 +171,30 @@ const PROJECTS = [
     icon: '🖥️',
     screenshot: null,
   },
+  {
+    id: 'win95-arch',
+    name: 'Win95 Architecture Deck',
+    category: 'research',
+    type: 'Research · Presentation',
+    desc: 'Zero-dependency Win95-themed architecture presentation for Polis University. Custom pixel-art CSS, IBM Plex typography, and interactive slide transitions — no frameworks, no build step.',
+    stack: ['JavaScript', 'HTML/CSS', 'Win95 Theme'],
+    link: 'https://github.com/IsliBasha/win95-architecture',
+    linkLabel: 'GitHub →',
+    icon: '🏛️',
+    screenshot: null,
+  },
+  {
+    id: 'previsit',
+    name: 'PreVisit',
+    category: 'app',
+    type: 'App · Healthcare · Hackathon',
+    desc: 'AI-powered pre-visit medical intake system built for the Coolab hackathon. Patients complete a voice-guided intake before their appointment — Claude AI extracts structured medical data, ElevenLabs drives TTS/STT, and a real-time doctor dashboard surfaces the briefing instantly. Two-repo project: patient intake + doctor dashboard.',
+    stack: ['React', 'TanStack', 'FastAPI', 'Claude AI', 'ElevenLabs', 'Supabase', 'Twilio'],
+    link: 'https://github.com/IsliBasha/Coolab_hackathon',
+    linkLabel: 'GitHub →',
+    icon: '🏥',
+    screenshot: null,
+  },
 ];
 
 const CATEGORIES = [

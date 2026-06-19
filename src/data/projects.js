@@ -88,4 +88,28 @@ export const projects = [
     href: 'https://github.com/IsliBasha/copycat',
     iconType: 'python',
   },
+  {
+    id: 'stani-hoxhes',
+    name: 'Stani i Hoxhës',
+    description: 'Real-client website for a seasonal mountain hotel in the Novoseja highlands, Kukës. Astro 4, fully bilingual (Albanian/English), drone video integration, image galleries, and responsive room booking sections.',
+    stack: ['Astro', 'JavaScript', 'HTML/CSS', 'Bilingual'],
+    href: 'https://github.com/IsliBasha/stani-hoxhes-website',
+    iconType: 'globe',
+  },
+  {
+    id: 'win95-arch',
+    name: 'Win95 Architecture Deck',
+    description: 'Zero-dependency Win95-themed architecture presentation for Polis University. Custom pixel-art CSS, IBM Plex typography, and interactive slide transitions — no frameworks, no build step.',
+    stack: ['JavaScript', 'HTML/CSS', 'Win95 Theme'],
+    href: 'https://github.com/IsliBasha/win95-architecture',
+    iconType: 'chip',
+  },
+  {
+    id: 'previsit',
+    name: 'PreVisit',
+    description: 'AI-powered pre-visit medical intake system built for the Coolab hackathon. Patients complete a voice-guided intake — Claude AI extracts structured medical data, ElevenLabs drives TTS/STT, and a real-time doctor dashboard surfaces the briefing instantly.',
+    stack: ['React', 'TanStack', 'FastAPI', 'Claude AI', 'ElevenLabs', 'Supabase', 'Twilio'],
+    href: 'https://github.com/IsliBasha/Coolab_hackathon',
+    iconType: 'chat',
+  },
 ];

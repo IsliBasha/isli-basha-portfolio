@@ -202,7 +202,22 @@ function ChipIcon() {
   );
 }
 
-const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon, rust: RustIcon, book: BookIcon, terminal: TerminalIcon, typescript: TypeScriptIcon, chip: ChipIcon };
+function GlobeIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <circle cx="16" cy="16" r="13" fill="#000080" stroke="#404040" strokeWidth="1"/>
+      <line x1="16" y1="3" x2="16" y2="29" stroke="#6060c0" strokeWidth="1"/>
+      <line x1="3" y1="16" x2="29" y2="16" stroke="#6060c0" strokeWidth="1"/>
+      <ellipse cx="16" cy="16" rx="13" ry="5" fill="none" stroke="#6060c0" strokeWidth="0.8"/>
+      <ellipse cx="16" cy="16" rx="9" ry="13" fill="none" stroke="#6060c0" strokeWidth="0.8"/>
+      <path d="M9 8 Q12 6 14 9" stroke="#8080ff" strokeWidth="1" fill="none"/>
+      <circle cx="22" cy="10" r="2.5" fill="#ffdd44" stroke="#cc9900" strokeWidth="0.8"/>
+      <line x1="22" y1="12.5" x2="22" y2="17" stroke="#cc9900" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+const ICONS = { android: AndroidIcon, python: PythonIcon, chat: ChatIcon, network: NetworkIcon, rust: RustIcon, book: BookIcon, terminal: TerminalIcon, typescript: TypeScriptIcon, chip: ChipIcon, globe: GlobeIcon };
 
 export function ProjectIcon({ type }) {
   const Icon = ICONS[type] ?? ICONS.chat;
