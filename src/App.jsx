@@ -4,7 +4,6 @@ import { Window } from './components/Window.jsx';
 import { Taskbar } from './components/Taskbar.jsx';
 import { DesktopIcon } from './components/DesktopIcon.jsx';
 import { StackCmd } from './components/StackCmd.jsx';
-import { StickyNote } from './components/StickyNote.jsx';
 import { SystemDialog } from './components/SystemDialog.jsx';
 import { Minesweeper } from './components/Minesweeper.jsx';
 import { Snake } from './components/Snake.jsx';
@@ -242,9 +241,6 @@ function App() {
           <DesktopIcon kind="mywork"      label="my work"         target="mywork"      defaultPos={{ x: 16, y: 496 }} />
         </div>
 
-        <div className="sticky-note-wrap">
-          <StickyNote />
-        </div>
 
 
         <Window
