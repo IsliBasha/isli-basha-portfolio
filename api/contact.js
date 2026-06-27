@@ -1,10 +1,19 @@
+import { Redis } from '@upstash/redis';
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://islibasha.dev');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() ?? 'unknown';
+  const redis = Redis.fromEnv();
+  const rateLimitKey = `contact:ratelimit:${ip}`;
+  const count = await redis.incr(rateLimitKey);
+  if (count === 1) await redis.expire(rateLimitKey, 3600);
+  if (count > 5) return res.status(429).json({ error: 'Too many messages' });
 
   const { message } = req.body ?? {};
   if (!message || typeof message !== 'string' || !message.trim()) {
