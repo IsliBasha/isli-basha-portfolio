@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Isli Basha — Full-Stack Developer CV | React · Python · Rust</title>
-  <meta name="description" content="CV of Isli Basha, Full-Stack Developer skilled in React, Python, FastAPI and Rust. Open to remote and Tirana-based roles." />
+  <title>Isli Basha — Software Engineer | TypeScript · Python · Rust</title>
+  <meta name="description" content="CV of Isli Basha, Software Engineer skilled in TypeScript, Python, Rust, and React. Open to remote and Tirana-based roles." />
   <link rel="canonical" href="https://islibasha.dev/cv.html" />
-  <meta property="og:title" content="Isli Basha — Full-Stack Developer CV" />
-  <meta property="og:description" content="CV of Isli Basha, Full-Stack Developer. React · Python · FastAPI · Rust." />
+  <meta property="og:title" content="Isli Basha — Software Engineer CV" />
+  <meta property="og:description" content="CV of Isli Basha, Software Engineer. TypeScript · Python · Rust · React." />
   <meta property="og:url" content="https://islibasha.dev/cv.html" />
   <meta property="og:type" content="profile" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -119,6 +119,17 @@
     }
     .entry-bullets li { margin-bottom: 0.18rem; }
 
+    /* ── Other Projects mini-list ─────────────────────── */
+    .other-projects {
+      list-style: disc;
+      padding-left: 1.2rem;
+      font-size: 8.5pt;
+      color: var(--ink);
+    }
+    .other-projects li { margin-bottom: 0.25rem; }
+    .other-projects a  { color: var(--ink); text-decoration: none; }
+    .other-projects a:hover { text-decoration: underline; }
+
     /* ── Tags ─────────────────────────────────────────── */
     .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
 
@@ -147,13 +158,17 @@
     .skill-dots .filled { color: var(--ink); }
     .skill-dots .empty  { color: #ccc; }
 
-    /* ── Framework list ───────────────────────────────── */
-    .fw-list {
-      list-style: disc;
-      padding-left: 1.2rem;
-      font-size: 9pt;
+    /* ── Skill category rows ──────────────────────────── */
+    .skills-cats { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+    .skills-cats td { padding: 0.2rem 0; vertical-align: top; font-size: 8pt; }
+    .skills-cat-label {
+      font-weight: 700;
+      font-size: 8pt;
+      white-space: nowrap;
+      padding-right: 0.5rem;
+      color: var(--ink);
     }
-    .fw-list li { margin-bottom: 0.2rem; }
+    .skills-cat-value { color: var(--muted); }
 
     /* ── Print ────────────────────────────────────────── */
     @media print {
@@ -180,6 +195,9 @@
       .entry-bullets { font-size: 7.3pt; padding-left: 0.9rem; }
       .entry-bullets li { margin-bottom: 0.02rem; }
 
+      .other-projects { font-size: 7pt; padding-left: 0.9rem; }
+      .other-projects li { margin-bottom: 0.04rem; }
+
       .edu-inst   { font-size: 8.2pt; }
       .edu-degree { font-size: 8.2pt; }
       .edu-meta   { font-size: 6.5pt; margin: 0.04rem 0 0.12rem; }
@@ -188,8 +206,8 @@
       .skill-dots { font-size: 8.8pt; }
       .skills-table td { padding: 0.08rem 0; }
 
-      .fw-list { font-size: 7.3pt; padding-left: 0.9rem; }
-      .fw-list li { margin-bottom: 0.02rem; }
+      .skills-cats td  { padding: 0.08rem 0; font-size: 6.5pt; }
+      .skills-cat-label { font-size: 6.5pt; }
 
       .tags { gap: 0.12rem; }
       .tag  { font-size: 6.5pt; padding: 0.03rem 0.28rem; }
@@ -203,7 +221,7 @@
   <!-- ── Header ── -->
   <div class="cv-header">
     <div class="cv-name">Isli Basha</div>
-    <div class="cv-title">Full-Stack Developer</div>
+    <div class="cv-title">Software Engineer &mdash; Full-Stack &middot; TypeScript &middot; Node.js &middot; React</div>
     <div class="cv-contact">
       <span class="cv-contact-item">
         <i class="cv-contact-icon">&#9993;</i>
@@ -223,7 +241,7 @@
       </span>
       <span class="cv-contact-item">
         <i class="cv-contact-icon">&#9741;</i>
-        <a href="https://isli-basha-portfolio.vercel.app" target="_blank">isli-basha-portfolio.vercel.app</a>
+        <a href="https://islibasha.dev" target="_blank">islibasha.dev</a>
       </span>
     </div>
   </div>
@@ -239,25 +257,25 @@
       <section>
         <div class="section-title">Experience</div>
 
-        <div class="entry-role">Freelance Web Developer</div>
+        <div class="entry-role">Freelance Software Engineer</div>
         <div class="entry-org">Self-Employed</div>
-        <div class="entry-meta">&#128197; 2022&ndash;2024</div>
+        <div class="entry-meta">&#128197; 01/2022 &ndash; 12/2024 &nbsp;&middot;&nbsp; Tirana, Albania</div>
         <ul class="entry-bullets">
-          <li>Designed and delivered web projects for independent clients — landing pages, portfolio sites, and small e-commerce builds — managing requirements, timelines, and revisions end to end.</li>
-          <li>Integrated third-party APIs and payment services, built responsive layouts with HTML/CSS/JavaScript, and deployed to cloud hosting — picking up React and Node.js on live projects where clients needed dynamic functionality.</li>
+          <li>Delivered full-stack web projects for 5+ independent clients &mdash; landing pages, e-commerce builds, and portfolio sites &mdash; owning requirements, timelines, and client revisions end to end.</li>
+          <li>Integrated third-party REST APIs and payment services; deployed to Vercel and Cloudflare Pages; adopted React and Node.js on projects requiring dynamic functionality.</li>
         </ul>
-        <div class="entry-stack">HTML &middot; CSS &middot; JavaScript &middot; React &middot; Node.js &middot; Git</div>
+        <div class="entry-stack">TypeScript &middot; React &middot; Node.js &middot; REST API &middot; PostgreSQL &middot; Git &middot; Vercel &middot; Client Management</div>
 
         <hr class="dash" />
 
         <div class="entry-role">Web Developer</div>
         <div class="entry-org">BS Concept</div>
-        <div class="entry-meta">&#128197; 2021</div>
+        <div class="entry-meta">&#128197; 01/2021 &ndash; 12/2021 &nbsp;&middot;&nbsp; Tirana, Albania</div>
         <ul class="entry-bullets">
-          <li>Shipped front-end features for client web projects using HTML, CSS, and JavaScript, working within a small team and meeting production deadlines.</li>
-          <li>Tracked down cross-browser rendering bugs via dev tools inspection and iterative testing; contributed to project delivery through pull requests, code reviews, and sprint task tracking.</li>
+          <li>Shipped front-end features for client web projects in a small team, consistently meeting production deadlines.</li>
+          <li>Resolved cross-browser rendering bugs via DevTools; contributed through pull requests, code reviews, and Agile sprint task tracking.</li>
         </ul>
-        <div class="entry-stack">HTML &middot; CSS &middot; JavaScript &middot; Git</div>
+        <div class="entry-stack">HTML &middot; CSS &middot; JavaScript &middot; Git &middot; Code Review &middot; Agile</div>
       </section>
 
       <!-- Projects -->
@@ -265,70 +283,70 @@
         <div class="section-title">Projects</div>
 
         <!-- ME-DT Framework -->
-        <div class="entry-role">Bachelor Thesis</div>
+        <div class="entry-role">Bachelor Thesis &mdash; Multi-Domain Anomaly Detection</div>
         <div class="entry-org">ME-DT Framework</div>
-        <div class="entry-meta">&#128197; 2025&ndash;2026 &nbsp;&nbsp; &#9655; Polis University, Tirana</div>
+        <div class="entry-meta">&#128197; 09/2025 &ndash; 06/2026 &nbsp;&middot;&nbsp; Polis University, Tirana &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/me-dt-framework" target="_blank">github.com/IsliBasha/me-dt-framework</a></div>
         <ul class="entry-bullets">
-          <li>Designed and built a multi-domain anomaly detection system across transport, energy, water, and communications infrastructure using Isolation Forest &mdash; custom correction applied to reduce DOS-event false positives, detections surfaced through a Flask REST API.</li>
-          <li>Mapped findings to MITRE ATT&amp;CK categories and visualised live anomaly data on a real-time dashboard. 68 TDD tests passing across the backend pipeline and API layer.</li>
+          <li>Designed and built a cyberphysical threat detection backend across transport, energy, water, and communications infrastructure using Isolation Forest &mdash; custom correction logic reduced DOS-event false positives across 4 infrastructure domains.</li>
+          <li>Surfaced detections through a Flask REST API; mapped findings to MITRE ATT&amp;CK categories; visualised live anomaly data on a real-time JavaScript dashboard. 68 TDD tests.</li>
         </ul>
-        <div class="entry-stack">Python &middot; Flask &middot; REST API &middot; Isolation Forest &middot; MITRE ATT&amp;CK &middot; JavaScript</div>
+        <div class="entry-stack">Python &middot; Flask &middot; REST API &middot; PostgreSQL &middot; Isolation Forest &middot; MITRE ATT&amp;CK &middot; JavaScript &middot; TDD</div>
 
         <hr class="dash" />
 
-        <!-- rust-scraper -->
-        <div class="entry-role">Rust / Systems</div>
-        <div class="entry-org">rust-scraper</div>
-        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/rust-scraper</div>
+        <!-- mira-study -->
+        <div class="entry-role">AI Desktop Application</div>
+        <div class="entry-org">mira-study</div>
+        <div class="entry-meta">&#128197; 2026 &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/mira-study" target="_blank">github.com/IsliBasha/mira-study</a></div>
         <ul class="entry-bullets">
-          <li>Architected an 11-crate Cargo workspace for a production Rust web scraper &mdash; hybrid HTTP and headless rendering, CSS selector and XPath extraction engines, a tokio async worker pool, and per-host token-bucket rate limiting via governor.</li>
-          <li>Shipped two parallel UI surfaces: a ratatui live terminal dashboard and an axum SSE web dashboard with embedded HTML; SQLite WAL-mode persistence with crash-safe frontier recovery. 33 tests across 7 crates, 9 MB self-contained binary.</li>
+          <li>Built a full-stack AI desktop app: FastAPI backend exposes a clean REST API consumed by a PyQt6 desktop frontend &mdash; upload PDFs, auto-generate flashcards and multiple-choice quizzes, and get step-by-step AI tutor explanations via Claude; analytics dashboard tracks score trends and weak topics.</li>
+          <li>PDF text extraction via PyMuPDF + pdfplumber + Tesseract OCR; SQLite persistence via SQLAlchemy; Albanian/English i18n toggle; full test suite across backend and API layers.</li>
         </ul>
-        <div class="entry-stack">Rust &middot; Tokio &middot; Axum &middot; Ratatui &middot; SQLite &middot; WebAssembly</div>
+        <div class="entry-stack">Python &middot; FastAPI &middot; PyQt6 &middot; Claude AI &middot; SQLite &middot; PyMuPDF &middot; Tesseract OCR &middot; REST API &middot; LLM Integration</div>
 
         <hr class="dash" />
 
         <!-- Whatsapp-Chatbot -->
-        <div class="entry-role">WhatsApp Business Bot</div>
+        <div class="entry-role">WhatsApp Business Bot &mdash; Inventory Webhook Service</div>
         <div class="entry-org">Whatsapp-Chatbot</div>
-        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/Whatsapp-Chatbot</div>
+        <div class="entry-meta">&#128197; 01/2026 &ndash; Present &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/Whatsapp-Chatbot" target="_blank">github.com/IsliBasha/Whatsapp-Chatbot</a></div>
         <ul class="entry-bullets">
-          <li>Built and deployed a production webhook service connecting WhatsApp Business to an Odoo inventory backend over XML-RPC; requests authenticated via HMAC-SHA256, rate-limited per IP, and handled by Claude AI for intent parsing and fuzzy product search. Test coverage at 95%+.</li>
+          <li>Built and deployed a production full-stack webhook service integrating WhatsApp Business with an Odoo inventory backend over XML-RPC &mdash; Node.js + Express backend with PostgreSQL persistence, requests authenticated via HMAC-SHA256, rate-limited per IP, and intent-parsed by Claude AI for fuzzy product search.</li>
+          <li>Maintained 95%+ test coverage across unit, integration, and end-to-end webhook message test suites; service handles live production traffic with full observability of the request lifecycle.</li>
         </ul>
-        <div class="entry-stack">JavaScript &middot; Node.js &middot; Express &middot; Claude AI &middot; Odoo XML-RPC &middot; PostgreSQL</div>
+        <div class="entry-stack">TypeScript &middot; Node.js &middot; Express &middot; Claude AI &middot; PostgreSQL &middot; Odoo XML-RPC &middot; REST API &middot; HMAC-SHA256</div>
 
         <hr class="dash" />
 
-        <!-- stani-hoxhes-website -->
-        <div class="entry-role">Client Website</div>
-        <div class="entry-org">stani-hoxhes-website</div>
-        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/stani-hoxhes-website</div>
+        <!-- rust-scraper -->
+        <div class="entry-role">Production Rust Web Scraper</div>
+        <div class="entry-org">rust-scraper</div>
+        <div class="entry-meta">&#128197; 01/2026 &ndash; Present &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/rust-scraper" target="_blank">github.com/IsliBasha/rust-scraper</a></div>
         <ul class="entry-bullets">
-          <li>Designed and delivered a full marketing website for a real hotel client in Kukës, Albania &mdash; Astro 4 with content collections, bilingual Albanian/English i18n routing, a static availability widget wired to an email inquiry form, and honeypot anti-spam. Deployed to Cloudflare Pages.</li>
+          <li>Architected an 11-crate Cargo workspace: hybrid HTTP/headless rendering, CSS selector and XPath extraction engines, Tokio async worker pool, per-host token-bucket rate limiting &mdash; delivered as a single 9 MB self-contained binary with 33 tests across 7 crates.</li>
+          <li>Ratatui terminal dashboard + Axum SSE web dashboard; SQLite WAL-mode persistence with crash-safe frontier recovery &mdash; demonstrates deep systems design and ownership across the full stack.</li>
         </ul>
-        <div class="entry-stack">Astro &middot; TypeScript &middot; CSS &middot; i18n &middot; Web3Forms &middot; Cloudflare Pages</div>
-
-        <hr class="dash" />
-
-        <!-- publer-mcp -->
-        <div class="entry-role">MCP Server</div>
-        <div class="entry-org">publer-mcp</div>
-        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/publer-mcp</div>
-        <ul class="entry-bullets">
-          <li>Developed a TypeScript MCP server exposing 13 tools against the Publer REST API &mdash; three-package pnpm monorepo with a dedicated API client layer, Zod-validated shared types, and a full mock mode for testing without live credentials.</li>
-        </ul>
-        <div class="entry-stack">TypeScript &middot; Node.js &middot; MCP SDK &middot; Zod &middot; pnpm Workspaces &middot; Claude AI</div>
+        <div class="entry-stack">Rust &middot; Tokio &middot; Axum &middot; SQLite &middot; WebAssembly &middot; Async &middot; System Design &middot; CI/CD</div>
 
         <hr class="dash" />
 
         <!-- cf-worker-rust -->
-        <div class="entry-role">Edge Security Worker</div>
+        <div class="entry-role">Edge Security Service</div>
         <div class="entry-org">cf-worker-rust</div>
-        <div class="entry-meta">&#128197; 2026 &nbsp;&nbsp; &#9655; github.com/IsliBasha/cf-worker-rust</div>
+        <div class="entry-meta">&#128197; 01/2026 &ndash; Present &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/cf-worker-rust" target="_blank">github.com/IsliBasha/cf-worker-rust</a></div>
         <ul class="entry-bullets">
-          <li>Wrote a Rust security service, compiled it to WebAssembly, and deployed it to Cloudflare Workers &mdash; JWT validation (HS256 and RS256) and sliding-window rate limiting at the network edge, with rate-limit state in Cloudflare KV and no cold-start penalty.</li>
+          <li>Rust security service compiled to WASM, deployed to Cloudflare Workers &mdash; JWT validation (HS256/RS256) and sliding-window rate limiting enforced at the network edge with zero cold-start. Rate-limit state in Cloudflare KV; eliminates an entire auth round-trip per protected request.</li>
         </ul>
-        <div class="entry-stack">Rust &middot; WebAssembly &middot; Cloudflare Workers &middot; JWT &middot; Cloudflare KV</div>
+        <div class="entry-stack">Rust &middot; WebAssembly &middot; Cloudflare Workers &middot; JWT &middot; Cloudflare KV &middot; Security &middot; Edge Computing</div>
+
+        <hr class="dash" />
+
+        <!-- Other Projects -->
+        <div class="entry-org" style="margin-bottom:0.35rem;">Other Projects</div>
+        <ul class="other-projects">
+          <li><strong>FloraCare</strong> &mdash; Android plant care app; Kotlin + Jetpack Compose, Perenual species API, weather-aware care scheduling. (<a href="https://github.com/IsliBasha/FloraCare" target="_blank">github.com/IsliBasha/FloraCare</a>)</li>
+          <li><strong>publer-mcp</strong> &mdash; TypeScript MCP server, 13 tools, three-package pnpm monorepo, Zod-validated shared types, full mock mode. (<a href="https://github.com/IsliBasha/publer-mcp" target="_blank">github.com/IsliBasha/publer-mcp</a>)</li>
+        </ul>
 
       </section>
 
@@ -337,11 +355,11 @@
     <!-- RIGHT COLUMN -->
     <div>
 
-      <!-- Profile -->
+      <!-- Profile / Summary -->
       <section>
         <div class="section-title">Profile</div>
         <p style="font-size:9pt;line-height:1.6;">
-          CS graduate with three years of hands-on development experience across backend services, full-stack web, systems programming, and real client delivery. Works across TypeScript, Python, Rust, Go, and Kotlin &mdash; picking the right tool per problem rather than defaulting to one stack. Has shipped production webhook services, 11-crate Rust workspaces, Astro sites for real clients, and MCP API integrations. Comfortable taking a feature from spec to deployed, tested code and integrating cleanly into an existing team and codebase.
+          Software engineer with 3+ years of production experience across full-stack TypeScript/Node.js, Python, and systems programming in Rust. Built and shipped: a production webhook service handling live WhatsApp Business traffic (Node.js + Express + PostgreSQL, 95%+ test coverage); an AI study companion with PDF ingestion and LLM-powered tutoring (FastAPI + Claude); a cyberphysical anomaly detection system for smart-city infrastructure (Flask + REST API + TDD, 68 tests); and a Cloudflare edge security service compiled to WASM. CS graduate (Polis University, 2026) &mdash; comfortable owning features end-to-end, working across ambiguous requirements, and shipping clean, tested code fast.
         </p>
       </section>
 
@@ -364,16 +382,16 @@
 
         <div class="edu-inst">Polis University, Tirana</div>
         <div class="edu-degree">Bachelor&rsquo;s in Computer Science</div>
-        <div class="edu-meta">&#128197; 2026</div>
+        <div class="edu-meta">&#128197; 09/2022 &ndash; 06/2026</div>
         <ul style="list-style:disc;padding-left:1.2rem;font-size:8.5pt;">
-          <li>Thesis: ME-DT Framework &mdash; cyber-physical threat detection for smart-city infrastructure</li>
+          <li>Thesis: ME-DT Framework &mdash; cyberphysical threat detection for smart-city infrastructure using machine learning anomaly detection</li>
         </ul>
 
         <hr class="dash" />
 
         <div class="edu-inst">Harry T. Fultz, Tirana</div>
         <div class="edu-degree">High School &mdash; Electronics</div>
-        <div class="edu-meta">&#128197; 2018&ndash;2022</div>
+        <div class="edu-meta">&#128197; 09/2018 &ndash; 06/2022</div>
       </section>
 
       <!-- Technical Skills -->
@@ -390,6 +408,10 @@
               <td class="skill-dots"><span class="filled">●●●●</span><span class="empty">○</span></td>
             </tr>
             <tr>
+              <td class="skill-name">Rust / WASM</td>
+              <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
+            </tr>
+            <tr>
               <td class="skill-name">Go</td>
               <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
             </tr>
@@ -397,24 +419,41 @@
               <td class="skill-name">Kotlin</td>
               <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
             </tr>
+          </tbody>
+        </table>
+
+        <table class="skills-cats">
+          <tbody>
             <tr>
-              <td class="skill-name">Rust / WASM</td>
-              <td class="skill-dots"><span class="filled">●●●</span><span class="empty">○○</span></td>
+              <td class="skills-cat-label">Frontend</td>
+              <td class="skills-cat-value">React, Next.js, Svelte, SvelteKit, Tailwind CSS, Three.js, HTML, CSS</td>
+            </tr>
+            <tr>
+              <td class="skills-cat-label">Backend</td>
+              <td class="skills-cat-value">Node.js, Express, NestJS, Hono, FastAPI, Axum (Rust), tRPC, GraphQL, REST API, WebSockets</td>
+            </tr>
+            <tr>
+              <td class="skills-cat-label">Databases</td>
+              <td class="skills-cat-value">PostgreSQL, SQLite, Turso, Redis</td>
+            </tr>
+            <tr>
+              <td class="skills-cat-label">Cloud</td>
+              <td class="skills-cat-value">Docker, GitHub Actions, Cloudflare Workers, Cloudflare Pages, Vercel, WebAssembly</td>
+            </tr>
+            <tr>
+              <td class="skills-cat-label">Testing</td>
+              <td class="skills-cat-value">TDD, unit testing, integration testing, 95%+ coverage workflows</td>
+            </tr>
+            <tr>
+              <td class="skills-cat-label">AI / LLMs</td>
+              <td class="skills-cat-value">Claude AI, MCP SDK, LLM integration, RAG, PDF parsing, OCR, Zod</td>
+            </tr>
+            <tr>
+              <td class="skills-cat-label">Other</td>
+              <td class="skills-cat-value">Git, pnpm Workspaces, Agile, REST API design, HMAC-SHA256, JWT, system design</td>
             </tr>
           </tbody>
         </table>
-      </section>
-
-      <!-- Frameworks / Tools -->
-      <section>
-        <div class="section-title">Frameworks / Tools</div>
-        <ul class="fw-list">
-          <li>React &middot; Next.js &middot; Astro &middot; Svelte</li>
-          <li>Node.js &middot; Express &middot; FastAPI &middot; Axum (Rust)</li>
-          <li>Docker &middot; Vercel &middot; Cloudflare Workers &middot; Pages</li>
-          <li>PostgreSQL &middot; SQLite &middot; Redis</li>
-          <li>GitHub Actions &middot; pnpm &middot; Tailwind CSS</li>
-        </ul>
       </section>
 
     </div>
