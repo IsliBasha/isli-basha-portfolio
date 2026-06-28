@@ -4,11 +4,12 @@ import { SystemDialog } from './SystemDialog.jsx';
 const ROOT = 'C:\\ISLI\\STACK';
 
 const DIRS = {
-  '':         { subdirs: ['languages', 'frontend', 'backend', 'infra'], files: [] },
-  languages:  { subdirs: [], files: ['TypeScript', 'Go', 'Rust', 'Python'] },
-  frontend:   { subdirs: [], files: ['React / Next.js', 'Svelte / SvelteKit', 'Tailwind CSS', 'Three.js'] },
-  backend:    { subdirs: [], files: ['Node.js', 'Fiber (Go)', 'Hono', 'tRPC / GraphQL'] },
-  infra:      { subdirs: [], files: ['Docker', 'Vercel / Cloudflare Workers', 'Turso / PostgreSQL / Redis', 'GitHub Actions'] },
+  '':         { subdirs: ['languages', 'frontend', 'backend', 'ai', 'infra'], files: [] },
+  languages:  { subdirs: [], files: ['Python', 'Rust', 'TypeScript', 'Kotlin', 'Java 21', 'JavaScript'] },
+  frontend:   { subdirs: [], files: ['React 19 / Vite', 'Astro 4', 'Jetpack Compose'] },
+  backend:    { subdirs: [], files: ['FastAPI', 'Spring Boot 3', 'Node.js / Express'] },
+  ai:         { subdirs: [], files: ['MCP Protocol', 'DeepFace / OpenCV', 'RAG Pipeline'] },
+  infra:      { subdirs: [], files: ['Docker', 'Cloudflare Workers (WASM)', 'SQLite / MySQL / PostgreSQL', 'GitHub Actions'] },
 };
 
 function getPrompt(cwd) {
