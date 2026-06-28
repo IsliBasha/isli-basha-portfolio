@@ -380,6 +380,40 @@ const chrome = {
     display: 'inline-block',
     lineHeight: 1.4,
   },
+  addressBar: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '3px 6px',
+    borderBottom: '1px solid #808080',
+    background: '#c0c0c0',
+  },
+  searchInput: {
+    flex: 1,
+    fontFamily: 'inherit',
+    fontSize: 'inherit',
+    background: '#ffffff',
+    borderTop: '1px solid #808080',
+    borderLeft: '1px solid #808080',
+    borderBottom: '1px solid #dfdfdf',
+    borderRight: '1px solid #dfdfdf',
+    padding: '1px 4px',
+    outline: 'none',
+    color: '#1a1a2e',
+  },
+  clearBtn: {
+    padding: '0 6px',
+    background: '#c0c0c0',
+    borderTop: '1px solid #dfdfdf',
+    borderLeft: '1px solid #dfdfdf',
+    borderRight: '1px solid #808080',
+    borderBottom: '1px solid #808080',
+    fontFamily: 'inherit',
+    fontSize: '0.65rem',
+    cursor: 'pointer',
+    lineHeight: 1.6,
+    color: '#1a1a2e',
+  },
   statusbar: {
     borderTop: '1px solid #808080',
     padding: '2px 8px',
@@ -393,11 +427,21 @@ const chrome = {
 export function MyWorkExplorer() {
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState(PROJECTS[0]);
+  const [query, setQuery] = useState('');
 
-  const visible = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === filter);
+  const q = query.trim().toLowerCase();
+  const visible = q
+    ? PROJECTS.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.stack.some(t => t.toLowerCase().includes(q))
+      )
+    : filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === filter);
+
+  const effectiveSelected = visible.find(p => p.id === selected?.id) ?? visible[0] ?? null;
 
   function handleFilter(cat) {
     setFilter(cat);
+    setQuery('');
     const next = cat === 'all' ? PROJECTS[0] : PROJECTS.find(p => p.category === cat);
     if (next) setSelected(next);
   }
@@ -410,6 +454,21 @@ export function MyWorkExplorer() {
         ))}
       </div>
 
+      <div style={chrome.addressBar}>
+        <span style={{ fontSize: '0.65rem', color: '#404040', whiteSpace: 'nowrap' }}>Search:</span>
+        <input
+          type="text"
+          style={chrome.searchInput}
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="project name or tech…"
+          aria-label="Search projects by name or technology"
+        />
+        {query && (
+          <button type="button" style={chrome.clearBtn} onClick={() => setQuery('')}>✕</button>
+        )}
+      </div>
+
       <div style={chrome.body}>
         <div style={chrome.sidebar}>
           <div style={chrome.sidebarHeading}>Categories</div>
@@ -417,7 +476,7 @@ export function MyWorkExplorer() {
             <button
               key={cat.id}
               type="button"
-              style={folderItemStyle(filter === cat.id)}
+              style={folderItemStyle(!q && filter === cat.id)}
               onClick={() => handleFilter(cat.id)}
             >
               <span>{cat.icon}</span> {cat.label}
@@ -430,45 +489,50 @@ export function MyWorkExplorer() {
             <button
               key={p.id}
               type="button"
-              style={tileStyle(selected?.id === p.id)}
+              style={tileStyle(effectiveSelected?.id === p.id)}
               onClick={() => setSelected(p)}
             >
               <span style={{ fontSize: '22px', lineHeight: 1 }}>{p.icon}</span>
-              <span style={tileLabelStyle(selected?.id === p.id)}>{p.name}</span>
+              <span style={tileLabelStyle(effectiveSelected?.id === p.id)}>{p.name}</span>
             </button>
           ))}
+          {visible.length === 0 && (
+            <div style={{ padding: '12px', fontSize: '0.7rem', color: '#808080', gridColumn: '1 / -1' }}>
+              No results for &ldquo;{query}&rdquo;
+            </div>
+          )}
         </div>
       </div>
 
-      {selected && (
+      {effectiveSelected && (
         <div style={chrome.detail}>
           <div style={chrome.preview}>
-            {selected.screenshot
-              ? <img src={selected.screenshot} alt={selected.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            {effectiveSelected.screenshot
+              ? <img src={effectiveSelected.screenshot} alt={effectiveSelected.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               : <span style={{ fontSize: '0.62rem', color: '#808080', textAlign: 'center', padding: '12px' }}>No preview</span>
             }
           </div>
           <div style={chrome.info}>
-            <div style={chrome.detailName}>{selected.name}</div>
-            <div style={chrome.detailDesc}>{selected.desc}</div>
-            <div style={chrome.detailMeta}><strong>Type:</strong> {selected.type}</div>
+            <div style={chrome.detailName}>{effectiveSelected.name}</div>
+            <div style={chrome.detailDesc}>{effectiveSelected.desc}</div>
+            <div style={chrome.detailMeta}><strong>Type:</strong> {effectiveSelected.type}</div>
             <div style={chrome.tags}>
-              {selected.stack.map(t => <span key={t} style={chrome.tag}>{t}</span>)}
+              {effectiveSelected.stack.map(t => <span key={t} style={chrome.tag}>{t}</span>)}
             </div>
             <div style={chrome.actions}>
-              {selected.link && (
+              {effectiveSelected.link && (
                 <a
-                  href={selected.link}
+                  href={effectiveSelected.link}
                   target="_blank"
                   rel="noopener"
                   style={{
                     ...chrome.btn,
-                    background: selected.linkLabel?.startsWith('GitHub') ? '#1a1a2e' : '#1a73e8',
+                    background: effectiveSelected.linkLabel?.startsWith('GitHub') ? '#1a1a2e' : '#1a73e8',
                     color: '#fff',
-                    borderColor: selected.linkLabel?.startsWith('GitHub') ? '#000' : '#0d47a1',
+                    borderColor: effectiveSelected.linkLabel?.startsWith('GitHub') ? '#000' : '#0d47a1',
                   }}
                 >
-                  {selected.linkLabel}
+                  {effectiveSelected.linkLabel}
                 </a>
               )}
             </div>
@@ -477,8 +541,13 @@ export function MyWorkExplorer() {
       )}
 
       <div style={chrome.statusbar}>
-        <span>{visible.length} object{visible.length !== 1 ? 's' : ''}</span>
-        {selected && <span>1 object selected</span>}
+        <span>
+          {q
+            ? `${visible.length} object${visible.length !== 1 ? 's' : ''} matching '${query.trim()}'`
+            : `${visible.length} object${visible.length !== 1 ? 's' : ''}`
+          }
+        </span>
+        {effectiveSelected && <span>1 object selected</span>}
       </div>
     </div>
   );
