@@ -273,7 +273,7 @@
         <div class="entry-meta">&#128197; 01/2021 &ndash; 12/2021 &nbsp;&middot;&nbsp; Tirana, Albania</div>
         <ul class="entry-bullets">
           <li>Shipped front-end features for client web projects in a small team, consistently meeting production deadlines.</li>
-          <li>Resolved cross-browser rendering bugs via DevTools; contributed through pull requests, code reviews, and Agile sprint task tracking.</li>
+          <li>Resolved cross-browser rendering bugs across Chrome, Firefox, and Safari via DevTools inspection; contributed to production delivery through pull requests, code reviews, and Agile sprint tracking.</li>
         </ul>
         <div class="entry-stack">HTML &middot; CSS &middot; JavaScript &middot; Git &middot; Code Review &middot; Agile</div>
       </section>
@@ -300,7 +300,7 @@
         <div class="entry-meta">&#128197; 2026 &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/mira-study" target="_blank">github.com/IsliBasha/mira-study</a></div>
         <ul class="entry-bullets">
           <li>Built a full-stack AI desktop app: FastAPI backend exposes a clean REST API consumed by a PyQt6 desktop frontend &mdash; upload PDFs, auto-generate flashcards and multiple-choice quizzes, and get step-by-step AI tutor explanations via Claude; analytics dashboard tracks score trends and weak topics.</li>
-          <li>PDF text extraction via PyMuPDF + pdfplumber + Tesseract OCR; SQLite persistence via SQLAlchemy; Albanian/English i18n toggle; full test suite across backend and API layers.</li>
+          <li>Wired a three-engine extraction pipeline &mdash; PyMuPDF, pdfplumber, and Tesseract OCR &mdash; handling digital and scanned PDFs; SQLAlchemy + SQLite persistence, Albanian/English i18n toggle, and a full backend and API test suite.</li>
         </ul>
         <div class="entry-stack">Python &middot; FastAPI &middot; PyQt6 &middot; Claude AI &middot; SQLite &middot; PyMuPDF &middot; Tesseract OCR &middot; REST API &middot; LLM Integration</div>
 
@@ -324,7 +324,7 @@
         <div class="entry-meta">&#128197; 01/2026 &ndash; Present &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/rust-scraper" target="_blank">github.com/IsliBasha/rust-scraper</a></div>
         <ul class="entry-bullets">
           <li>Architected an 11-crate Cargo workspace: hybrid HTTP/headless rendering, CSS selector and XPath extraction engines, Tokio async worker pool, per-host token-bucket rate limiting &mdash; delivered as a single 9 MB self-contained binary with 33 tests across 7 crates.</li>
-          <li>Ratatui terminal dashboard + Axum SSE web dashboard; SQLite WAL-mode persistence with crash-safe frontier recovery &mdash; demonstrates deep systems design and ownership across the full stack.</li>
+          <li>Shipped two parallel UI surfaces &mdash; a ratatui live TUI and an axum SSE web dashboard with embedded HTML; SQLite WAL-mode persistence guarantees crash-safe frontier recovery with zero scrape-data loss on unexpected exits.</li>
         </ul>
         <div class="entry-stack">Rust &middot; Tokio &middot; Axum &middot; SQLite &middot; WebAssembly &middot; Async &middot; System Design &middot; CI/CD</div>
 
@@ -335,7 +335,7 @@
         <div class="entry-org">cf-worker-rust</div>
         <div class="entry-meta">&#128197; 01/2026 &ndash; Present &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/cf-worker-rust" target="_blank">github.com/IsliBasha/cf-worker-rust</a></div>
         <ul class="entry-bullets">
-          <li>Rust security service compiled to WASM, deployed to Cloudflare Workers &mdash; JWT validation (HS256/RS256) and sliding-window rate limiting enforced at the network edge with zero cold-start. Rate-limit state in Cloudflare KV; eliminates an entire auth round-trip per protected request.</li>
+          <li>Compiled a Rust security service to WASM and deployed it to Cloudflare Workers &mdash; JWT validation (HS256/RS256) and sliding-window rate limiting at the network edge with zero cold-start; rate-limit state in Cloudflare KV cuts one full auth round-trip per protected request.</li>
         </ul>
         <div class="entry-stack">Rust &middot; WebAssembly &middot; Cloudflare Workers &middot; JWT &middot; Cloudflare KV &middot; Security &middot; Edge Computing</div>
 
