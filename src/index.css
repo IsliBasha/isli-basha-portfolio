@@ -12,8 +12,6 @@
 :root {
   color-scheme: light;
   --font-hand: 'Caveat', cursive;
-  --c-sky-top: #d6eaf8;
-  --c-sky-bottom: #aed6f1;
   --c-gray: #c0c0c0;
   --c-gray-dark: #808080;
   --c-gray-darker: #404040;
@@ -47,7 +45,7 @@ body {
 body {
   font-family: var(--font-sans);
   color: var(--c-text);
-  background: linear-gradient(180deg, var(--c-sky-top) 0%, var(--c-sky-bottom) 100%);
+  background: url('/win95-clouds-bg.jpg') center / cover no-repeat scroll;
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
@@ -69,6 +67,10 @@ body {
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
+  }
+
+  body {
+    background-attachment: fixed;
   }
 
   #root {
