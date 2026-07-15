@@ -40,15 +40,18 @@ const NEOFETCH_ART = [
   '####*+++===+====--------==+==--:::%%%%',
 ];
 
+const MOBILE_BREAKPOINT = 1024;
+
 async function fetchNeofetchOutput() {
   const res = await fetch('/api/neofetch');
   if (!res.ok) throw new Error('Failed to fetch GitHub stats');
   const s = await res.json();
 
   const statLine = (key, value) => `${key.padEnd(9)}: ${value}`;
+  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
   return [
-    ...NEOFETCH_ART,
+    ...(isMobile ? [] : NEOFETCH_ART),
     '',
     'IsliBasha@github',
     '-----------------',
