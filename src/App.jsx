@@ -56,6 +56,11 @@ function NotepadAbout() {
           ~/ whoami
         </h2>
         <p className="mb-2">
+          I'm currently working as an Agent &amp; Automation Specialist at
+          Ofive Global, building agentic systems that carry out real
+          multi-step work reliably.
+        </p>
+        <p className="mb-2">
           I build software end-to-end — from the database schema up to the
           pixel on screen — from Tirana, Albania. I care a lot about how
           things feel under load, which usually means obsessing over the

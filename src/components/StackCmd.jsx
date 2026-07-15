@@ -84,11 +84,11 @@ function processCommand(raw, cwd) {
           output: [
             '',
             'ISLI BASHA',
-            'Full-Stack Developer -- Tirana, Albania',
+            'Agent & Automation Specialist -- Ofive Global',
             '',
             'Builds software end-to-end, from database schema to pixel on screen.',
             'Focused on caching, indexing, bundle size, and render cost.',
-            'Currently digging into edge computing and WebAssembly.',
+            'Currently building agentic automation systems at Ofive Global.',
             '',
             'Email   : islibasha1@gmail.com',
             'GitHub  : github.com/IsliBasha',
