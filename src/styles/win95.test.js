@@ -85,6 +85,18 @@ describe('mobile responsive polish', () => {
   });
 });
 
+describe('mobile grid row sizing', () => {
+  it('does not stretch grid rows to fill leftover viewport height on mobile', () => {
+    // .desktop-area is `display: grid` with `min-height: calc(100vh - 34px)`
+    // and no explicit grid-template-rows. Without align-content: start, the
+    // default (normal, which behaves as stretch for Grid) evenly distributes
+    // leftover viewport height across every row -- inflating .desktop-icons
+    // and every window far beyond their natural content height on mobile.
+    const body = topLevelRuleBody('.desktop-area');
+    expect(body).toMatch(/align-content\s*:\s*start/);
+  });
+});
+
 describe('window flex layout for natural resize', () => {
   it('window is a flex column so the content area fills the chrome', () => {
     const body = topLevelRuleBody('.win95-window');
