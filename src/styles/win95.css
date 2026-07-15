@@ -913,6 +913,7 @@
     top: 5%;
     left: 58%;
     width: 30%;
+    min-width: 380px;
     height: 56%;
     --tilt: -0.6deg;
   }
