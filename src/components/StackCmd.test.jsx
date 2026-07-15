@@ -19,15 +19,22 @@ const STATS_FIXTURE = {
   locDel: '9,200',
 };
 
+function setViewportWidth(width) {
+  Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: width });
+}
+
 describe('StackCmd terminal', () => {
   const originalFetch = global.fetch;
+  const originalWidth = window.innerWidth;
 
   beforeEach(() => {
     global.fetch = vi.fn(() => jsonResponse(STATS_FIXTURE));
+    setViewportWidth(1440);
   });
 
   afterEach(() => {
     global.fetch = originalFetch;
+    setViewportWidth(originalWidth);
   });
 
   it('still handles existing synchronous commands (regression check)', async () => {
@@ -82,5 +89,26 @@ describe('StackCmd terminal', () => {
     await user.type(input, 'neofetch{Enter}');
 
     expect(await screen.findByText(/failed to fetch github stats/i)).toBeInTheDocument();
+  });
+
+  it('includes the ASCII art on desktop-width viewports', async () => {
+    setViewportWidth(1440);
+    const user = userEvent.setup();
+    render(<StackCmd />);
+    const input = screen.getByRole('textbox');
+    await user.type(input, 'neofetch{Enter}');
+
+    expect(await screen.findByText(/^-{2}={30}\+{6}$/)).toBeInTheDocument();
+  });
+
+  it('omits the ASCII art on mobile-width viewports, but still shows stats', async () => {
+    setViewportWidth(375);
+    const user = userEvent.setup();
+    render(<StackCmd />);
+    const input = screen.getByRole('textbox');
+    await user.type(input, 'neofetch{Enter}');
+
+    expect(await screen.findByText(/23/)).toBeInTheDocument();
+    expect(screen.queryByText(/^-{2}={30}\+{6}$/)).not.toBeInTheDocument();
   });
 });
