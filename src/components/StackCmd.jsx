@@ -105,6 +105,7 @@ function processCommand(raw, cwd) {
           'DIR      Displays a list of files and subdirectories.',
           'ECHO     Displays messages.',
           'HELP     Provides Help information for commands.',
+          'NEOFETCH Displays live GitHub stats.',
           'TYPE     Displays the contents of a text file.',
           'VER      Displays the Windows version.',
         ].join('\n'),
