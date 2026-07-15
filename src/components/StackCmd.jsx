@@ -236,35 +236,37 @@ export function StackCmd() {
         role="log"
         aria-live="polite"
       >
-        {lines.map((line, i) =>
-          typeof line === 'object' && line.type === 'neofetch' ? (
-            <div key={i} className="stack-cmd__neofetch">
-              <img src="/neofetch-art.svg" alt="" className="stack-cmd__neofetch-art" />
-              <pre className="stack-cmd__neofetch-stats">{line.stats.join('\n')}</pre>
-            </div>
-          ) : (
-            <div key={i} className="stack-cmd__line">
-              {line || ' '}
-            </div>
-          ),
-        )}
-        <div className="stack-cmd__prompt-row">
-          <span className="stack-cmd__prompt" aria-hidden="true">
-            {getPrompt(cwd)}
-          </span>
-          <input
-            ref={inputRef}
-            className="stack-cmd__input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            autoFocus
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck={false}
-            aria-label={`Terminal prompt: ${getPrompt(cwd)}`}
-          />
+        <div className="stack-cmd__inner">
+          {lines.map((line, i) =>
+            typeof line === 'object' && line.type === 'neofetch' ? (
+              <div key={i} className="stack-cmd__neofetch">
+                <img src="/neofetch-art.svg" alt="" className="stack-cmd__neofetch-art" />
+                <pre className="stack-cmd__neofetch-stats">{line.stats.join('\n')}</pre>
+              </div>
+            ) : (
+              <div key={i} className="stack-cmd__line">
+                {line || ' '}
+              </div>
+            ),
+          )}
+          <div className="stack-cmd__prompt-row">
+            <span className="stack-cmd__prompt" aria-hidden="true">
+              {getPrompt(cwd)}
+            </span>
+            <input
+              ref={inputRef}
+              className="stack-cmd__input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              aria-label={`Terminal prompt: ${getPrompt(cwd)}`}
+            />
+          </div>
         </div>
       </div>
       <SystemDialog

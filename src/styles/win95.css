@@ -911,12 +911,12 @@
   }
 
   .win-stack {
-    top: 4%;
+    top: 8%;
     left: 3%;
     width: 45%;
     max-width: 620px;
     min-width: 480px;
-    height: 64%;
+    height: 52%;
     --tilt: -0.6deg;
   }
 
@@ -1320,6 +1320,8 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   background: var(--c-term-bg);
   color: var(--c-term-fg);
   font-family: var(--font-mono);
@@ -1329,6 +1331,10 @@
   cursor: text;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.stack-cmd__inner {
+  margin-top: auto;
 }
 
 .stack-cmd__line {

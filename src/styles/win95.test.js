@@ -97,6 +97,24 @@ describe('mobile grid row sizing', () => {
   });
 });
 
+describe('terminal output anchoring', () => {
+  it('anchors terminal content to the bottom instead of floating at the top', () => {
+    // .stack-cmd__inner (wrapping all output lines + the trailing prompt
+    // row) uses margin-top: auto inside the flex-column .stack-cmd__output,
+    // not justify-content: flex-end directly on the scrollable container.
+    // flex-end on a scrolling flex container has a well-known bug: content
+    // that overflows toward the "start" (opposite the packed end) doesn't
+    // extend scrollHeight, making it permanently inaccessible via scroll.
+    // margin-top: auto on a single wrapper avoids that entirely.
+    const outputBody = topLevelRuleBody('.stack-cmd__output');
+    expect(outputBody).toMatch(/display\s*:\s*flex/);
+    expect(outputBody).not.toMatch(/justify-content\s*:\s*flex-end/);
+
+    const innerBody = topLevelRuleBody('.stack-cmd__inner');
+    expect(innerBody).toMatch(/margin-top\s*:\s*auto/);
+  });
+});
+
 describe('window flex layout for natural resize', () => {
   it('window is a flex column so the content area fills the chrome', () => {
     const body = topLevelRuleBody('.win95-window');
