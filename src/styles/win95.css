@@ -911,11 +911,12 @@
   }
 
   .win-stack {
-    top: 5%;
-    left: 58%;
-    width: 30%;
+    top: 4%;
+    left: 3%;
+    width: 85%;
+    max-width: 1160px;
     min-width: 380px;
-    height: 56%;
+    height: 74%;
     --tilt: -0.6deg;
   }
 

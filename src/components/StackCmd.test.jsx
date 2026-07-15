@@ -91,14 +91,27 @@ describe('StackCmd terminal', () => {
     expect(await screen.findByText(/failed to fetch github stats/i)).toBeInTheDocument();
   });
 
-  it('includes the ASCII art on desktop-width viewports', async () => {
+  it('includes the full-size ASCII art on desktop-width viewports', async () => {
     setViewportWidth(1440);
     const user = userEvent.setup();
     render(<StackCmd />);
     const input = screen.getByRole('textbox');
     await user.type(input, 'neofetch{Enter}');
 
-    expect(await screen.findByText(/^-{2}={30}\+{6}$/)).toBeInTheDocument();
+    expect(await screen.findByText(/^-{8}=+\+{16}/)).toBeInTheDocument();
+  });
+
+  it('renders the ASCII art and system info side by side, not stacked', async () => {
+    setViewportWidth(1440);
+    const user = userEvent.setup();
+    render(<StackCmd />);
+    const input = screen.getByRole('textbox');
+    await user.type(input, 'neofetch{Enter}');
+
+    // Real neofetch layout: the art's first row and the info header
+    // ("IsliBasha@github") must be the same text line, not separate lines.
+    const firstArtRow = await screen.findByText(/^-{8}=+\+{16}/);
+    expect(firstArtRow.textContent).toContain('IsliBasha@github');
   });
 
   it('omits the ASCII art on mobile-width viewports, but still shows stats', async () => {
@@ -109,6 +122,6 @@ describe('StackCmd terminal', () => {
     await user.type(input, 'neofetch{Enter}');
 
     expect(await screen.findByText(/23/)).toBeInTheDocument();
-    expect(screen.queryByText(/^-{2}={30}\+{6}$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^-{8}=+\+{16}/)).not.toBeInTheDocument();
   });
 });
