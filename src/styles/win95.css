@@ -913,10 +913,10 @@
   .win-stack {
     top: 4%;
     left: 3%;
-    width: 85%;
-    max-width: 1160px;
-    min-width: 380px;
-    height: 74%;
+    width: 45%;
+    max-width: 620px;
+    min-width: 480px;
+    height: 64%;
     --tilt: -0.6deg;
   }
 
@@ -1333,6 +1333,29 @@
 
 .stack-cmd__line {
   display: block;
+  white-space: pre-wrap;
+}
+
+.stack-cmd__neofetch {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  margin: 0.25rem 0;
+}
+
+.stack-cmd__neofetch-art {
+  width: 220px;
+  height: auto;
+  aspect-ratio: 600 / 648;
+  flex-shrink: 0;
+  image-rendering: crisp-edges;
+}
+
+.stack-cmd__neofetch-stats {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
   white-space: pre-wrap;
 }
 
