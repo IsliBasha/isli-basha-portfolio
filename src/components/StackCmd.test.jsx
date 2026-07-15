@@ -91,37 +91,48 @@ describe('StackCmd terminal', () => {
     expect(await screen.findByText(/failed to fetch github stats/i)).toBeInTheDocument();
   });
 
-  it('includes the full-size ASCII art on desktop-width viewports', async () => {
+  it('renders the ASCII art as an image on desktop-width viewports', async () => {
     setViewportWidth(1440);
     const user = userEvent.setup();
-    render(<StackCmd />);
+    const { container } = render(<StackCmd />);
     const input = screen.getByRole('textbox');
     await user.type(input, 'neofetch{Enter}');
 
-    expect(await screen.findByText(/^-{8}=+\+{16}/)).toBeInTheDocument();
+    const img = await waitFor(() => {
+      const el = container.querySelector('img[src="/neofetch-art.svg"]');
+      expect(el).toBeInTheDocument();
+      return el;
+    });
+    expect(img).toBeInTheDocument();
   });
 
-  it('renders the ASCII art and system info side by side, not stacked', async () => {
+  it('renders the art image and system info side by side, not stacked', async () => {
     setViewportWidth(1440);
     const user = userEvent.setup();
-    render(<StackCmd />);
+    const { container } = render(<StackCmd />);
     const input = screen.getByRole('textbox');
     await user.type(input, 'neofetch{Enter}');
 
-    // Real neofetch layout: the art's first row and the info header
-    // ("IsliBasha@github") must be the same text line, not separate lines.
-    const firstArtRow = await screen.findByText(/^-{8}=+\+{16}/);
-    expect(firstArtRow.textContent).toContain('IsliBasha@github');
+    const block = await waitFor(() => {
+      const el = container.querySelector('.stack-cmd__neofetch');
+      expect(el).toBeInTheDocument();
+      return el;
+    });
+    // Real neofetch layout: art and stats live in the same flex row,
+    // not as separate stacked lines.
+    expect(block.querySelector('img[src="/neofetch-art.svg"]')).toBeInTheDocument();
+    expect(block.textContent).toContain('IsliBasha@github');
+    expect(block.textContent).toContain('23');
   });
 
-  it('omits the ASCII art on mobile-width viewports, but still shows stats', async () => {
+  it('omits the ASCII art image on mobile-width viewports, but still shows stats', async () => {
     setViewportWidth(375);
     const user = userEvent.setup();
-    render(<StackCmd />);
+    const { container } = render(<StackCmd />);
     const input = screen.getByRole('textbox');
     await user.type(input, 'neofetch{Enter}');
 
     expect(await screen.findByText(/23/)).toBeInTheDocument();
-    expect(screen.queryByText(/^-{8}=+\+{16}/)).not.toBeInTheDocument();
+    expect(container.querySelector('img[src="/neofetch-art.svg"]')).not.toBeInTheDocument();
   });
 });
