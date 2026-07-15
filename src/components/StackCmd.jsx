@@ -12,6 +12,45 @@ const DIRS = {
   infra:      { subdirs: [], files: ['Docker', 'Cloudflare Workers (WASM)', 'SQLite / MySQL / PostgreSQL', 'GitHub Actions'] },
 };
 
+const NEOFETCH_ART = [
+  '================++++',
+  '===========+++==++++',
+  '===+-===+++++--=*+++',
+  '===+==--===----+*++*',
+  '+++++==--:::-::+****',
+  '+++++=*%=-:=%=-+****',
+  '++++#*=-==-::--=#***',
+  '++**##*+=*=::-=-%###',
+  '*****##***++====####',
+  '*****%%%%##**+=-####',
+  '******###*+===-:=###',
+  '*##+=+++==-----::*%%',
+  '##*+=====----==-:=%%',
+];
+
+async function fetchNeofetchOutput() {
+  const res = await fetch('/api/neofetch');
+  if (!res.ok) throw new Error('Failed to fetch GitHub stats');
+  const s = await res.json();
+
+  const statLine = (key, value) => `${key.padEnd(9)}: ${value}`;
+
+  return [
+    ...NEOFETCH_ART,
+    '',
+    'IsliBasha@github',
+    '-----------------',
+    statLine('Repos', s.repos),
+    statLine('Stars', s.stars),
+    statLine('Commits', s.commits),
+    statLine('Followers', s.followers),
+    statLine('Forks', s.forks),
+    statLine('Issues', s.issues),
+    statLine('LOC', `${s.loc} (+${s.locAdd}, -${s.locDel})`),
+    '',
+  ].join('\n');
+}
+
 function getPrompt(cwd) {
   return cwd ? `${ROOT}\\${cwd.toUpperCase()}>` : `${ROOT}>`;
 }
@@ -99,6 +138,9 @@ function processCommand(raw, cwd) {
       return { output: `File not found - ${arg || '(none)'}` };
     }
 
+    case 'neofetch':
+      return { async: true, pending: 'Fetching GitHub stats...', run: fetchNeofetchOutput };
+
     default:
       return {
         output: `'${cmd}' is not recognized as an internal or external command,\noperable program or batch file.`,
@@ -132,11 +174,19 @@ export function StackCmd() {
   }, [lines]);
 
   const runCommand = useCallback(
-    (raw) => {
+    async (raw) => {
       const result = processCommand(raw, cwd);
 
       if (result.clear) {
         setLines([]);
+      } else if (result.async) {
+        setLines((prev) => [...prev, `${getPrompt(cwd)}${raw}`, result.pending]);
+        try {
+          const output = await result.run();
+          setLines((prev) => [...prev, ...output.split('\n')]);
+        } catch {
+          setLines((prev) => [...prev, 'Failed to fetch GitHub stats.']);
+        }
       } else {
         setLines((prev) => [
           ...prev,
