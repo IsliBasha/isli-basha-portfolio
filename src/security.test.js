@@ -21,9 +21,12 @@ describe('vercel.json security headers', () => {
     expect(h?.value).toBe('nosniff');
   });
 
-  it('has X-Frame-Options: DENY', () => {
+  // SAMEORIGIN (not DENY) is intentional: ResumeViewer embeds cv.html/PDF in a
+  // same-origin <iframe>. DENY would blank that viewer. Cross-origin framing is
+  // still blocked, so clickjacking protection holds. See commit 6298845.
+  it('has X-Frame-Options: SAMEORIGIN', () => {
     const h = getVercelHeaders().find(h => h.key === 'X-Frame-Options');
-    expect(h?.value).toBe('DENY');
+    expect(h?.value).toBe('SAMEORIGIN');
   });
 
   it('has Strict-Transport-Security with max-age', () => {
