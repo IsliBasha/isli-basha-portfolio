@@ -26,6 +26,7 @@ describe('projects data', () => {
       expect(Array.isArray(p.stack), `${p.id} stack must be array`).toBe(true);
       expect(p.href, `${p.id} missing href`).toBeTruthy();
       expect(p.iconType, `${p.id} missing iconType`).toBeTruthy();
+      expect(p.tag, `${p.id} missing tag`).toBeTruthy();
     }
   });
 });

@@ -1,6 +1,7 @@
 export const projects = [
   {
     id: 'medt',
+    tag: 'thesis',
     name: 'ME-DT Framework',
     description: 'Bachelor thesis: Mythos-Enhanced Digital Twin for smart-city cyber-physical threat detection. Isolation Forest anomaly detection, MITRE ATT&CK mapping, real-time Flask dashboard.',
     stack: ['Python', 'Flask', 'Isolation Forest', 'MITRE ATT&CK'],
@@ -9,6 +10,7 @@ export const projects = [
   },
   {
     id: 'floracare',
+    tag: 'android',
     name: 'FloraCare',
     description: 'Android plant care companion. Species lookup via Perenual API, watering schedules, and weather-aware care reminders.',
     stack: ['Kotlin', 'Android', 'Perenual API', 'OpenWeatherMap'],
@@ -17,6 +19,7 @@ export const projects = [
   },
   {
     id: 'wabot',
+    tag: 'chatbot',
     name: 'Whatsapp-Chatbot',
     description: 'AI-powered Albanian product chatbot on WhatsApp. Claude AI intent parsing, fuzzy product search, session state, HMAC webhook verification, and rate limiting.',
     stack: ['JavaScript', 'Node.js', 'Claude AI', 'PostgreSQL'],
@@ -25,6 +28,7 @@ export const projects = [
   },
   {
     id: 'cf-worker-rust',
+    tag: 'edge',
     name: 'cf-worker-rust',
     description:
       'Edge JWT validator and per-IP rate limiter running on Cloudflare Workers. Rust/WASM via workers-rs, supports HS256 and RS256. KV-backed sliding-window rate limiting.',
@@ -34,6 +38,7 @@ export const projects = [
   },
   {
     id: 'hamster',
+    tag: 'ML',
     name: 'HamsterFaceRecognition',
     description: 'Face recognition model trained on hamster images. DeepFace + OpenCV applied to a deeply unserious dataset.',
     stack: ['Python', 'OpenCV', 'DeepFace'],
@@ -42,6 +47,7 @@ export const projects = [
   },
   {
     id: 'mira-study',
+    tag: 'study',
     name: 'Mira Study',
     description: 'AI study companion. Upload PDFs, auto-generate flashcards and quizzes, get step-by-step AI tutor explanations, and track progress with an analytics dashboard.',
     stack: ['PyQt6', 'FastAPI', 'Claude AI', 'SQLite'],
@@ -50,6 +56,7 @@ export const projects = [
   },
   {
     id: 'rust-scraper',
+    tag: 'scraper',
     name: 'rust-scraper',
     description: 'Production-grade Rust web scraper — hybrid HTTP/headless rendering, recursive crawler, CSS + XPath extraction, live TUI, web dashboard, SQLite persistence, single self-contained binary.',
     stack: ['Rust', 'SQLite', 'ratatui', 'XPath'],
@@ -58,6 +65,7 @@ export const projects = [
   },
   {
     id: 'linkedin-banner',
+    tag: 'automation',
     name: 'LinkedIn Banner',
     description: 'Auto-generates a LinkedIn cover photo from live GitHub stats — dark terminal aesthetic with contribution graph, language breakdown, and streak metrics. Refreshed daily via GitHub Actions.',
     stack: ['Python', 'Pillow', 'GitHub Actions', 'GitHub API'],
@@ -66,6 +74,7 @@ export const projects = [
   },
   {
     id: 'publer-mcp',
+    tag: 'MCP',
     name: 'Publer MCP Server',
     description: 'AI-powered social media management via Model Context Protocol. Exposes Publer\'s full scheduling and analytics API as MCP tools for direct AI assistant integration.',
     stack: ['TypeScript', 'MCP', 'Publer API', 'Turborepo'],
@@ -74,6 +83,7 @@ export const projects = [
   },
   {
     id: 'mcp-odoo-fintech',
+    tag: 'MCP',
     name: 'MCP Odoo Fintech',
     description: 'TypeScript MCP server connecting Claude directly to Odoo ERP via JSON-RPC 2.0. Exposes invoices, sales orders, and customer balances as AI tools, with HMAC webhook verification and a Web Inspector UI.',
     stack: ['TypeScript', 'MCP', 'Odoo ERP', 'JSON-RPC 2.0'],
@@ -82,6 +92,7 @@ export const projects = [
   },
   {
     id: 'playwright-saas-automator',
+    tag: 'automation',
     name: 'Playwright SaaS Automator',
     description: 'Resilient SaaS user provisioning via Playwright with ARIA-first selectors. Claude Haiku self-repairs broken selectors when UIs change, with PII scrubbing for audit-safe logs.',
     stack: ['TypeScript', 'Playwright', 'Claude AI', 'Node.js'],
@@ -90,6 +101,7 @@ export const projects = [
   },
   {
     id: 'meridian-build',
+    tag: 'website',
     name: 'Meridian Build',
     description: 'SvelteKit website for a NYC commercial contractor. Flagship UX: an interactive building explorer that lets visitors navigate building → floor → room to explore completed projects.',
     stack: ['SvelteKit', 'JavaScript', 'HTML/CSS'],
@@ -98,6 +110,7 @@ export const projects = [
   },
   {
     id: 'mips-voting',
+    tag: 'voting',
     name: 'MIPS Voting System',
     description: 'Electronic voting system simulator in MIPS Assembly for the MARS simulator. Vote casting, live statistics, winner detection, MMIO simulation, and timer-based live updates.',
     stack: ['MIPS Assembly', 'MARS Simulator', 'MMIO'],
@@ -106,6 +119,7 @@ export const projects = [
   },
   {
     id: 'copycat',
+    tag: 'agent',
     name: 'Copycat',
     description: 'AI screen automation agent — captures the screen, asks Claude what to do next, and executes actions with human-like timing. Autonomous GUI interaction driven by vision and language.',
     stack: ['Python', 'Claude AI', 'PyAutoGUI', 'Pillow'],
@@ -114,6 +128,7 @@ export const projects = [
   },
   {
     id: 'stani-hoxhes',
+    tag: 'website',
     name: 'Stani i Hoxhës',
     description: 'Real-client website for a seasonal mountain hotel in the Novoseja highlands, Kukës. Astro 4, fully bilingual (Albanian/English), drone video integration, image galleries, and responsive room booking sections.',
     stack: ['Astro', 'JavaScript', 'HTML/CSS', 'Bilingual'],
@@ -122,6 +137,7 @@ export const projects = [
   },
   {
     id: 'win95-arch',
+    tag: 'deck',
     name: 'Win95 Architecture Deck',
     description: 'Zero-dependency Win95-themed architecture presentation for Polis University. Custom pixel-art CSS, IBM Plex typography, and interactive slide transitions — no frameworks, no build step.',
     stack: ['JavaScript', 'HTML/CSS', 'Win95 Theme'],
@@ -130,6 +146,7 @@ export const projects = [
   },
   {
     id: 'previsit',
+    tag: 'hackathon',
     name: 'PreVisit',
     description: 'AI-powered pre-visit medical intake system built for the Coolab hackathon. Patients complete a voice-guided intake — Claude AI extracts structured medical data, ElevenLabs drives TTS/STT, and a real-time doctor dashboard surfaces the briefing instantly.',
     stack: ['React', 'TanStack', 'FastAPI', 'Claude AI', 'ElevenLabs', 'Supabase', 'Twilio'],
