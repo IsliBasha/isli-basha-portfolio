@@ -2,13 +2,18 @@
 // screen's scroll-locked content. Also exports the small header pieces so
 // each screen can compose its own header slot (idle/menu vs section variant).
 
+import { useSignalStrength } from './useSignalStrength.js';
+
 export function SignalBars() {
+  const bars = useSignalStrength();
   return (
     <span className="nk-signal" aria-hidden="true">
-      <span className="nk-signal__bar" />
-      <span className="nk-signal__bar" />
-      <span className="nk-signal__bar" />
-      <span className="nk-signal__bar" />
+      {[0, 1, 2, 3].map((i) => (
+        <span
+          key={i}
+          className={`nk-signal__bar ${i >= bars ? 'nk-signal__bar--dim' : ''}`}
+        />
+      ))}
     </span>
   );
 }

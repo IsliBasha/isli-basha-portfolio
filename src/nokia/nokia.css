@@ -73,7 +73,8 @@
   color: var(--ink-60);
 }
 
-/* signal bars: 4 bars, 4th at 25% */
+/* signal bars: 4 bars, ascending height; bars past the current strength
+   (useSignalStrength) dim to 25% — the level drifts gently over time. */
 .nk-signal {
   display: inline-flex;
   align-items: flex-end;
@@ -83,17 +84,20 @@
 .nk-signal__bar {
   width: 3px;
   background: var(--ink);
+  transition: opacity 400ms ease;
 }
 .nk-signal__bar:nth-child(1) { height: 5px; }
 .nk-signal__bar:nth-child(2) { height: 8px; }
 .nk-signal__bar:nth-child(3) { height: 11px; }
-.nk-signal__bar:nth-child(4) { height: 14px; opacity: 0.25; }
+.nk-signal__bar:nth-child(4) { height: 14px; }
+.nk-signal__bar--dim { opacity: 0.25; }
 
-/* battery: 3 stacked cells, top at 25% */
+/* battery: horizontal icon (terminal nub on the right), so the 3 fill
+   cells run left-to-right as vertical bars to match — not stacked top-to-
+   bottom. The cell nearest the terminal (last, rightmost) sits at 25%. */
 .nk-battery {
   position: relative;
   display: inline-flex;
-  flex-direction: column;
   justify-content: space-between;
   width: 16px;
   height: 12px;
@@ -110,10 +114,10 @@
   background: var(--ink);
 }
 .nk-battery__cell {
-  height: 2px;
+  width: 2px;
   background: var(--ink);
 }
-.nk-battery__cell:first-child { opacity: 0.25; }
+.nk-battery__cell:last-child { opacity: 0.25; }
 
 /* ---- Scroll-locked content region ---- */
 .nk-content {
@@ -853,4 +857,5 @@
   .nk-flash--on { opacity: 0; }
   .nk-boot__tagline--in { animation: none; clip-path: inset(0 0 0 0); }
   .nk-boot__flash { animation: none; opacity: 1; }
+  .nk-signal__bar { transition: none; }
 }
