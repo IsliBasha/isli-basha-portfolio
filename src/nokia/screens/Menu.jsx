@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NokiaShell, StatusHeader } from '../NokiaShell.jsx';
+import { useSmear } from '../useSmear.js';
 
 // 03 MENU — numbered list 1-6. Focused row inverts (ink fill, LCD text, ►).
 // Tap opens; digits 1-6 open directly; arrows move the highlight; Enter =
@@ -15,6 +16,7 @@ const MENU_ITEMS = [
 
 export function Menu({ time, onSelect, onBack }) {
   const [focus, setFocus] = useState(0);
+  const smearIndex = useSmear(focus);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -54,7 +56,7 @@ export function Menu({ time, onSelect, onBack }) {
             role="menuitem"
             tabIndex={-1}
             aria-current={i === focus ? true : undefined}
-            className={`nk-menu-item ${i === focus ? 'nk-menu-item--focused' : ''}`}
+            className={`nk-menu-item ${i === focus ? 'nk-menu-item--focused' : ''} ${i === smearIndex ? 'nk-row-smear' : ''}`}
             onMouseEnter={() => setFocus(i)}
             onClick={() => onSelect(item.route)}
           >

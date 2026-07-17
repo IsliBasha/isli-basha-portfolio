@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NokiaShell, SectionHeader } from '../NokiaShell.jsx';
+import { useSmear } from '../useSmear.js';
 import { projects } from '../../data/projects.js';
 
 // 2 MY WORK — scrollable project list. Focused row inverts (ink fill). Header
@@ -9,6 +10,7 @@ export function WorkList({ initialFocus = 0, onOpen, onBack }) {
   const [focus, setFocus] = useState(() =>
     Math.min(Math.max(initialFocus, 0), projects.length - 1),
   );
+  const smearIndex = useSmear(focus);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -55,7 +57,7 @@ export function WorkList({ initialFocus = 0, onOpen, onBack }) {
             role="menuitem"
             tabIndex={-1}
             aria-current={i === focus ? true : undefined}
-            className={`nk-work-item ${i === focus ? 'nk-work-item--focused' : ''}`}
+            className={`nk-work-item ${i === focus ? 'nk-work-item--focused' : ''} ${i === smearIndex ? 'nk-row-smear' : ''}`}
             onMouseEnter={() => setFocus(i)}
             onClick={() => onOpen(i)}
           >

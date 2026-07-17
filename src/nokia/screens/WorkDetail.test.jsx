@@ -32,6 +32,21 @@ describe('WorkDetail', () => {
     expect(onPage).toHaveBeenCalledWith(projects.length - 1);
   });
 
+  it('renders the dithered screenshot for a project that has one', () => {
+    setup({ index: 0 });
+    expect(projects[0].screenshot).toBe('/nokia/medt.png');
+    const img = document.querySelector('.nk-detail__shot');
+    expect(img).not.toBeNull();
+    expect(img.src).toContain('/nokia/medt.png');
+  });
+
+  it('falls back to the hatch placeholder for a project without a screenshot', () => {
+    setup({ index: 2 });
+    expect(projects[2].screenshot).toBeUndefined();
+    expect(document.querySelector('.nk-detail__shot')).toBeNull();
+    expect(screen.getByText(projects[2].iconType)).toBeInTheDocument();
+  });
+
   it('goes Back on Escape and via the Back softkey', async () => {
     const user = userEvent.setup();
     const { onBack } = setup();

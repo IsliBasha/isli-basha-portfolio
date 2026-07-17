@@ -7,6 +7,7 @@ export const projects = [
     stack: ['Python', 'Flask', 'Isolation Forest', 'MITRE ATT&CK'],
     href: 'https://github.com/IsliBasha/me-dt-framework',
     iconType: 'network',
+    screenshot: '/nokia/medt.png',
   },
   {
     id: 'floracare',
@@ -62,6 +63,7 @@ export const projects = [
     stack: ['Rust', 'SQLite', 'ratatui', 'XPath'],
     href: 'https://github.com/IsliBasha/rust-scraper',
     iconType: 'rust',
+    screenshot: '/nokia/rust-scraper.png',
   },
   {
     id: 'linkedin-banner',
@@ -71,6 +73,7 @@ export const projects = [
     stack: ['Python', 'Pillow', 'GitHub Actions', 'GitHub API'],
     href: 'https://github.com/IsliBasha/linkedin-banner',
     iconType: 'terminal',
+    screenshot: '/nokia/linkedin-banner.png',
   },
   {
     id: 'publer-mcp',
@@ -134,6 +137,7 @@ export const projects = [
     stack: ['Astro', 'JavaScript', 'HTML/CSS', 'Bilingual'],
     href: 'https://github.com/IsliBasha/stani-hoxhes-website',
     iconType: 'globe',
+    screenshot: '/nokia/stani-hoxhes.png',
   },
   {
     id: 'win95-arch',
@@ -143,6 +147,7 @@ export const projects = [
     stack: ['JavaScript', 'HTML/CSS', 'Win95 Theme'],
     href: 'https://github.com/IsliBasha/win95-architecture',
     iconType: 'chip',
+    screenshot: '/nokia/win95-arch.png',
   },
   {
     id: 'previsit',
@@ -152,5 +157,6 @@ export const projects = [
     stack: ['React', 'TanStack', 'FastAPI', 'Claude AI', 'ElevenLabs', 'Supabase', 'Twilio'],
     href: 'https://github.com/IsliBasha/Coolab_hackathon',
     iconType: 'chat',
+    screenshot: '/nokia/previsit.png',
   },
 ];

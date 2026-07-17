@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { projects } from './projects.js';
+import { SOURCES } from '../../scripts/dither.js';
 
 describe('projects data', () => {
   it('includes the mira-study project', () => {
@@ -16,6 +17,21 @@ describe('projects data', () => {
   it('mira-study lists PyQt6 in its stack', () => {
     const p = projects.find((p) => p.id === 'mira-study');
     expect(p.stack).toContain('PyQt6');
+  });
+
+  it('only lists a screenshot for projects the dither pipeline actually produces', () => {
+    // Cross-checks against scripts/dither.js's SOURCES rather than a
+    // hardcoded list, so the two can't silently drift apart.
+    const withShot = projects.filter((p) => p.screenshot).map((p) => p.id).sort();
+    const ditherIds = SOURCES.map((s) => s.id).sort();
+    expect(withShot).toEqual(ditherIds);
+  });
+
+  it('points each screenshot field at the exact path the dither pipeline writes', () => {
+    for (const p of projects) {
+      if (!p.screenshot) continue;
+      expect(p.screenshot, `${p.id} screenshot path`).toBe(`/nokia/${p.id}.png`);
+    }
   });
 
   it('all projects have required fields', () => {

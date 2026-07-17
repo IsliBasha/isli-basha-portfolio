@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NokiaShell, SectionHeader } from '../NokiaShell.jsx';
 import { useHighScore } from '../useHighScore.js';
+import { useSmear } from '../useSmear.js';
 
 // 11 GAMES — list of the three playable games with pixel icons + HI scores.
 const GAMES = [
@@ -13,14 +14,14 @@ function formatHi(score) {
   return `HI ${String(score).padStart(4, '0')}`;
 }
 
-function GameRow({ game, focused, onFocus, onOpen }) {
+function GameRow({ game, focused, smearing, onFocus, onOpen }) {
   const { highScore } = useHighScore(game.id);
   return (
     <li
       role="menuitem"
       tabIndex={-1}
       aria-current={focused ? true : undefined}
-      className={`nk-game-item ${focused ? 'nk-game-item--focused' : ''}`}
+      className={`nk-game-item ${focused ? 'nk-game-item--focused' : ''} ${smearing ? 'nk-row-smear' : ''}`}
       onMouseEnter={onFocus}
       onClick={onOpen}
     >
@@ -33,6 +34,7 @@ function GameRow({ game, focused, onFocus, onOpen }) {
 
 export function Games({ onOpen, onBack }) {
   const [focus, setFocus] = useState(0);
+  const smearIndex = useSmear(focus);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -70,6 +72,7 @@ export function Games({ onOpen, onBack }) {
             key={game.id}
             game={game}
             focused={i === focus}
+            smearing={i === smearIndex}
             onFocus={() => setFocus(i)}
             onOpen={() => onOpen(game.route)}
           />

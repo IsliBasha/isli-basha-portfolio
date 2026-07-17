@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 import './nokia.css';
 import { useHashRoute } from './useHashRoute.js';
+import { useSectionFlash } from './useSectionFlash.js';
+import { SMEAR_MS } from './useSmear.js';
 import { useClock } from '../hooks/useClock.js';
 import { Boot } from './screens/Boot.jsx';
 import { Idle } from './screens/Idle.jsx';
@@ -39,6 +41,7 @@ export function NokiaApp() {
   const { route, navigate, replace, back } = useHashRoute();
   const time = useClock();
   const [booted, setBooted] = useState(readBooted);
+  const flashOn = useSectionFlash(route, booted);
 
   const finishBoot = useCallback(() => {
     try {
@@ -95,10 +98,10 @@ export function NokiaApp() {
   }
 
   return (
-    <div className="nokia-root">
+    <div className="nokia-root" style={{ '--nk-smear-ms': `${SMEAR_MS}ms` }}>
       {screen}
       <div className="nk-grid" aria-hidden="true" />
-      <div className="nk-flash" aria-hidden="true" />
+      <div className={`nk-flash ${flashOn ? 'nk-flash--on' : ''}`} aria-hidden="true" />
     </div>
   );
 }

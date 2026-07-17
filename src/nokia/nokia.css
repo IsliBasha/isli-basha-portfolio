@@ -177,6 +177,15 @@
   width: 12px;
   height: 12px;
   background: var(--ink);
+  opacity: 0;
+  transform: scale(0.3);
+  animation: nk-boot-block-in 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.nk-boot__block:nth-child(1) { animation-delay: 0ms; }
+.nk-boot__block:nth-child(2) { animation-delay: 120ms; }
+.nk-boot__block:nth-child(3) { animation-delay: 240ms; }
+@keyframes nk-boot-block-in {
+  to { opacity: 1; transform: scale(1); }
 }
 .nk-boot__name {
   font-size: 34px;
@@ -417,6 +426,16 @@
     var(--ink-35) 0 2px,
     transparent 2px 6px
   );
+}
+.nk-detail__frame:has(.nk-detail__shot) {
+  background: var(--lcd);
+  background-image: none;
+}
+.nk-detail__shot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
 }
 .nk-detail__frame-label {
   padding: 2px 6px;
@@ -794,6 +813,20 @@
 }
 
 /* ---- Global screen effects ---- */
+/* LCD smear: outgoing focused row fades its inverted ink-fill back to
+   normal over 150ms with a brief blur, ghosting where the focus just was. */
+.nk-row-smear {
+  background: var(--ink);
+  color: var(--lcd);
+  animation-name: nk-row-smear-out;
+  animation-duration: var(--nk-smear-ms, 150ms);
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+@keyframes nk-row-smear-out {
+  from { opacity: 1; filter: blur(0); }
+  to { opacity: 0.25; filter: blur(2px); }
+}
 .nk-grid {
   position: fixed;
   inset: 0;
@@ -832,4 +865,7 @@
   .nk-scroll-hint { animation: none; }
   .nk-snake-cell--food,
   .nk-snake-cell--bonus { animation: none; }
+  .nk-boot__block { animation: none; opacity: 1; transform: none; }
+  .nk-row-smear { animation: none; }
+  .nk-flash--on { opacity: 0; }
 }
