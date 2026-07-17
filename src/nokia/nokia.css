@@ -604,6 +604,195 @@
   color: var(--ink-60);
 }
 
+/* ---- Games: list ---- */
+.nk-game-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nk-game-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 7px 10px;
+  box-sizing: border-box;
+  border-bottom: 1px dashed var(--ink-35);
+  cursor: pointer;
+}
+.nk-game-item:last-child { border-bottom: 0; }
+.nk-game-item__icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  background: var(--ink);
+  clip-path: polygon(
+    0 20%, 20% 20%, 20% 0, 80% 0, 80% 20%, 100% 20%,
+    100% 80%, 80% 80%, 80% 100%, 20% 100%, 20% 80%, 0 80%
+  );
+}
+.nk-game-item__icon--spaceImpact {
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.nk-game-item__icon--bantumi {
+  clip-path: none;
+  border-radius: 50%;
+}
+.nk-game-item__label {
+  flex: 1 1 auto;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.nk-game-item__hi {
+  font-family: var(--nk-font-body);
+  font-size: 15px;
+  color: var(--ink-60);
+}
+.nk-game-item--focused {
+  background: var(--ink);
+  color: var(--lcd);
+}
+.nk-game-item--focused .nk-game-item__icon { background: var(--lcd); }
+.nk-game-item--focused .nk-game-item__hi { color: var(--lcd); }
+
+/* ---- Games: shared HUD bits ---- */
+.nk-game-over {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.nk-dpad {
+  margin: 10px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 40px);
+  grid-template-rows: repeat(2, 40px);
+  gap: 4px;
+  justify-content: center;
+}
+.nk-dpad__btn {
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--nk-font-chrome);
+  font-size: 14px;
+}
+.nk-dpad__btn:active { background: var(--ink); color: var(--lcd); }
+.nk-dpad__up { grid-column: 2; grid-row: 1; }
+.nk-dpad__left { grid-column: 1; grid-row: 2; }
+.nk-dpad__right { grid-column: 3; grid-row: 2; }
+.nk-dpad__down { grid-column: 2; grid-row: 2; }
+.nk-dpad--vertical {
+  grid-template-columns: 40px;
+  grid-template-rows: repeat(3, 40px);
+}
+.nk-dpad--vertical .nk-dpad__up { grid-column: 1; grid-row: 1; }
+.nk-dpad--vertical .nk-dpad__fire { grid-column: 1; grid-row: 2; }
+.nk-dpad--vertical .nk-dpad__down { grid-column: 1; grid-row: 3; }
+
+/* ---- Games: Snake II ---- */
+.nk-snake-grid {
+  display: grid;
+  gap: 1px;
+  aspect-ratio: 16 / 12;
+  max-width: 260px;
+  margin: 0 auto;
+  border: var(--nk-rule) solid var(--ink);
+  padding: 2px;
+  box-sizing: border-box;
+}
+.nk-snake-cell { background: transparent; }
+.nk-snake-cell--head,
+.nk-snake-cell--body {
+  background: var(--ink);
+}
+.nk-snake-cell--food {
+  background: var(--ink);
+  animation: nk-blink-cell 700ms steps(1) infinite;
+}
+.nk-snake-cell--bonus {
+  border: 2px solid var(--ink);
+  box-sizing: border-box;
+  animation: nk-blink-cell 400ms steps(1) infinite;
+}
+@keyframes nk-blink-cell {
+  50% { opacity: 0.15; }
+}
+
+/* ---- Games: Space Impact ---- */
+.nk-si-grid {
+  display: grid;
+  gap: 1px;
+  aspect-ratio: 16 / 7;
+  max-width: 280px;
+  margin: 0 auto;
+  border: var(--nk-rule) solid var(--ink);
+  padding: 2px;
+  box-sizing: border-box;
+}
+.nk-si-cell { background: transparent; }
+.nk-si-cell--player,
+.nk-si-cell--enemy {
+  background: var(--ink);
+}
+.nk-si-cell--bullet {
+  background: transparent;
+  border: 1px solid var(--ink);
+  box-sizing: border-box;
+}
+
+/* ---- Games: Bantumi ---- */
+.nk-bantumi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nk-bantumi__store {
+  width: 30px;
+  height: 60px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ink);
+  font-family: var(--nk-font-body);
+  font-size: 20px;
+}
+.nk-bantumi__board {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.nk-bantumi__row {
+  display: flex;
+  gap: 4px;
+}
+.nk-bantumi__pit {
+  flex: 1 1 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ink-35);
+  border-radius: 50%;
+  box-sizing: border-box;
+  font-family: var(--nk-font-body);
+  font-size: 16px;
+  background: transparent;
+  color: var(--ink);
+}
+.nk-bantumi__pit--player {
+  border-color: var(--ink);
+  cursor: pointer;
+}
+.nk-bantumi__pit--player:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 /* ---- Global screen effects ---- */
 .nk-grid {
   position: fixed;
@@ -641,4 +830,6 @@
   .nk-boot__fill { animation: none; width: 100%; }
   .nk-idle__press { animation: none; }
   .nk-scroll-hint { animation: none; }
+  .nk-snake-cell--food,
+  .nk-snake-cell--bonus { animation: none; }
 }

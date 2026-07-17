@@ -129,6 +129,132 @@ describe('snake tick', () => {
   });
 });
 
+describe('snake bonus mechanic', () => {
+  it('does not spawn a bonus when bonusEnabled is false', () => {
+    const game = {
+      width: 5,
+      height: 5,
+      snake: [
+        { x: 2, y: 2 },
+        { x: 1, y: 2 },
+      ],
+      direction: 'right',
+      food: { x: 3, y: 2 },
+      status: 'playing',
+      score: 4,
+      bonusEnabled: false,
+      bonusEvery: 5,
+      foodEatenCount: 4,
+      bonus: null,
+      foodRng: fixedFoodRng([0.01]),
+    };
+    const next = tick(game);
+    expect(next.bonus).toBeNull();
+  });
+
+  it('spawns a bonus after eating bonusEvery pieces of food when enabled', () => {
+    const game = {
+      width: 5,
+      height: 5,
+      snake: [
+        { x: 2, y: 2 },
+        { x: 1, y: 2 },
+      ],
+      direction: 'right',
+      food: { x: 3, y: 2 },
+      status: 'playing',
+      score: 4,
+      bonusEnabled: true,
+      bonusEvery: 5,
+      bonusLifetime: 10,
+      bonusValue: 5,
+      foodEatenCount: 4,
+      bonus: null,
+      foodRng: fixedFoodRng([0.01, 0.01]),
+    };
+    const next = tick(game);
+    expect(next.foodEatenCount).toBe(5);
+    expect(next.food).toEqual({ x: 0, y: 0 });
+    expect(next.bonus).toEqual({ x: 1, y: 0, ticksLeft: 10 });
+    expect(next.score).toBe(5);
+  });
+
+  it('expires the bonus once its lifetime reaches zero', () => {
+    const game = {
+      width: 5,
+      height: 5,
+      snake: [
+        { x: 2, y: 2 },
+        { x: 1, y: 2 },
+      ],
+      direction: 'right',
+      food: { x: 4, y: 4 },
+      status: 'playing',
+      score: 0,
+      bonusEnabled: true,
+      bonusEvery: 5,
+      foodEatenCount: 0,
+      bonus: { x: 0, y: 0, ticksLeft: 1 },
+      foodRng: () => 0,
+    };
+    const next = tick(game);
+    expect(next.bonus).toBeNull();
+  });
+
+  it('excludes the active bonus cell when respawning food', () => {
+    const game = {
+      width: 4,
+      height: 3,
+      snake: [
+        { x: 2, y: 1 },
+        { x: 1, y: 1 },
+      ],
+      direction: 'right',
+      food: { x: 3, y: 1 },
+      status: 'playing',
+      score: 0,
+      bonusEnabled: true,
+      bonusEvery: 5,
+      bonusLifetime: 15,
+      bonusValue: 5,
+      foodEatenCount: 0,
+      bonus: { x: 0, y: 1, ticksLeft: 5 },
+      // Without excluding the bonus cell, this rng value would land the new
+      // food exactly on the bonus at (0,1) — the free cell at that index.
+      foodRng: () => 0.45,
+    };
+    const next = tick(game);
+    expect(next.food).not.toEqual({ x: 0, y: 1 });
+    expect(next.food).toEqual({ x: 3, y: 0 });
+    expect(next.bonus).toEqual({ x: 0, y: 1, ticksLeft: 4 });
+  });
+
+  it('eating the bonus adds bonusValue to score without growing the snake', () => {
+    const game = {
+      width: 10,
+      height: 10,
+      snake: [
+        { x: 5, y: 5 },
+        { x: 4, y: 5 },
+      ],
+      direction: 'right',
+      food: { x: 9, y: 9 },
+      status: 'playing',
+      score: 0,
+      bonusEnabled: true,
+      bonusEvery: 5,
+      bonusValue: 5,
+      foodEatenCount: 0,
+      bonus: { x: 6, y: 5, ticksLeft: 5 },
+      foodRng: () => 0,
+    };
+    const next = tick(game);
+    expect(next.snake).toHaveLength(2);
+    expect(next.score).toBe(5);
+    expect(next.bonus).toBeNull();
+  });
+});
+
 describe('snake turn', () => {
   it('changes direction when given a valid 90-degree turn', () => {
     const game = createGame({ width: 10, height: 10 });

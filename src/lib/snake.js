@@ -12,8 +12,9 @@ const OPPOSITE = {
   right: 'left',
 };
 
-function placeFood(width, height, snake, rng) {
+function placeFood(width, height, snake, rng, exclude = null) {
   const taken = new Set(snake.map((s) => `${s.x},${s.y}`));
+  if (exclude) taken.add(`${exclude.x},${exclude.y}`);
   const free = [];
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
@@ -25,7 +26,15 @@ function placeFood(width, height, snake, rng) {
   return free[idx];
 }
 
-export function createGame({ width = 20, height = 15, rng = Math.random } = {}) {
+export function createGame({
+  width = 20,
+  height = 15,
+  rng = Math.random,
+  bonusEnabled = false,
+  bonusEvery = 5,
+  bonusLifetime = 15,
+  bonusValue = 5,
+} = {}) {
   const cy = Math.floor(height / 2);
   const cx = Math.floor(width / 2);
   const snake = [
@@ -43,6 +52,12 @@ export function createGame({ width = 20, height = 15, rng = Math.random } = {}) 
     status: 'playing',
     score: 0,
     foodRng: rng,
+    bonusEnabled,
+    bonusEvery,
+    bonusLifetime,
+    bonusValue,
+    bonus: null,
+    foodEatenCount: 0,
   };
 }
 
@@ -70,10 +85,13 @@ export function tick(game) {
     return { ...game, status: 'gameover', direction };
   }
 
-  const eating =
+  const eatingFood =
     game.food && nextHead.x === game.food.x && nextHead.y === game.food.y;
+  const eatingBonus =
+    game.bonus && nextHead.x === game.bonus.x && nextHead.y === game.bonus.y;
 
-  const bodyAfterMove = eating
+  // Bonus is a points pickup, not a meal — only regular food grows the snake.
+  const bodyAfterMove = eatingFood
     ? game.snake
     : game.snake.slice(0, game.snake.length - 1);
 
@@ -87,18 +105,51 @@ export function tick(game) {
 
   const nextSnake = [nextHead, ...bodyAfterMove];
   const rng = game.foodRng ?? Math.random;
-  const nextFood = eating
-    ? placeFood(game.width, game.height, nextSnake, rng)
+
+  // Decay/clear the carried-over bonus first so a fresh food spawn can
+  // exclude its cell — otherwise food could land exactly on a still-active
+  // bonus, silently hiding it and double-scoring the tile.
+  let carriedBonus = eatingBonus ? null : (game.bonus ?? null);
+  if (game.bonusEnabled && carriedBonus) {
+    const ticksLeft = carriedBonus.ticksLeft - 1;
+    carriedBonus = ticksLeft > 0 ? { ...carriedBonus, ticksLeft } : null;
+  }
+
+  const nextFood = eatingFood
+    ? placeFood(game.width, game.height, nextSnake, rng, carriedBonus)
     : game.food;
-  const nextScore = eating ? game.score + 1 : game.score;
+  const nextFoodEatenCount = eatingFood
+    ? (game.foodEatenCount ?? 0) + 1
+    : (game.foodEatenCount ?? 0);
+  const bonusEvery = game.bonusEvery ?? 5;
+
+  let nextBonus = carriedBonus;
+  const shouldSpawnBonus =
+    game.bonusEnabled &&
+    !nextBonus &&
+    eatingFood &&
+    nextFoodEatenCount % bonusEvery === 0;
+  if (shouldSpawnBonus) {
+    const spot = placeFood(game.width, game.height, nextSnake, rng, nextFood);
+    nextBonus = spot
+      ? { ...spot, ticksLeft: game.bonusLifetime ?? 15 }
+      : null;
+  }
+
+  const nextScore =
+    game.score +
+    (eatingFood ? 1 : 0) +
+    (eatingBonus ? (game.bonusValue ?? 5) : 0);
   const nextStatus = nextFood ? 'playing' : 'won';
 
   return {
     ...game,
     snake: nextSnake,
     food: nextFood,
+    bonus: nextBonus,
     direction,
     score: nextScore,
+    foodEatenCount: nextFoodEatenCount,
     status: nextStatus,
   };
 }
