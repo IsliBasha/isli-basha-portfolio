@@ -167,52 +167,37 @@
   padding: 0 24px;
   text-align: center;
   cursor: pointer;
+  position: relative;
 }
-.nk-boot__blocks {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 6px;
+.nk-boot__hands {
+  width: min(248px, 68vw);
+  height: auto;
+  image-rendering: pixelated;
 }
-.nk-boot__block {
-  width: 12px;
-  height: 12px;
-  background: var(--ink);
-  opacity: 0;
-  transform: scale(0.3);
-  animation: nk-boot-block-in 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.nk-boot__tagline {
+  margin-top: 24px;
+  font: 700 12px 'Silkscreen', monospace;
+  color: var(--ink);
+  text-align: center;
+  line-height: 2;
+  clip-path: inset(0 100% 0 0);
 }
-.nk-boot__block:nth-child(1) { animation-delay: 0ms; }
-.nk-boot__block:nth-child(2) { animation-delay: 120ms; }
-.nk-boot__block:nth-child(3) { animation-delay: 240ms; }
-@keyframes nk-boot-block-in {
-  to { opacity: 1; transform: scale(1); }
+.nk-boot__tagline--in {
+  animation: nk-boot-tagline-in 500ms steps(16, end) forwards;
 }
-.nk-boot__name {
-  font-size: 34px;
-  line-height: 1;
+@keyframes nk-boot-tagline-in {
+  to { clip-path: inset(0 0 0 0); }
 }
-.nk-boot__tag {
-  font-size: 11px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--ink-60);
+.nk-boot__flash {
+  position: absolute;
+  inset: 0;
+  background: #fdfdfb;
+  animation: nk-boot-flash-in 60ms ease-out forwards;
+  z-index: 5;
 }
-.nk-boot__bar {
-  width: 180px;
-  max-width: 70%;
-  height: 14px;
-  margin-top: 14px;
-  padding: 2px;
-  border: 2px solid var(--ink);
-}
-.nk-boot__fill {
-  height: 100%;
-  width: 0;
-  background: var(--ink);
-  animation: nk-boot-fill 1.8s linear forwards;
-}
-@keyframes nk-boot-fill {
-  to { width: 100%; }
+@keyframes nk-boot-flash-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ---- Idle screen ---- */
@@ -860,12 +845,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nk-boot__fill { animation: none; width: 100%; }
   .nk-idle__press { animation: none; }
   .nk-scroll-hint { animation: none; }
   .nk-snake-cell--food,
   .nk-snake-cell--bonus { animation: none; }
-  .nk-boot__block { animation: none; opacity: 1; transform: none; }
   .nk-row-smear { animation: none; }
   .nk-flash--on { opacity: 0; }
+  .nk-boot__tagline--in { animation: none; clip-path: inset(0 0 0 0); }
+  .nk-boot__flash { animation: none; opacity: 1; }
 }
