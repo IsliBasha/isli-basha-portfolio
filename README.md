@@ -1,16 +1,40 @@
-# React + Vite
+# islibasha.dev
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio of **Isli Basha** — Agent & Automation Specialist at Ofive Global, Tirana — built as an interactive **Windows 95 desktop simulation** in React 19.
 
-Currently, two official plugins are available:
+**Live: [islibasha.dev](https://islibasha.dev)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Windows 95 desktop simulation — desktop icons, taskbar, and SiteCounter.exe window](screenshot.png)
 
-## React Compiler
+## What's inside
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Desktop (Win95):**
 
-## Expanding the ESLint configuration
+- Boot sequence, draggable/resizable windows, taskbar with Start menu
+- DOS-style terminal (`cmd`) with real commands
+- Playable Minesweeper and Snake
+- `my work` folder with 20 projects, `resume.pdf` viewer, contact window
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Mobile (Nokia 3310):**
+
+- On phone viewports the site becomes a Nokia 3310 — LCD chrome, boot intro, monochrome dithered screens
+- Playable Snake II, Space Impact, and Bantumi
+
+**AI discoverability:**
+
+- [`/llms.txt`](public/llms.txt) machine-readable site summary for AI assistants
+- Static pre-rendered content inside `#root` so non-JS crawlers see a real page
+- JSON-LD structured data; AI/LLM crawlers explicitly allowed in `robots.txt`
+
+## Stack
+
+React 19 + Vite, hand-rolled Win95 CSS (no UI library), Vitest (328 tests).
+
+## Run it
+
+```bash
+npm install
+npm run dev      # local dev server
+npm test         # run the test suite
+npm run build    # production build (pre-dithers screenshots)
+```
