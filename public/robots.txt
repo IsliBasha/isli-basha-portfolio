@@ -1,3 +1,56 @@
+# islibasha.dev — all crawlers welcome, including AI/LLM crawlers.
+# Machine-readable site summary for AI assistants: /llms.txt
+
 User-agent: *
 Allow: /
+
+# --- AI / LLM crawlers, explicitly welcome ---
+
+# OpenAI (training / search / user-triggered)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic (training / search / user-triggered)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# Perplexity (index / user-triggered)
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google AI (Gemini training)
+User-agent: Google-Extended
+Allow: /
+
+# Common Crawl (feeds many open training sets)
+User-agent: CCBot
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta AI
+User-agent: meta-externalagent
+Allow: /
+
+# Amazon (Alexa / Rufus)
+User-agent: Amazonbot
+Allow: /
+
 Sitemap: https://islibasha.dev/sitemap.xml

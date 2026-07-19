@@ -1,0 +1,34 @@
+# Isli Basha
+
+> Agent & Automation Specialist at Ofive Global, based in Tirana, Albania. Computer Science graduate (Polis University, 2026). Builds AI-agent systems, Model Context Protocol (MCP) servers, and workflow automation, with a full-stack background in TypeScript/Node.js, Python/FastAPI, React, Rust, and Kotlin.
+
+islibasha.dev is an interactive Windows 95 desktop simulation built in React 19 — draggable windows, a boot sequence, a DOS-style terminal, playable Minesweeper and Snake. Because the site is a JavaScript application, this file summarises its content for crawlers and AI assistants.
+
+## Profile
+
+- [CV](https://islibasha.dev/cv.html): full curriculum vitae with experience, education, and project detail
+- [GitHub](https://github.com/IsliBasha): all public repositories
+- [LinkedIn](https://linkedin.com/in/islibasha): professional profile
+
+## AI & automation work
+
+- [Publer MCP Server](https://github.com/IsliBasha/publer-mcp): AI-powered social media management via Model Context Protocol — exposes Publer's full scheduling and analytics API as MCP tools for direct AI assistant integration
+- [MCP Odoo Fintech](https://github.com/IsliBasha/mcp-odoo-fintech): TypeScript MCP server connecting Claude directly to Odoo ERP via JSON-RPC 2.0 — invoices, sales orders, and customer balances as AI tools, with HMAC webhook verification
+- [Playwright SaaS Automator](https://github.com/IsliBasha/playwright-saas-automator): resilient SaaS user provisioning via Playwright with ARIA-first selectors — an LLM self-repairs broken selectors when UIs change, with PII scrubbing for audit-safe logs
+- [Copycat](https://github.com/IsliBasha/copycat): AI screen automation agent — captures the screen, asks an LLM what to do next, and executes actions with human-like timing
+- [PreVisit](https://github.com/IsliBasha/Coolab_hackathon): AI-powered pre-visit medical intake built for the Coolab hackathon — voice-guided intake, structured medical data extraction, real-time doctor dashboard
+
+## Full-stack & systems work
+
+- [ME-DT Framework](https://github.com/IsliBasha/me-dt-framework): bachelor thesis — digital twin for smart-city cyber-physical threat detection with Isolation Forest anomaly detection, MITRE ATT&CK mapping, and a real-time FastAPI dashboard
+- [rust-scraper](https://github.com/IsliBasha/rust-scraper): production-grade Rust web scraper — hybrid HTTP/headless rendering, recursive crawler, live TUI, web dashboard, single self-contained binary
+- [WhatsApp Chatbot](https://github.com/IsliBasha/Whatsapp-Chatbot): Node.js + Express business chatbot — NLP intent detection, product search via Odoo XML-RPC, HMAC webhook verification, rate limiting
+- [cf-worker-rust](https://github.com/IsliBasha/cf-worker-rust): Cloudflare Worker in Rust — JWT validation and per-IP rate limiting at the edge, compiled to WASM
+- [FloraCare](https://github.com/IsliBasha/FloraCare): Android plant-care companion — Kotlin + Jetpack Compose, species lookup via Perenual API, weather-aware watering reminders
+
+## Optional
+
+- [Meridian Build](https://github.com/IsliBasha/meridian-build): SvelteKit site for a NYC commercial contractor with an interactive building explorer
+- [Stani i Hoxhës](https://stani-hoxhes-website.pages.dev/): bilingual SQ/EN website for a mountain lodge in Kukës, Albania
+- [Win95 Architecture Deck](https://github.com/IsliBasha/win95-architecture): zero-dependency presentation on how this portfolio is built
+- [Java Advanced Programming](https://github.com/IsliBasha/java-advanced-programming): nine university Java 21 projects — Spring Boot 3 REST APIs, JPA, JUnit 5

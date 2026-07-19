@@ -106,6 +106,87 @@ describe('sitemap.xml completeness', () => {
   });
 });
 
+describe('robots.txt AI crawler access', () => {
+  const robots = () => readFileSync(join(ROOT, 'public', 'robots.txt'), 'utf8');
+
+  it('explicitly allows GPTBot', () => {
+    expect(robots()).toMatch(/User-agent: GPTBot\s+Allow: \//);
+  });
+
+  it('explicitly allows OAI-SearchBot', () => {
+    expect(robots()).toMatch(/User-agent: OAI-SearchBot\s+Allow: \//);
+  });
+
+  it('explicitly allows ClaudeBot', () => {
+    expect(robots()).toMatch(/User-agent: ClaudeBot\s+Allow: \//);
+  });
+
+  it('explicitly allows PerplexityBot', () => {
+    expect(robots()).toMatch(/User-agent: PerplexityBot\s+Allow: \//);
+  });
+});
+
+describe('llms.txt for AI assistants', () => {
+  const llms = () => readFileSync(join(ROOT, 'public', 'llms.txt'), 'utf8');
+
+  it('exists in public/', () => {
+    expect(existsSync(join(ROOT, 'public', 'llms.txt'))).toBe(true);
+  });
+
+  it('starts with an H1 of the site owner name', () => {
+    expect(llms()).toMatch(/^# Isli Basha/);
+  });
+
+  it('describes the agent and automation specialisation', () => {
+    expect(llms()).toMatch(/[Aa]gent/);
+    expect(llms()).toMatch(/[Aa]utomation/);
+  });
+
+  it('mentions Tirana, Albania', () => {
+    expect(llms()).toMatch(/Tirana/);
+  });
+
+  it('links to the GitHub profile', () => {
+    expect(llms()).toMatch(/github\.com\/IsliBasha/);
+  });
+});
+
+describe('index.html prerendered content for non-JS crawlers', () => {
+  const rootContent = () => {
+    const m = indexHtml().match(/<div id="root">([\s\S]*?)<\/div>\s*<script/);
+    return m ? m[1] : '';
+  };
+
+  it('has static content inside #root', () => {
+    expect(rootContent()).toMatch(/Isli Basha/);
+  });
+
+  it('static content names the agent and automation role', () => {
+    expect(rootContent()).toMatch(/Automation Specialist/);
+  });
+
+  it('static content links real project repos', () => {
+    expect(rootContent()).toMatch(/github\.com\/IsliBasha\/rust-scraper/);
+    expect(rootContent()).toMatch(/github\.com\/IsliBasha\/publer-mcp/);
+  });
+});
+
+describe('index.html JSON-LD location and education', () => {
+  it('Person includes a Tirana address', () => {
+    expect(indexHtml()).toMatch(/"addressLocality"\s*:\s*"Tirana"/);
+  });
+
+  it('Person includes alumniOf Polis University', () => {
+    expect(indexHtml()).toMatch(/"alumniOf"/);
+    expect(indexHtml()).toMatch(/Polis University/);
+  });
+
+  it('Person knowsAbout covers the AI-agent niche', () => {
+    expect(indexHtml()).toMatch(/AI Agents/);
+    expect(indexHtml()).toMatch(/Model Context Protocol/);
+  });
+});
+
 describe('public/ SEO files', () => {
   it('robots.txt exists', () => {
     expect(existsSync(join(ROOT, 'public', 'robots.txt'))).toBe(true);
