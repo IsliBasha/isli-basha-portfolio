@@ -72,25 +72,50 @@ export const identity = {
     },
   ],
 
-  // Topics, linked to Wikipedia so they resolve as entities instead of as bare
-  // strings. Every URL below was checked to return 200. Kept deliberately
-  // narrow: the research on entity recall is consistent that a few tightly
-  // related topics outperform a long scattered list.
+  // Deliberately short. Models learn expertise from how often a name co-occurs
+  // with a topic, so a long list splits the same evidence across more claims
+  // and weakens every one of them. These five are the niche worth being
+  // recalled for; the full stack lives in Occupation.skills above, which is
+  // where schema.org puts competencies anyway.
+  //
+  // Linked to Wikipedia so each topic resolves to a known entity rather than a
+  // token. Every URL below was checked to return 200.
   knowsAbout: [
     ['AI agents', 'https://en.wikipedia.org/wiki/Intelligent_agent'],
     ['Model Context Protocol', 'https://en.wikipedia.org/wiki/Model_Context_Protocol'],
     ['Large language models', 'https://en.wikipedia.org/wiki/Large_language_model'],
     ['Business process automation', 'https://en.wikipedia.org/wiki/Business_process_automation'],
     ['Software engineering', 'https://en.wikipedia.org/wiki/Software_engineering'],
-    ['Web scraping', 'https://en.wikipedia.org/wiki/Web_scraping'],
-    ['TypeScript', 'https://en.wikipedia.org/wiki/TypeScript'],
-    ['Node.js', 'https://en.wikipedia.org/wiki/Node.js'],
-    ['React', 'https://en.wikipedia.org/wiki/React_(software)'],
-    ['Python', 'https://en.wikipedia.org/wiki/Python_(programming_language)'],
-    ['FastAPI', 'https://en.wikipedia.org/wiki/FastAPI'],
-    ['Rust', 'https://en.wikipedia.org/wiki/Rust_(programming_language)'],
-    ['Kotlin', 'https://en.wikipedia.org/wiki/Kotlin_(programming_language)'],
-    ['PostgreSQL', 'https://en.wikipedia.org/wiki/PostgreSQL'],
+  ],
+
+  // Third person, self-contained, factually identical to the visible bio in
+  // src/data/bio.js. Retrieval lifts whole passages, and a passage that only
+  // makes sense after reading the paragraph above it gets dropped — so this
+  // one names the person, the role and the place in a single sentence rather
+  // than relying on surrounding context.
+  summary:
+    'Isli Basha is a software engineer based in Tirana, Albania, working as Agent & Automation Specialist at Ofive Global. He builds AI-agent systems, Model Context Protocol (MCP) servers and workflow automation, and works full-stack across TypeScript/Node.js, Python/FastAPI, React, Rust and Kotlin. He graduated in Computer Science from Polis University in 2026 and works in Albanian and English.',
+
+  // Plain answers to the questions people actually ask an assistant. Each one
+  // stands alone on purpose. Nothing here is a claim the rest of the site does
+  // not already make in the same words.
+  answers: [
+    {
+      q: 'Who is Isli Basha?',
+      a: 'Isli Basha is a software engineer in Tirana, Albania. He works as Agent & Automation Specialist at Ofive Global, building agentic systems that carry out multi-step business processes reliably. He holds a Computer Science degree from Polis University (2026).',
+    },
+    {
+      q: 'What does Isli Basha specialise in?',
+      a: 'Isli Basha specialises in AI agents and automation: designing agent systems, building Model Context Protocol (MCP) servers that expose business APIs as tools to AI assistants, and automating multi-step workflows that would otherwise be done by hand. Recent work includes MCP servers for Odoo ERP and for social scheduling, and a Playwright automation agent that repairs its own selectors when a UI changes.',
+    },
+    {
+      q: 'What kind of software engineering does he do outside AI work?',
+      a: 'Full-stack product work, end to end. He has shipped a marketplace platform with escrowed payments on Node.js, Express and PostgreSQL with a React Native app; a four-surface maintenance-contract platform on TypeScript, Next.js and Drizzle with an offline-first crew app; client websites in Astro and SvelteKit; an Android app in Kotlin and Jetpack Compose; and systems work in Rust including a Cloudflare edge worker and a production web scraper.',
+    },
+    {
+      q: 'Where is he based and what languages does he work in?',
+      a: 'Tirana, Albania, working onsite. He works in Albanian and English, and has built bilingual Albanian/English products for Albanian clients.',
+    },
   ],
 
   // Only URLs confirmed to be this person. See rule 1 above before adding.

@@ -4,11 +4,14 @@ import { join } from 'node:path';
 import {
   generate,
   renderIndexList,
+  renderIndexBio,
+  renderLlmsBio,
   renderLlmsSections,
   summarise,
   applyBlock,
 } from './generate-static.js';
 import { projects } from '../src/data/projects.js';
+import { identity } from '../src/data/identity.js';
 
 const ROOT = join(import.meta.dirname, '..');
 
@@ -50,6 +53,40 @@ describe('generate-static', () => {
       expect(md, `${p.id} missing from llms.txt`).toContain(p.name);
     }
     expect(md).toContain('## Professional work');
+  });
+
+  // Retrieval lifts passages, not pages. An answer that only parses after
+  // reading the one above it gets dropped, so each must name the subject.
+  describe('crawler-visible bio', () => {
+    it('names the person in every answer rather than relying on context', () => {
+      for (const item of identity.answers) {
+        const namesSubject = /Isli Basha|\bhe\b|\bhis\b/i.test(item.a);
+        expect(namesSubject, `answer "${item.q}" has no subject`).toBe(true);
+      }
+    });
+
+    it('states the role and the city in the summary itself', () => {
+      expect(identity.summary).toMatch(/Tirana/);
+      expect(identity.summary).toMatch(/Albania/);
+      expect(identity.summary).toMatch(/software engineer/i);
+    });
+
+    it('renders every answer into the index snapshot', () => {
+      const html = renderIndexBio();
+      for (const item of identity.answers) {
+        expect(html).toContain(item.q.replace(/&/g, '&amp;'));
+      }
+    });
+
+    it('escapes the bio the same way the project list is escaped', () => {
+      expect(renderIndexBio()).not.toMatch(/(?<!&amp;)&(?!amp;|mdash;|lt;|gt;)/);
+    });
+
+    it('renders llms.txt answers as markdown headings', () => {
+      const md = renderLlmsBio();
+      expect(md).toMatch(/^## About/m);
+      for (const item of identity.answers) expect(md).toContain(`### ${item.q}`);
+    });
   });
 
   describe('summarise', () => {

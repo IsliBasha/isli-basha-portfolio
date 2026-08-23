@@ -14,6 +14,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { projects } from '../src/data/projects.js';
+import { identity } from '../src/data/identity.js';
 import { renderGraph } from './schema-graph.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -21,6 +22,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const MARKERS = {
   projects: ['projects:start', 'projects:end'],
   schema: ['schema:start', 'schema:end'],
+  bio: ['bio:start', 'bio:end'],
 };
 
 // llms.txt groups by what a reader is looking for, not by our category slugs.
@@ -66,6 +68,26 @@ export function renderIndexList(list) {
     return `          <li>${label} &mdash; ${desc}</li>`;
   });
   return items.join('\n');
+}
+
+// The crawler-visible bio. Retrieval works on passages, so each answer is
+// written to stand on its own — the heading is not load-bearing.
+export function renderIndexBio() {
+  const answers = identity.answers
+    .map(
+      (item) =>
+        `        <h3 style="font-size:1rem;margin:1.4rem 0 .3rem">${escapeHtml(item.q)}</h3>\n` +
+        `        <p>${escapeHtml(item.a)}</p>`,
+    )
+    .join('\n');
+  return `        <p>${escapeHtml(identity.summary)}</p>\n${answers}`;
+}
+
+export function renderLlmsBio() {
+  const answers = identity.answers
+    .map((item) => `### ${item.q}\n\n${item.a}`)
+    .join('\n\n');
+  return `## About\n\n${identity.summary}\n\n${answers}`;
 }
 
 export function renderLlmsSections(list) {
@@ -119,6 +141,7 @@ const TARGETS = [
   {
     file: join(ROOT, 'index.html'),
     blocks: [
+      { marker: 'bio', render: renderIndexBio },
       { marker: 'projects', render: () => renderIndexList(projects) },
       {
         marker: 'schema',
@@ -128,7 +151,10 @@ const TARGETS = [
   },
   {
     file: join(ROOT, 'public', 'llms.txt'),
-    blocks: [{ marker: 'projects', render: () => renderLlmsSections(projects) }],
+    blocks: [
+      { marker: 'bio', render: renderLlmsBio },
+      { marker: 'projects', render: () => renderLlmsSections(projects) },
+    ],
   },
   {
     file: join(ROOT, 'public', 'cv.html'),
