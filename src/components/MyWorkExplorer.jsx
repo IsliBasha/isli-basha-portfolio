@@ -1,252 +1,9 @@
 import { useState } from 'react';
-
-const PROJECTS = [
-  // ── Client / Delivered ──────────────────────────────────────────────────
-  {
-    id: 'stani',
-    name: 'Stani i Hoxhës',
-    category: 'web',
-    type: 'Web · Client',
-    desc: 'Mountain lodge in Kukës, Albania. Bilingual SQ/EN, animated hero, gallery, and reservation contact form.',
-    stack: ['Astro', 'CSS', 'i18n'],
-    link: 'https://stani-hoxhes-website.pages.dev/',
-    linkLabel: 'Visit →',
-    icon: '🌐',
-    screenshot: '/stani-screenshot.jpeg',
-  },
-  {
-    id: 'meridian-build',
-    name: 'Meridian Build',
-    category: 'web',
-    type: 'Web · Client',
-    desc: 'SvelteKit website for a NYC commercial contractor. Flagship UX: an interactive building explorer that lets visitors navigate building → floor → room to explore completed projects.',
-    stack: ['SvelteKit', 'JavaScript', 'HTML/CSS'],
-    link: 'https://github.com/IsliBasha/meridian-build',
-    linkLabel: 'GitHub →',
-    icon: '🏗️',
-    screenshot: null,
-  },
-  {
-    id: 'warehouse',
-    name: 'warehouse-inventory',
-    category: 'app',
-    type: 'App · Mobile',
-    desc: 'Mobile-first inventory management app built during a work placement. Tracks stock levels, movements, and locations.',
-    stack: ['Ionic', 'Angular', 'Capacitor'],
-    link: '',
-    linkLabel: '',
-    icon: '📦',
-    screenshot: null,
-  },
-  {
-    id: 'ionic-work',
-    name: 'ionic-project-work-1',
-    category: 'app',
-    type: 'App · Mobile',
-    desc: 'Ionic/Angular hybrid app built during a work placement. Compiled to native iOS and Android targets.',
-    stack: ['Ionic', 'Angular', 'Capacitor'],
-    link: '',
-    linkLabel: '',
-    icon: '📱',
-    screenshot: null,
-  },
-  // ── Open Source / GitHub ─────────────────────────────────────────────────
-  {
-    id: 'medt',
-    name: 'ME-DT Framework',
-    category: 'research',
-    type: 'Research · Thesis',
-    desc: 'Bachelor thesis: Mythos-Enhanced Digital Twin for smart-city cyber-physical threat detection. Isolation Forest anomaly detection, MITRE ATT&CK mapping, real-time FastAPI dashboard.',
-    stack: ['Python', 'FastAPI', 'Isolation Forest', 'MITRE ATT&CK'],
-    link: 'https://github.com/IsliBasha/me-dt-framework',
-    linkLabel: 'GitHub →',
-    icon: '🔬',
-    screenshot: '/medt-screenshot.jpeg',
-  },
-  {
-    id: 'floracare',
-    name: 'FloraCare',
-    category: 'app',
-    type: 'App · Android',
-    desc: 'Android plant care companion — Kotlin + Jetpack Compose, species lookup via Perenual API, weather-aware watering reminders.',
-    stack: ['Kotlin', 'Jetpack Compose', 'Perenual API', 'OpenWeatherMap'],
-    link: 'https://github.com/IsliBasha/FloraCare',
-    linkLabel: 'GitHub →',
-    icon: '🌿',
-    screenshot: null,
-  },
-  {
-    id: 'wabot',
-    name: 'Whatsapp-Chatbot',
-    category: 'tool',
-    type: 'Tool · Backend',
-    desc: 'WhatsApp business chatbot — Node.js + Express, NLP intent detection, product search via Odoo XML-RPC, session management, HMAC webhook verification, and rate limiting.',
-    stack: ['Node.js', 'Express', 'Odoo XML-RPC', 'PostgreSQL'],
-    link: 'https://github.com/IsliBasha/Whatsapp-Chatbot',
-    linkLabel: 'GitHub →',
-    icon: '🤖',
-    screenshot: null,
-  },
-  {
-    id: 'cf-worker-rust',
-    name: 'cf-worker-rust',
-    category: 'tool',
-    type: 'Tool · Edge',
-    desc: 'Cloudflare Worker in Rust — JWT validation (HS256/RS256) and per-IP rate limiting at the edge, compiled to WASM via workers-rs.',
-    stack: ['Rust', 'WASM', 'Cloudflare Workers', 'JWT'],
-    link: 'https://github.com/IsliBasha/cf-worker-rust',
-    linkLabel: 'GitHub →',
-    icon: '⚡',
-    screenshot: null,
-  },
-  {
-    id: 'hamster',
-    name: 'HamsterFaceRecognition',
-    category: 'research',
-    type: 'Research · ML',
-    desc: 'Hamster face recognition — Python + DeepFace + OpenCV. Identifies individual hamsters from webcam or photo input.',
-    stack: ['Python', 'OpenCV', 'DeepFace'],
-    link: 'https://github.com/IsliBasha/HamsterFaceRecognition',
-    linkLabel: 'GitHub →',
-    icon: '🐹',
-    screenshot: null,
-  },
-  {
-    id: 'mira-study',
-    name: 'Mira Study',
-    category: 'app',
-    type: 'App · Desktop',
-    desc: 'AI study companion. Upload PDFs, auto-generate flashcards and quizzes, get step-by-step AI tutor explanations, and track progress with an analytics dashboard.',
-    stack: ['PyQt6', 'FastAPI', 'Claude AI', 'SQLite'],
-    link: 'https://github.com/IsliBasha/mira-study',
-    linkLabel: 'GitHub →',
-    icon: '📚',
-    screenshot: null,
-  },
-  {
-    id: 'rust-scraper',
-    name: 'rust-scraper',
-    category: 'tool',
-    type: 'Tool · CLI',
-    desc: 'Production-grade Rust web scraper — hybrid HTTP/headless rendering, recursive crawler, CSS + XPath extraction, live TUI, web dashboard, SQLite persistence, single self-contained binary.',
-    stack: ['Rust', 'SQLite', 'ratatui', 'XPath'],
-    link: 'https://github.com/IsliBasha/rust-scraper',
-    linkLabel: 'GitHub →',
-    icon: '🕷️',
-    screenshot: '/rust-scraper-screenshot.jpeg',
-  },
-  {
-    id: 'linkedin-banner',
-    name: 'LinkedIn Banner',
-    category: 'tool',
-    type: 'Tool · Automation',
-    desc: 'Auto-generates a LinkedIn cover photo from live GitHub stats — dark terminal aesthetic with contribution graph, language breakdown, and streak metrics. Refreshed daily via GitHub Actions.',
-    stack: ['Python', 'Pillow', 'GitHub Actions', 'GitHub API'],
-    link: 'https://github.com/IsliBasha/linkedin-banner',
-    linkLabel: 'GitHub →',
-    icon: '🎨',
-    screenshot: '/linkedin-banner-screenshot.png',
-  },
-  {
-    id: 'publer-mcp',
-    name: 'Publer MCP Server',
-    category: 'tool',
-    type: 'Tool · MCP',
-    desc: "AI-powered social media management via Model Context Protocol. Exposes Publer's full scheduling and analytics API as MCP tools for direct AI assistant integration.",
-    stack: ['TypeScript', 'MCP', 'Publer API', 'Turborepo'],
-    link: 'https://github.com/IsliBasha/publer-mcp',
-    linkLabel: 'GitHub →',
-    icon: '🔧',
-    screenshot: null,
-  },
-  {
-    id: 'mcp-odoo-fintech',
-    name: 'MCP Odoo Fintech',
-    category: 'tool',
-    type: 'Tool · MCP',
-    desc: 'TypeScript MCP server connecting Claude directly to Odoo ERP via JSON-RPC 2.0. Exposes invoices, sales orders, and customer balances as AI tools, with HMAC webhook verification and a Web Inspector UI.',
-    stack: ['TypeScript', 'MCP', 'Odoo ERP', 'JSON-RPC 2.0'],
-    link: 'https://github.com/IsliBasha/mcp-odoo-fintech',
-    linkLabel: 'GitHub →',
-    icon: '🔌',
-    screenshot: null,
-  },
-  {
-    id: 'playwright-saas-automator',
-    name: 'Playwright SaaS Automator',
-    category: 'tool',
-    type: 'Tool · Automation',
-    desc: 'Resilient SaaS user provisioning via Playwright with ARIA-first selectors. Claude Haiku self-repairs broken selectors when UIs change, with PII scrubbing for audit-safe logs.',
-    stack: ['TypeScript', 'Playwright', 'Claude AI', 'Node.js'],
-    link: 'https://github.com/IsliBasha/playwright-saas-automator',
-    linkLabel: 'GitHub →',
-    icon: '🎭',
-    screenshot: null,
-  },
-  {
-    id: 'mips-voting',
-    name: 'MIPS Voting System',
-    category: 'research',
-    type: 'Research · Systems',
-    desc: 'Electronic voting system simulator in MIPS Assembly for the MARS simulator. Vote casting, live statistics, winner detection, MMIO simulation, and timer-based live updates.',
-    stack: ['MIPS Assembly', 'MARS Simulator', 'MMIO'],
-    link: 'https://github.com/IsliBasha/mips-voting-system',
-    linkLabel: 'GitHub →',
-    icon: '💾',
-    screenshot: null,
-  },
-  {
-    id: 'copycat',
-    name: 'Copycat',
-    category: 'tool',
-    type: 'Tool · Agent',
-    desc: 'AI screen automation agent — captures the screen, asks Claude what to do next, and executes actions with human-like timing. Autonomous GUI interaction driven by vision and language.',
-    stack: ['Python', 'Claude AI', 'PyAutoGUI', 'Pillow'],
-    link: 'https://github.com/IsliBasha/copycat',
-    linkLabel: 'GitHub →',
-    icon: '🖥️',
-    screenshot: null,
-  },
-  {
-    id: 'win95-arch',
-    name: 'Win95 Architecture Deck',
-    category: 'research',
-    type: 'Research · Presentation',
-    desc: 'Zero-dependency Win95-themed architecture presentation for Polis University. Custom pixel-art CSS, IBM Plex typography, and interactive slide transitions — no frameworks, no build step.',
-    stack: ['JavaScript', 'HTML/CSS', 'Win95 Theme'],
-    link: 'https://github.com/IsliBasha/win95-architecture',
-    linkLabel: 'GitHub →',
-    icon: '🏛️',
-    screenshot: '/win95-screenshot.png',
-  },
-  {
-    id: 'previsit',
-    name: 'PreVisit',
-    category: 'app',
-    type: 'App · Healthcare · Hackathon',
-    desc: 'AI-powered pre-visit medical intake system built for the Coolab hackathon. Patients complete a voice-guided intake — Claude AI extracts structured medical data, ElevenLabs drives TTS/STT, and a real-time doctor dashboard surfaces the briefing instantly.',
-    stack: ['React', 'TanStack', 'FastAPI', 'Claude AI', 'ElevenLabs', 'Supabase', 'Twilio'],
-    link: 'https://github.com/IsliBasha/Coolab_hackathon',
-    linkLabel: 'GitHub →',
-    icon: '🏥',
-    screenshot: '/previsit-screenshot.jpeg',
-  },
-  {
-    id: 'java-advanced',
-    name: 'Java Advanced Programming',
-    category: 'research',
-    type: 'Research · Academic',
-    desc: 'Nine university Java projects — Collections, Streams, Optional console apps and Spring Boot 3 REST APIs with JPA, Bean Validation, layered architecture, and JUnit 5 test suites. Java 21.',
-    stack: ['Java 21', 'Spring Boot 3', 'JPA', 'JUnit 5'],
-    link: 'https://github.com/IsliBasha/java-advanced-programming',
-    linkLabel: 'GitHub →',
-    icon: '☕',
-    screenshot: null,
-  },
-];
+import { projects as PROJECTS } from '../data/projects.js';
 
 const CATEGORIES = [
   { id: 'all',      label: 'All',      icon: '🗂️' },
+  { id: 'work',     label: 'Work',     icon: '💼' },
   { id: 'web',      label: 'Web',      icon: '🌐' },
   { id: 'app',      label: 'App',      icon: '📱' },
   { id: 'tool',     label: 'Tool',     icon: '🔧' },
@@ -401,6 +158,19 @@ const chrome = {
     fontSize: '0.62rem',
   },
   actions: { display: 'flex', gap: '4px', marginTop: 'auto', paddingTop: '4px' },
+  privatePill: {
+    padding: '2px 10px',
+    background: '#c0c0c0',
+    borderTop: '2px solid #404040',
+    borderLeft: '2px solid #404040',
+    borderRight: '2px solid #dfdfdf',
+    borderBottom: '2px solid #dfdfdf',
+    fontFamily: 'inherit',
+    fontSize: '0.68rem',
+    color: '#404040',
+    lineHeight: 1.4,
+    display: 'inline-block',
+  },
   btn: {
     padding: '2px 10px',
     background: '#c0c0c0',
@@ -543,33 +313,35 @@ export function MyWorkExplorer() {
       {effectiveSelected && (
         <div style={chrome.detail}>
           <div style={chrome.preview}>
-            {effectiveSelected.screenshot
-              ? <img src={effectiveSelected.screenshot} alt={effectiveSelected.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            {effectiveSelected.preview
+              ? <img src={effectiveSelected.preview} alt={effectiveSelected.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               : <span style={{ fontSize: '0.62rem', color: '#808080', textAlign: 'center', padding: '12px' }}>No preview</span>
             }
           </div>
           <div style={chrome.info}>
             <div style={chrome.detailName}>{effectiveSelected.name}</div>
-            <div style={chrome.detailDesc}>{effectiveSelected.desc}</div>
+            <div style={chrome.detailDesc}>{effectiveSelected.description}</div>
             <div style={chrome.detailMeta}><strong>Type:</strong> {effectiveSelected.type}</div>
             <div style={chrome.tags}>
               {effectiveSelected.stack.map(t => <span key={t} style={chrome.tag}>{t}</span>)}
             </div>
             <div style={chrome.actions}>
-              {effectiveSelected.link && (
+              {effectiveSelected.link ? (
                 <a
-                  href={effectiveSelected.link}
+                  href={effectiveSelected.link.href}
                   target="_blank"
                   rel="noopener"
                   style={{
                     ...chrome.btn,
-                    background: effectiveSelected.linkLabel?.startsWith('GitHub') ? '#1a1a2e' : '#1a73e8',
+                    background: effectiveSelected.link.label.startsWith('GitHub') ? '#1a1a2e' : '#1a73e8',
                     color: '#fff',
-                    borderColor: effectiveSelected.linkLabel?.startsWith('GitHub') ? '#000' : '#0d47a1',
+                    borderColor: effectiveSelected.link.label.startsWith('GitHub') ? '#000' : '#0d47a1',
                   }}
                 >
-                  {effectiveSelected.linkLabel}
+                  {effectiveSelected.link.label}
                 </a>
+              ) : (
+                <span style={chrome.privatePill}>{effectiveSelected.privateNote}</span>
               )}
             </div>
           </div>

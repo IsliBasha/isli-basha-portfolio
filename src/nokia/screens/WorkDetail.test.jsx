@@ -33,18 +33,36 @@ describe('WorkDetail', () => {
   });
 
   it('renders the dithered screenshot for a project that has one', () => {
-    setup({ index: 0 });
-    expect(projects[0].screenshot).toBe('/nokia/medt.png');
+    const index = projects.findIndex((p) => p.screenshot);
+    expect(index, 'no project carries a screenshot').toBeGreaterThan(-1);
+    setup({ index });
     const img = document.querySelector('.nk-detail__shot');
     expect(img).not.toBeNull();
-    expect(img.src).toContain('/nokia/medt.png');
+    expect(img.src).toContain(projects[index].screenshot);
   });
 
   it('falls back to the hatch placeholder for a project without a screenshot', () => {
-    setup({ index: 2 });
-    expect(projects[2].screenshot).toBeUndefined();
+    const index = projects.findIndex((p) => !p.screenshot);
+    expect(index, 'every project carries a screenshot').toBeGreaterThan(-1);
+    setup({ index });
     expect(document.querySelector('.nk-detail__shot')).toBeNull();
-    expect(screen.getByText(projects[2].iconType)).toBeInTheDocument();
+    expect(screen.getByText(projects[index].iconType)).toBeInTheDocument();
+  });
+
+  it('offers a Visit softkey for a project with a public link', () => {
+    const index = projects.findIndex((p) => p.link);
+    setup({ index });
+    expect(screen.getByRole('button', { name: /visit/i })).toBeInTheDocument();
+  });
+
+  it('drops the Visit softkey and states why for a project with no public link', () => {
+    const index = projects.findIndex((p) => !p.link);
+    expect(index, 'no linkless project to exercise').toBeGreaterThan(-1);
+    setup({ index });
+    expect(screen.queryByRole('button', { name: /visit/i })).toBeNull();
+    expect(
+      screen.getByText(new RegExp(projects[index].privateNote, 'i')),
+    ).toBeInTheDocument();
   });
 
   it('goes Back on Escape and via the Back softkey', async () => {

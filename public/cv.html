@@ -262,8 +262,11 @@
         <div class="entry-meta">&#128197; 07/2026 &ndash; Present &nbsp;&middot;&nbsp; Onsite &middot; Tirana, Albania</div>
         <ul class="entry-bullets">
           <li>Design and operate agentic automation workflows, building tooling that lets AI agents execute multi-step business processes reliably.</li>
+          <li>Built the AI lead generation platform end to end &mdash; automated company research, qualification against ideal-customer criteria, and outreach orchestration, with a human review-and-approve gate before anything is sent.</li>
+          <li>Established migration governance for a database schema jointly owned by two independent service teams: explicit ownership boundaries, review-before-apply on every migration, and least-privilege runtime roles with no DDL capability at all.</li>
+          <li>Hardened cloud provisioning and CI identity &mdash; duty-separated service accounts and keyless CI authentication through federated workload identity, eliminating long-lived credentials; written up as a cross-team review adopted by a second engineering team.</li>
         </ul>
-        <div class="entry-stack">Agentic Systems &middot; Automation &middot; Python &middot; TypeScript &middot; LLM Tooling</div>
+        <div class="entry-stack">Agentic Systems &middot; Automation &middot; Python &middot; FastAPI &middot; PostgreSQL &middot; TypeScript &middot; Cloud IAM &middot; LLM Tooling</div>
 
         <hr class="dash" />
 
@@ -291,6 +294,32 @@
       <!-- Projects -->
       <section>
         <div class="section-title">Projects</div>
+
+        <!-- MOS VONO -->
+        <div class="entry-role">Marketplace Platform</div>
+        <div class="entry-org">MOS VONO</div>
+        <div class="entry-meta">&#128197; 2026 &ndash; Present &nbsp;&middot;&nbsp; <a href="https://mosvono.al" target="_blank">mosvono.al</a></div>
+        <ul class="entry-bullets">
+          <li>Built an Albanian marketplace for tasks and local services: clients post a task, verified workers bid, and the awarded job runs in a private shared space with payment held in escrow until completion.</li>
+          <li>Express API over raw parameterised SQL on PostgreSQL &mdash; every monetary calculation isolated in a single module, and status transitions routed through explicit state machines rather than inline conditionals.</li>
+          <li>Shipped a React Native (Expo) client for both app stores against the same API.</li>
+        </ul>
+        <div class="entry-stack">Node.js &middot; Express &middot; PostgreSQL &middot; React Native &middot; Expo &middot; Payments &middot; Escrow</div>
+
+        <hr class="dash" />
+
+        <!-- EcoVolt Platform -->
+        <div class="entry-role">Maintenance-Contract Platform</div>
+        <div class="entry-org">EcoVolt &mdash; private client project</div>
+        <div class="entry-meta">&#128197; 2026 &ndash; Present &nbsp;&middot;&nbsp; Private repository</div>
+        <ul class="entry-bullets">
+          <li>Four product surfaces &mdash; public site, owner portal, offline-first crew app, and admin console &mdash; over a single per-building equipment register as the shared data spine.</li>
+          <li>Dispatch board with drag-assign on a crew timeline, where double-booking is refused by a database constraint rather than by UI validation; contract tiers auto-generate the preventive-maintenance calendar.</li>
+          <li>Emergency escalation modelled as a server-side state machine with SMS and voice fallback, so push notification is an accelerant rather than the mechanism of record.</li>
+        </ul>
+        <div class="entry-stack">TypeScript &middot; Next.js &middot; PostgreSQL &middot; Drizzle &middot; Expo &middot; Turborepo &middot; Offline Sync</div>
+
+        <hr class="dash" />
 
         <!-- ME-DT Framework -->
         <div class="entry-role">Bachelor Thesis &mdash; Multi-Domain Anomaly Detection</div>
@@ -369,7 +398,7 @@
       <section>
         <div class="section-title">Profile</div>
         <p style="font-size:9pt;line-height:1.6;">
-          Software engineer with 3+ years of production experience across full-stack TypeScript/Node.js, Python, and systems programming in Rust. Built and shipped: a production webhook service handling live WhatsApp Business traffic (Node.js + Express + PostgreSQL, 95%+ test coverage); an AI study companion with PDF ingestion and LLM-powered tutoring (FastAPI + Claude); a cyberphysical anomaly detection system for smart-city infrastructure (Flask + REST API + TDD, 68 tests); and a Cloudflare edge security service compiled to WASM. CS graduate (Polis University, 2026) &mdash; comfortable owning features end-to-end, working across ambiguous requirements, and shipping clean, tested code fast.
+          Software engineer with 3+ years of production experience across full-stack TypeScript/Node.js, Python, and systems programming in Rust. Built and shipped: a production webhook service handling live WhatsApp Business traffic (Node.js + Express + PostgreSQL, 95%+ test coverage); an AI study companion with PDF ingestion and LLM-powered tutoring (FastAPI + Claude); a cyberphysical anomaly detection system for smart-city infrastructure (FastAPI + WebSockets + TDD, 68 tests); and a Cloudflare edge security service compiled to WASM. CS graduate (Polis University, 2026) &mdash; comfortable owning features end-to-end, working across ambiguous requirements, and shipping clean, tested code fast.
         </p>
       </section>
 

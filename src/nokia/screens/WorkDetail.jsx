@@ -30,15 +30,18 @@ export function WorkDetail({ index, onPage, onBack }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [safeIndex, total, onPage, onBack]);
 
+  // Projects with no public destination (private client repos, employer-owned
+  // work) get no Visit softkey at all — SoftKey renders a disabled blank when
+  // handed null. Opening `undefined` would blank the tab instead.
   const visit = () =>
-    window.open(project.href, '_blank', 'noopener,noreferrer');
+    window.open(project.link.href, '_blank', 'noopener,noreferrer');
 
   return (
     <NokiaShell
       header={
         <SectionHeader title="2 My Work" context={`${safeIndex + 1}/${total}`} />
       }
-      leftKey={{ label: 'Visit', action: visit }}
+      leftKey={project.link ? { label: 'Visit', action: visit } : null}
       rightKey={{ label: 'Back', action: onBack }}
       className="nk-screen--work-detail"
     >
@@ -63,6 +66,10 @@ export function WorkDetail({ index, onPage, onBack }) {
       <p className="nk-body nk-detail__desc">{project.description}</p>
 
       <div className="nk-detail__stack">&gt; {project.stack.join(' · ')}</div>
+
+      {!project.link && (
+        <div className="nk-detail__private">[ {project.privateNote} ]</div>
+      )}
 
       <div className="nk-detail__pager" aria-hidden="true">
         ◄ {safeIndex + 1} / {total} ►

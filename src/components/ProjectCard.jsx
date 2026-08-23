@@ -1,6 +1,9 @@
 import { ProjectIcon } from './ProjectIcon.jsx';
 
-export function ProjectCard({ name, description, stack, href, iconType }) {
+// Not currently mounted by any surface — the desktop uses MyWorkExplorer and
+// the phone uses nokia/screens/WorkDetail. Kept in the shape src/data/projects.js
+// exports so it stays usable rather than silently rotting.
+export function ProjectCard({ name, description, stack, link, privateNote, iconType }) {
   return (
     <article className="project-card">
       <header className="project-card__header">
@@ -16,15 +19,19 @@ export function ProjectCard({ name, description, stack, href, iconType }) {
         ))}
       </div>
       <div className="project-card__foot">
-        <a
-          className="win-btn"
-          href={href}
-          target="_blank"
-          rel="noreferrer noopener"
-          aria-label={`View source for ${name} on GitHub`}
-        >
-          View Source
-        </a>
+        {link ? (
+          <a
+            className="win-btn"
+            href={link.href}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label={`Open ${name}`}
+          >
+            {link.label}
+          </a>
+        ) : (
+          <span className="win-sunken win95-pill">{privateNote}</span>
+        )}
       </div>
     </article>
   );

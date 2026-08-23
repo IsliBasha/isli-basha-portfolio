@@ -444,6 +444,14 @@
   font-size: 16px;
   color: var(--ink-60);
 }
+/* Shown in place of the Visit softkey for work with no public destination. */
+.nk-detail__private {
+  margin-top: 6px;
+  font-family: var(--nk-font-body);
+  font-size: 15px;
+  color: var(--ink-60);
+  letter-spacing: 0.04em;
+}
 .nk-detail__pager {
   margin-top: 10px;
   text-align: center;
