@@ -181,9 +181,29 @@ describe('index.html JSON-LD location and education', () => {
     expect(indexHtml()).toMatch(/Polis University/);
   });
 
+  // Case-insensitive: the topic list uses the entity's own naming ("AI agents"),
+  // and this guards that the niche is covered, not how it is capitalised.
   it('Person knowsAbout covers the AI-agent niche', () => {
-    expect(indexHtml()).toMatch(/AI Agents/);
+    expect(indexHtml()).toMatch(/AI agents/i);
     expect(indexHtml()).toMatch(/Model Context Protocol/);
+  });
+
+  it('states each role together with where it applies', () => {
+    const html = indexHtml();
+    expect(html).toMatch(/"hasOccupation"/);
+    expect(html).toMatch(/"occupationLocation"/);
+    expect(html).toMatch(/"name": "Software Engineer"/);
+    expect(html).toMatch(/"name": "Agent & Automation Specialist"/);
+  });
+
+  it('resolves place names to Wikidata rather than leaving them as strings', () => {
+    expect(indexHtml()).toMatch(/wikidata\.org\/wiki\/Q19689/); // Tirana
+    expect(indexHtml()).toMatch(/wikidata\.org\/wiki\/Q222/); // Albania
+  });
+
+  it('declares a ProfilePage whose mainEntity is the Person', () => {
+    expect(indexHtml()).toMatch(/"@type": "ProfilePage"/);
+    expect(indexHtml()).toMatch(/"mainEntity"/);
   });
 });
 

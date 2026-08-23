@@ -14,11 +14,14 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { projects } from '../src/data/projects.js';
+import { renderGraph } from './schema-graph.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const START = 'projects:start';
-const END = 'projects:end';
+const MARKERS = {
+  projects: ['projects:start', 'projects:end'],
+  schema: ['schema:start', 'schema:end'],
+};
 
 // llms.txt groups by what a reader is looking for, not by our category slugs.
 const SECTIONS = [
@@ -83,7 +86,8 @@ export function renderLlmsSections(list) {
 
 // Replaces the body between the two markers, preserving the markers themselves
 // and their surrounding indentation.
-export function applyBlock(source, body) {
+export function applyBlock(source, body, marker = 'projects') {
+  const [START, END] = MARKERS[marker];
   const startIdx = source.indexOf(START);
   const endIdx = source.indexOf(END);
   if (startIdx === -1 || endIdx === -1) {
@@ -94,16 +98,57 @@ export function applyBlock(source, body) {
   return `${source.slice(0, afterStart)}${body}${source.slice(beforeEnd)}`;
 }
 
+// The JSON-LD carries a dateModified, so it is pinned to the data's last
+// change rather than to "now" — otherwise every run would report the files as
+// stale and --check could never pass.
+const SCHEMA_DATE = '2026-08-23';
+
+// Emits the complete <script> element. The markers live outside it on purpose:
+// an HTML comment inside a ld+json block makes the block invalid JSON, and every
+// consumer of it fails closed.
+function schemaBlock(options, spaces) {
+  const pad = ' '.repeat(spaces);
+  const json = renderGraph(options)
+    .split('\n')
+    .map((line) => pad + line)
+    .join('\n');
+  return `${pad}<script type="application/ld+json">\n${json}\n${pad}</script>`;
+}
+
 const TARGETS = [
-  { file: join(ROOT, 'index.html'), render: renderIndexList },
-  { file: join(ROOT, 'public', 'llms.txt'), render: renderLlmsSections },
+  {
+    file: join(ROOT, 'index.html'),
+    blocks: [
+      { marker: 'projects', render: () => renderIndexList(projects) },
+      {
+        marker: 'schema',
+        render: () => schemaBlock({ page: 'home', dateModified: SCHEMA_DATE }, 4),
+      },
+    ],
+  },
+  {
+    file: join(ROOT, 'public', 'llms.txt'),
+    blocks: [{ marker: 'projects', render: () => renderLlmsSections(projects) }],
+  },
+  {
+    file: join(ROOT, 'public', 'cv.html'),
+    blocks: [
+      {
+        marker: 'schema',
+        render: () => schemaBlock({ page: 'cv', dateModified: SCHEMA_DATE }, 2),
+      },
+    ],
+  },
 ];
 
 export function generate({ check = false } = {}) {
   const stale = [];
-  for (const { file, render } of TARGETS) {
+  for (const { file, blocks } of TARGETS) {
     const current = readFileSync(file, 'utf8');
-    const next = applyBlock(current, render(projects));
+    const next = blocks.reduce(
+      (acc, b) => applyBlock(acc, b.render(), b.marker),
+      current,
+    );
     if (current === next) continue;
     if (check) {
       stale.push(file.replace(`${ROOT}/`, ''));
