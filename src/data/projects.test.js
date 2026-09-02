@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
+import { readdirSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join, relative, resolve } from 'node:path';
 import { projects } from './projects.js';
+import { ICONS } from '../lib/pixelIcons/index.js';
+import { CATEGORY_ICONS } from '../lib/pixelIcons/categories.js';
+import projectIcons from '../lib/pixelIcons/projects.js';
 import { SOURCES } from '../../scripts/dither.js';
 
 const VALID_CATEGORIES = ['work', 'web', 'app', 'tool', 'research'];
@@ -89,6 +95,39 @@ describe('projects data', () => {
     }
   });
 
+  // The explorer draws p.icon through PixelIcon, which swallows an unknown id
+  // and paints the generic placeholder. Without this the whole grid could
+  // quietly degrade to 25 identical grey windows and still pass every other
+  // test here.
+  it('gives every project an icon id the registry can actually draw', () => {
+    for (const p of projects) {
+      expect(typeof p.icon, `${p.id} icon must be an id string`).toBe('string');
+      // Object.hasOwn, not toHaveProperty: the latter walks the prototype
+      // chain, so an icon of 'toString' would pass while drawing nothing.
+      expect(
+        Object.hasOwn(ICONS, p.icon),
+        `${p.id} icon "${p.icon}" is not registered`,
+      ).toBe(true);
+    }
+  });
+
+  // Today every icon is its category's, which means nothing catches a project
+  // moved between categories with its old icon left behind — it would keep
+  // drawing a briefcase in the Tool folder and no test would notice. An icon
+  // is legitimate only if it is the category's, or a deliberate per-project
+  // override registered in pixelIcons/projects.js.
+  it('keeps each icon either the category default or a registered override', () => {
+    for (const p of projects) {
+      const isCategoryDefault = p.icon === CATEGORY_ICONS[p.category];
+      const isDeliberateOverride = Object.hasOwn(projectIcons, p.icon);
+      expect(
+        isCategoryDefault || isDeliberateOverride,
+        `${p.id} is category "${p.category}" but draws "${p.icon}", which is neither ` +
+          `the category icon "${CATEGORY_ICONS[p.category]}" nor a per-project override`,
+      ).toBe(true);
+    }
+  });
+
   // Ofive repos live under a private org; the org name should not leak into a
   // link a visitor could try to open.
   it('routes Ofive work to the company site, never to a private org repo', () => {
@@ -98,5 +137,76 @@ describe('projects data', () => {
       expect(p.link.href, `${p.id}`).toBe('https://ofive.io');
       expect(p.link.href).not.toContain('github.com');
     }
+  });
+});
+
+// ── No emoji in the rendered UI ─────────────────────────────────────────────
+// The desktop is a 1995 machine: a colour emoji glyph is anti-aliased, font-
+// dependent and decades out of period, which is why the explorer draws
+// PixelIcons instead. This walks the source rather than the DOM so a new emoji
+// is caught wherever it is introduced, including in a component no test
+// happens to render.
+//
+// Test files are excluded (this one has to name the thing it forbids) and so
+// is src/nokia — the phone renders its own monochrome text UI and never reads
+// p.icon.
+
+const SRC_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const EMOJI = /\p{Extended_Pictographic}/u;
+
+// Files that still hold a pictographic character, each waiting on the order
+// that owns it. The list must shrink and never grow: the assertion is exact
+// equality, so clearing the last emoji out of one of these files fails this
+// test until its entry is deleted too.
+const PENDING_EMOJI_FILES = [
+  // Submenu marker in the desktop context menu — shell-glyph order.
+  'components/ContextMenu.jsx',
+  // The Minesweeper smiley button — games-icon order.
+  'components/Minesweeper.jsx',
+];
+
+// Only the Nokia port itself, not any directory that happens to be called
+// nokia further down the tree.
+const NOKIA_ROOT = join(SRC_ROOT, 'nokia');
+const TEST_FILE = /(\.(test|spec)\.[jt]sx?)$/;
+// Text the desktop can actually render. Reading a binary that lands under src/
+// would fail the suite with a message about emoji, which is the wrong lead.
+const READABLE = /\.(jsx?|tsx?|css|html)$/;
+
+function sourceFiles(dir = SRC_ROOT) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (full === NOKIA_ROOT || entry.name === '__tests__') return [];
+      return sourceFiles(full);
+    }
+    if (TEST_FILE.test(entry.name) || !READABLE.test(entry.name)) return [];
+    return [full];
+  });
+}
+
+describe('no emoji in the desktop UI', () => {
+  it('scans a source tree that is actually there', () => {
+    // An empty walk would make every assertion below vacuously true.
+    const files = sourceFiles();
+    expect(files.length).toBeGreaterThan(30);
+    expect(files.some((f) => f.endsWith('MyWorkExplorer.jsx'))).toBe(true);
+  });
+
+  it('leaves no emoji outside the files later orders still own', () => {
+    const offenders = sourceFiles()
+      .filter((file) => EMOJI.test(readFileSync(file, 'utf8')))
+      .map((file) => relative(SRC_ROOT, file).split('\\').join('/'))
+      .sort();
+
+    expect(offenders).toEqual([...PENDING_EMOJI_FILES].sort());
+  });
+
+  it('keeps every project and category icon free of emoji', () => {
+    for (const p of projects) {
+      expect(EMOJI.test(p.icon), `${p.id} icon is an emoji`).toBe(false);
+    }
+    const explorer = readFileSync(join(SRC_ROOT, 'components/MyWorkExplorer.jsx'), 'utf8');
+    expect(EMOJI.test(explorer)).toBe(false);
   });
 });

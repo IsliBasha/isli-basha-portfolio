@@ -1296,6 +1296,16 @@
   padding: 0.75rem;
 }
 
+/* Pixel icons in the explorer. The SVG carries its own width/height, so these
+   rules only stop the surrounding flex/grid from resizing it: an icon squeezed
+   off its 16px grid shears every outline in it. `display: block` kills the
+   inline baseline gap that would otherwise push the label down a pixel. */
+.explorer-folder-icon,
+.explorer-tile-icon {
+  display: block;
+  flex: none;
+}
+
 .explorer-statusbar {
   flex-shrink: 0;
   padding: 2px 8px;
