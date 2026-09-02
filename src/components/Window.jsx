@@ -8,6 +8,97 @@ const TASKBAR_H = 34;
 const TITLEBAR_VISIBLE_PX = 40;
 const MIN_VISIBLE_PX = 80;
 
+// The Win95 close glyph is an 8x7 bitmap with two 2px-thick diagonals.
+// Row i of the "\" stroke starts at column i; the "/" stroke mirrors it.
+// Both meet on row 3, which is why that row is the narrowest.
+const CLOSE_X_ORIGIN = { x: 4, y: 4 };
+const CLOSE_X_PIXELS = [0, 1, 2, 3, 4, 5, 6].flatMap((row) =>
+  // On the middle row the two strokes land on the same pixel pair.
+  row === 6 - row
+    ? [{ col: row, row }]
+    : [
+        { col: row, row },
+        { col: 6 - row, row },
+      ],
+);
+
+/**
+ * Caption-button glyph canvas. The 16x14 viewBox is the real Win95 caption
+ * button, bevel included, so every rect below lands on a whole pixel.
+ *
+ * Every rect fills with currentColor rather than a literal black: Windows
+ * High Contrast repaints `color` but leaves a hard-coded fill alone, which
+ * would leave three blank buttons on the one setting that needs them most.
+ */
+function TitlebarGlyph({ children }) {
+  return (
+    <svg
+      className="win95-titlebar-btn__glyph"
+      width="16"
+      height="14"
+      viewBox="0 0 16 14"
+      shapeRendering="crispEdges"
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
+  );
+}
+
+function MinimizeGlyph() {
+  return (
+    <TitlebarGlyph>
+      <rect x="4" y="9" width="6" height="2" fill="currentColor" />
+    </TitlebarGlyph>
+  );
+}
+
+function MaximizeGlyph() {
+  // 9x9 frame: the 2px top edge is the miniature titlebar.
+  return (
+    <TitlebarGlyph>
+      <rect x="3" y="2" width="9" height="2" fill="currentColor" />
+      <rect x="3" y="4" width="1" height="6" fill="currentColor" />
+      <rect x="11" y="4" width="1" height="6" fill="currentColor" />
+      <rect x="3" y="10" width="9" height="1" fill="currentColor" />
+    </TitlebarGlyph>
+  );
+}
+
+function RestoreGlyph() {
+  // Two 6x6 frames offset by (3, 3). The back frame is drawn only where the
+  // front one does not cover it, so the pair reads as stacked windows.
+  return (
+    <TitlebarGlyph>
+      <rect x="6" y="2" width="6" height="2" fill="currentColor" />
+      <rect x="6" y="4" width="1" height="1" fill="currentColor" />
+      <rect x="11" y="4" width="1" height="4" fill="currentColor" />
+      <rect x="9" y="7" width="3" height="1" fill="currentColor" />
+      <rect x="3" y="5" width="6" height="2" fill="currentColor" />
+      <rect x="3" y="7" width="1" height="4" fill="currentColor" />
+      <rect x="8" y="7" width="1" height="4" fill="currentColor" />
+      <rect x="3" y="10" width="6" height="1" fill="currentColor" />
+    </TitlebarGlyph>
+  );
+}
+
+function CloseGlyph() {
+  return (
+    <TitlebarGlyph>
+      {CLOSE_X_PIXELS.map(({ col, row }) => (
+        <rect
+          key={`${col}-${row}`}
+          x={CLOSE_X_ORIGIN.x + col}
+          y={CLOSE_X_ORIGIN.y + row}
+          width="2"
+          height="1"
+          fill="currentColor"
+        />
+      ))}
+    </TitlebarGlyph>
+  );
+}
+
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -44,6 +135,7 @@ export function Window({
     isHidden,
     isClosed,
     isMaximized,
+    activeId,
   } = useWindowStack();
 
   useEffect(() => {
@@ -245,6 +337,7 @@ export function Window({
     dragging ? 'win95-window--dragging' : '',
     resizing ? 'win95-window--resizing' : '',
     maximized ? 'win95-window--maximized' : '',
+    activeId !== id ? 'win95-window--inactive' : '',
     className,
   ]
     .filter(Boolean)
@@ -280,7 +373,7 @@ export function Window({
             onPointerDown={stopPointer}
             onClick={handleMinimize}
           >
-            _
+            <MinimizeGlyph />
           </button>
           <button
             type="button"
@@ -293,7 +386,7 @@ export function Window({
             onPointerDown={stopPointer}
             onClick={handleMaximize}
           >
-            {maximized ? '❐' : '□'}
+            {maximized ? <RestoreGlyph /> : <MaximizeGlyph />}
           </button>
           <button
             type="button"
@@ -303,7 +396,7 @@ export function Window({
             onPointerDown={stopPointer}
             onClick={handleClose}
           >
-            ×
+            <CloseGlyph />
           </button>
         </div>
       </div>

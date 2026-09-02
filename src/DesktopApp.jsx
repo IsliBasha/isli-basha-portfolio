@@ -14,6 +14,7 @@ import { ContextMenu } from './components/ContextMenu.jsx';
 import { ResumeViewer } from './components/ResumeViewer.jsx';
 import { VisitorCounterContent } from './components/VisitorCounter.jsx';
 import { MyWorkExplorer } from './components/MyWorkExplorer.jsx';
+import { AppGlyph } from './lib/AppGlyph.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
 import { bio } from './data/bio.js';
 
@@ -239,7 +240,8 @@ export function DesktopApp() {
 
         <Window
           id="about"
-          title="about.txt"
+          title="about.txt - Notepad"
+          icon={<AppGlyph kind="about" size={16} />}
           className="win-about"
           bootDelayMs={0}
           contentClassName="win-about__content"
@@ -250,6 +252,7 @@ export function DesktopApp() {
         <Window
           id="stack"
           title="cmd"
+          icon={<AppGlyph kind="stack" size={16} />}
           className="win-stack"
           bootDelayMs={240}
           contentClassName="win-stack__content"
@@ -260,6 +263,7 @@ export function DesktopApp() {
         <Window
           id="contact"
           title="contact.exe"
+          icon={<AppGlyph kind="contact" size={16} />}
           className="win-contact"
           bootDelayMs={360}
           contentClassName="win-contact__content"
@@ -270,6 +274,7 @@ export function DesktopApp() {
         <Window
           id="stats"
           title="SiteCounter.exe"
+          icon={<AppGlyph kind="stats" size={16} />}
           className="win-stats"
           bootDelayMs={0}
           contentClassName="win-stats__content"
@@ -280,6 +285,7 @@ export function DesktopApp() {
         <Window
           id="resume"
           title="resume.pdf - Adobe Acrobat"
+          icon={<AppGlyph kind="resume" size={16} />}
           className="win-resume"
           bootDelayMs={0}
           contentClassName="win-resume__content"
@@ -290,6 +296,7 @@ export function DesktopApp() {
         <Window
           id="minesweeper"
           title="minesweeper.exe"
+          icon={<AppGlyph kind="minesweeper" size={16} />}
           className="win-minesweeper"
           bootDelayMs={0}
           contentClassName="win-minesweeper__content"
@@ -300,6 +307,7 @@ export function DesktopApp() {
         <Window
           id="snake"
           title="snake.exe"
+          icon={<AppGlyph kind="snake" size={16} />}
           className="win-snake"
           bootDelayMs={0}
           contentClassName="win-snake__content"
@@ -310,6 +318,7 @@ export function DesktopApp() {
         <Window
           id="mywork"
           title="my work"
+          icon={<AppGlyph kind="mywork" size={16} />}
           className="win-mywork"
           bootDelayMs={0}
           contentClassName="win-mywork__content"

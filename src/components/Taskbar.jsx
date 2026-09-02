@@ -6,7 +6,7 @@ import { AppGlyph } from '../lib/AppGlyph.jsx';
 
 const MENU_ITEMS = [
   { id: 'about', label: 'About', icon: 'info' },
-  { id: 'projects', label: 'Projects', icon: 'folder' },
+  { id: 'mywork', label: 'Projects', icon: 'folder' },
   { id: 'stack', label: 'Stack', icon: 'term' },
   { id: 'contact', label: 'Contact', icon: 'mail' },
   { id: 'stats', label: 'SiteCounter', icon: 'stats' },

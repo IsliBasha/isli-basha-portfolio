@@ -61,11 +61,7 @@
   gap: 0.5rem;
   padding: 2px 2px 2px 6px;
   margin: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--c-title-from) 0%,
-    var(--c-title-to) 100%
-  );
+  background: var(--c-title-from);
   color: #ffffff;
   font-family: var(--font-mono);
   font-weight: 700;
@@ -73,6 +69,13 @@
   letter-spacing: 0.02em;
   user-select: none;
   cursor: default;
+}
+
+/* Win95 signalled focus by desaturating the titlebar of every window that
+   was not on top. The chrome of the titlebar buttons stays untouched. */
+.win95-window--inactive .win95-window__titlebar {
+  background: var(--c-title-inactive);
+  color: var(--c-title-inactive-text);
 }
 
 .win95-window--draggable .win95-window__titlebar {
@@ -171,20 +174,26 @@
   flex-shrink: 0;
 }
 
+.win95-window__title-icon svg {
+  image-rendering: pixelated;
+  display: block;
+}
+
 .win95-window__buttons {
   display: flex;
   gap: 2px;
 }
 
+/* 16x14 is the real Win95 caption-button box. The glyph inside is an inline
+   SVG bitmap, so no font metrics are involved any more -- but `color` still
+   matters: it is what the glyph rects fill with, and what a forced-colors
+   mode repaints. */
 .win95-titlebar-btn {
-  width: 14px;
+  width: 16px;
   height: 14px;
   padding: 0;
   display: grid;
   place-items: center;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  line-height: 1;
   color: var(--c-text);
   background: var(--c-gray);
   border: 1px solid;
@@ -195,12 +204,17 @@
   box-shadow:
     inset 1px 1px 0 var(--c-gray-light),
     inset -1px -1px 0 var(--c-gray-dark);
-  cursor: default;
+  cursor: pointer;
 }
 
-.win95-titlebar-btn {
-  cursor: pointer;
-  font-weight: 700;
+.win95-titlebar-btn__glyph {
+  display: block;
+}
+
+/* Win95 put a gap between maximize and close so the destructive button is
+   never hit by an overshooting click. */
+.win95-titlebar-btn--close {
+  margin-left: 2px;
 }
 
 .win95-titlebar-btn:hover {
@@ -209,7 +223,6 @@
 
 .win95-titlebar-btn--close:hover {
   background: #d44;
-  color: #ffffff;
 }
 
 .win95-titlebar-btn:active {
@@ -410,7 +423,7 @@
 }
 
 .win95-taskbar__task--hidden .win95-taskbar__task-label {
-  color: var(--c-gray-darker);
+  color: var(--c-text-muted);
   font-style: italic;
 }
 
@@ -480,11 +493,7 @@
 
 .win95-start-menu__stripe {
   width: 24px;
-  background: linear-gradient(
-    180deg,
-    var(--c-title-to) 0%,
-    var(--c-title-from) 100%
-  );
+  background: var(--c-title-from);
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   color: #ffffff;
@@ -541,10 +550,10 @@
    Desktop icons (top-left of desktop area)
    ============================================================ */
 .win95-desktop-icon {
-  width: 72px;
+  width: 96px;
   padding: 4px;
   background: transparent;
-  border: 1px dotted transparent;
+  border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -554,18 +563,35 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   text-align: center;
+}
+
+/* Win95 selected the label, never the whole icon slot: navy fill, white
+   text, and a 1px dotted focus rectangle drawn inside the label box. */
+.win95-desktop-icon__label {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0 2px;
+  background: transparent;
+  /* Win95 wrapped a long shortcut name onto a second line rather than
+     letting it bleed past the icon slot, which "minesweeper.exe" did. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.15;
   text-shadow: 1px 1px 0 #000000, 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
-.win95-desktop-icon:hover,
-.win95-desktop-icon:focus-visible {
-  border: 1px dotted #ffffff;
-  background: rgba(0, 0, 128, 0.25);
-  outline: none;
+.win95-desktop-icon:hover .win95-desktop-icon__label,
+.win95-desktop-icon:active .win95-desktop-icon__label,
+.win95-desktop-icon:focus-visible .win95-desktop-icon__label {
+  background: var(--c-title-from);
+  color: #ffffff;
+  outline: 1px dotted #ffffff;
+  outline-offset: -1px;
+  text-shadow: none;
 }
 
-.win95-desktop-icon:active {
-  background: rgba(0, 0, 128, 0.45);
+.win95-desktop-icon:focus-visible {
+  outline: none;
 }
 
 .win95-desktop-icon__glyph {
@@ -685,7 +711,7 @@
   font-family: var(--font-mono);
   font-size: 0.5rem;
   letter-spacing: 0.1em;
-  color: var(--c-gray-darker);
+  color: var(--c-text-muted);
   text-transform: uppercase;
   align-self: flex-start;
 }
@@ -899,7 +925,6 @@
     top: 5%;
     left: 18%;
     width: 36%;
-    --tilt: -1deg;
   }
 
   .win-projects {
@@ -907,7 +932,6 @@
     left: 22%;
     width: 52%;
     height: 60%;
-    --tilt: 0.8deg;
   }
 
   .win-stack {
@@ -917,34 +941,31 @@
     max-width: 620px;
     min-width: 480px;
     height: 52%;
-    --tilt: -0.6deg;
   }
 
   .win-contact {
     top: 44%;
     right: 4%;
     width: 26%;
-    --tilt: 1.2deg;
   }
 
   .win-stats {
     bottom: 5rem;
     right: 2%;
-    width: 200px;
-    --tilt: 0.8deg;
+    /* Wide enough for "SiteCounter.exe" beside the 16px title icon and the
+       three caption buttons; at 200px the title ellipsised. */
+    width: 244px;
   }
 
   .win-minesweeper {
     top: 14%;
     left: 34%;
-    --tilt: -1.4deg;
     z-index: 2000;
   }
 
   .win-snake {
     top: 10%;
     right: 8rem;
-    --tilt: 1.6deg;
     z-index: 2000;
   }
 
@@ -953,7 +974,6 @@
     left: 20%;
     width: 58%;
     height: 62%;
-    --tilt: 0.4deg;
   }
 
   /* Window content scrolls only when the window itself has been resized
@@ -1146,7 +1166,7 @@
 .snake-hint {
   margin: 0;
   font-size: 0.75rem;
-  color: var(--c-gray-darker);
+  color: var(--c-text-muted);
 }
 
 .snake-message {
@@ -1301,7 +1321,7 @@
   padding: 2px 8px;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--c-gray-darker);
+  color: var(--c-text-muted);
   background: var(--c-gray);
   border-top: 1px solid var(--c-gray-dark);
   box-shadow: inset 0 1px 0 var(--c-gray-darker);
@@ -1416,7 +1436,7 @@
   padding: 2px 8px;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--c-gray-darker);
+  color: var(--c-text-muted);
   background: var(--c-gray);
   border-top: 1px solid var(--c-gray-dark);
   box-shadow: inset 0 1px 0 var(--c-gray-darker);
@@ -1490,7 +1510,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--c-gray-darker);
+  color: var(--c-text-muted);
   margin-bottom: 4px;
 }
 
@@ -1559,7 +1579,7 @@ textarea.win-field {
   }
 
   .win95-desktop-icon {
-    width: 72px;
+    width: 96px;
   }
 
   .sticky-note-wrap {
@@ -1784,7 +1804,7 @@ textarea.win-field {
   padding: 2px 8px;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--c-gray-darker);
+  color: var(--c-text-muted);
   background: var(--c-gray);
   border-top: 1px solid var(--c-gray-dark);
   box-shadow: inset 0 1px 0 var(--c-gray-darker);
@@ -1811,6 +1831,5 @@ textarea.win-field {
     left: 24%;
     width: 58%;
     height: 84%;
-    --tilt: 0.3deg;
   }
 }

@@ -91,13 +91,28 @@ export function WindowStackProvider({
     [hidden],
   );
 
+  // The topmost window that is neither minimized nor closed. Drives both the
+  // pressed taskbar task and the active/inactive titlebar colour.
+  //
+  // bringToFront() accepts any id -- the start menu and the desktop icons can
+  // both name a window that is not mounted. Electing such an id would leave
+  // every real window matching `activeId !== id`, so the whole desktop would
+  // go inactive with no titlebar and no taskbar task to click back. Only ids
+  // that are actually rendered (i.e. in initialOrder) may win.
+  const activeId = useMemo(
+    () =>
+      [...order]
+        .reverse()
+        .find(
+          (id) =>
+            initialOrder.includes(id) && !hidden.has(id) && !closed.has(id),
+        ) ?? null,
+    [initialOrder, order, hidden, closed],
+  );
+
   const openWindows = useMemo(() => {
     // Stable display order: follow the original initialOrder so taskbar
     // entries don't shuffle every time the user clicks a different window.
-    const activeId = [...order]
-      .reverse()
-      .find((id) => !hidden.has(id) && !closed.has(id));
-
     return initialOrder
       .filter((id) => !closed.has(id))
       .map((id) => ({
@@ -106,7 +121,7 @@ export function WindowStackProvider({
         hidden: hidden.has(id),
         active: id === activeId,
       }));
-  }, [initialOrder, order, hidden, closed, titles]);
+  }, [initialOrder, activeId, hidden, closed, titles]);
 
   const value = useMemo(
     () => ({
@@ -121,6 +136,7 @@ export function WindowStackProvider({
       isMaximized,
       hiddenWindows,
       openWindows,
+      activeId,
     }),
     [
       bringToFront,
@@ -134,6 +150,7 @@ export function WindowStackProvider({
       isMaximized,
       hiddenWindows,
       openWindows,
+      activeId,
     ],
   );
 
