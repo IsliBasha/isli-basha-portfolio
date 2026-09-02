@@ -575,73 +575,6 @@
 }
 
 /* ============================================================
-   Sticky note (hero)
-   ============================================================ */
-.sticky-note__pin {
-  position: absolute;
-  top: -11px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.38));
-}
-
-.sticky-note {
-  background:
-    repeating-linear-gradient(
-      transparent 0px,
-      transparent 25px,
-      rgba(140, 180, 220, 0.48) 25px,
-      rgba(140, 180, 220, 0.48) 26px
-    ),
-    #fff9c4;
-  color: var(--c-text);
-  font-family: var(--font-hand);
-  padding: 1rem 1rem 1.5rem;
-  box-shadow:
-    2px 3px 0 rgba(0, 0, 0, 0.12),
-    5px 8px 14px rgba(0, 0, 0, 0.11);
-  transform: rotate(3deg);
-  line-height: 1.5;
-  font-size: 1rem;
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - 10px),
-    94% 100%,
-    86% calc(100% - 6px),
-    76% 100%,
-    65% calc(100% - 4px),
-    54% calc(100% - 10px),
-    42% calc(100% - 2px),
-    30% calc(100% - 8px),
-    18% calc(100% - 1px),
-    8% calc(100% - 6px),
-    0 calc(100% - 2px)
-  );
-  max-width: 240px;
-}
-
-.sticky-note__name {
-  font-weight: 700;
-  font-size: 1.75rem;
-  line-height: 1.1;
-  margin-bottom: 0.15rem;
-}
-
-.sticky-note__role {
-  font-weight: 400;
-  font-size: 1.1rem;
-  color: #5c5070;
-  margin-bottom: 0.35rem;
-}
-
-.sticky-note__line {
-  font-size: 1rem;
-  color: var(--c-text);
-}
-
-/* ============================================================
    Visitor counter — SiteCounter window content
    ============================================================ */
 .visitor-win__body {
@@ -699,62 +632,6 @@
   line-height: 1;
 }
 
-
-/* ============================================================
-   Project card
-   ============================================================ */
-.project-card {
-  background: var(--c-gray-lighter);
-  padding: 0.75rem;
-  border: 1px solid;
-  border-top-color: #ffffff;
-  border-left-color: #ffffff;
-  border-right-color: var(--c-gray-darker);
-  border-bottom-color: var(--c-gray-darker);
-  box-shadow:
-    inset 1px 1px 0 var(--c-gray-light),
-    inset -1px -1px 0 var(--c-gray-dark);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  min-height: 160px;
-}
-
-.project-card:hover {
-  border-top-color: var(--c-gray-darker);
-  border-left-color: var(--c-gray-darker);
-  border-right-color: #ffffff;
-  border-bottom-color: #ffffff;
-  box-shadow:
-    inset 1px 1px 0 var(--c-gray-dark),
-    inset -1px -1px 0 var(--c-gray-light);
-}
-
-.project-card__name {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--c-text);
-}
-
-.project-card__desc {
-  font-size: 0.8125rem;
-  color: #333344;
-  line-height: 1.45;
-}
-
-.project-card__stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: auto;
-}
-
-.project-card__foot {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.4rem;
-}
 
 /* ============================================================
    Terminal (stack window)
@@ -880,13 +757,6 @@
   .desktop-icons .win95-desktop-icon {
     pointer-events: all;
     cursor: default;
-  }
-
-  .sticky-note-wrap {
-    position: absolute;
-    top: 1.75rem;
-    right: 1.5rem;
-    z-index: 1;
   }
 
   /* Windows: absolutely positioned, default openings within viewport.
@@ -1522,22 +1392,7 @@ textarea.win-field {
   font-weight: 700;
 }
 
-/* Project card icon */
-.project-card__header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.project-card__icon {
-  flex-shrink: 0;
-  display: block;
-  width: 32px;
-  height: 32px;
-  line-height: 0;
-}
-
-/* Mobile: no rotation, no absolute, sticky note goes above */
+/* Mobile: full-width windows, statically stacked */
 @media (max-width: 1023px) {
   .desktop-area {
     overflow-x: hidden;
@@ -1560,19 +1415,6 @@ textarea.win-field {
 
   .win95-desktop-icon {
     width: 72px;
-  }
-
-  .sticky-note-wrap {
-    position: relative;
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 0.75rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .sticky-note {
-    transform: none;
-    max-width: 100%;
   }
 
   .win95-window {

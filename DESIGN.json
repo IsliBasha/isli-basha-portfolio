@@ -16,7 +16,6 @@
       "accent":         { "role": "primary",   "displayName": "Accent Link Blue",      "canonical": "#1a73e8", "tonalRamp": ["#041428", "#082244", "#0c3870", "#1050a0", "#1a73e8", "#4090f0", "#70b0f8", "#a0ccfc", "#cce4ff"] },
       "ink":            { "role": "neutral",   "displayName": "Ink",                   "canonical": "#1a1a2e", "tonalRamp": ["#0a0a10", "#111120", "#1a1a2e", "#28283e", "#404060", "#606090", "#8888b0", "#b0b0cc", "#d8d8e8"] },
       "win-bg":         { "role": "neutral",   "displayName": "Win Background",        "canonical": "#fdfdfd", "tonalRamp": ["#181818", "#303030", "#484848", "#646464", "#828282", "#a0a0a0", "#c8c8c8", "#e4e4e4", "#fdfdfd"] },
-      "memo-canary":    { "role": "tertiary",  "displayName": "Memo Canary",           "canonical": "#fff9c4", "tonalRamp": ["#281e00", "#403200", "#604c00", "#887000", "#b09400", "#d0b800", "#ecdg60", "#f8f0a0", "#fff9c4"] },
       "phosphor-green": { "role": "secondary", "displayName": "Phosphor Green",        "canonical": "#33ff33", "tonalRamp": ["#002800", "#004800", "#006000", "#008800", "#00b800", "#1ce81c", "#33ff33", "#80ff80", "#c0ffc0"] },
       "term-bg":        { "role": "neutral",   "displayName": "Terminal Black",        "canonical": "#0c0c0c", "tonalRamp": ["#0c0c0c", "#141414", "#202020", "#303030", "#404040", "#585858", "#707070", "#909090", "#b4b4b4"] },
       "panic-blue":     { "role": "tertiary",  "displayName": "Panic Blue",            "canonical": "#0000aa", "tonalRamp": ["#00000c", "#000022", "#000044", "#000066", "#000088", "#0000aa", "#1a1ac0", "#4040d0", "#8080e0"] }
@@ -43,11 +42,6 @@
         "name": "win-drop",
         "value": "4px 4px 0px rgba(0,0,0,0.18)",
         "purpose": "Window frames and dialogs. Pixel-offset, zero blur — maintains the hardware aesthetic."
-      },
-      {
-        "name": "sticky-note",
-        "value": "2px 3px 0 rgba(0,0,0,0.12), 5px 8px 12px rgba(0,0,0,0.1)",
-        "purpose": "The sticky note only. The sole ambient shadow in the system."
       }
     ],
     "motion": [
@@ -94,14 +88,6 @@
       "description": "Raised panel that presses in on hover — bevel-out to bevel-in. The hover is the interaction, not a decoration.",
       "html": "<div class=\"ds-project-card\"><div class=\"ds-project-name\">Kode</div><div class=\"ds-project-desc\">Real-time collaborative code editor.</div><div class=\"ds-project-stack\"><span class=\"ds-stack-pill\">Next.js</span><span class=\"ds-stack-pill\">tRPC</span><span class=\"ds-stack-pill\">Yjs</span></div></div>",
       "css": ".ds-project-card { background: #ececec; padding: 12px; border: 1px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #404040; border-bottom-color: #404040; box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080; display: flex; flex-direction: column; gap: 8px; min-height: 140px; transition: none; cursor: default; } .ds-project-card:hover { border-top-color: #404040; border-left-color: #404040; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #dfdfdf; } .ds-project-name { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1rem; color: #1a1a2e; } .ds-project-desc { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.8125rem; color: #333344; line-height: 1.45; } .ds-project-stack { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; } .ds-stack-pill { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #1a1a2e; background: #fdfdfd; padding: 2px 6px; border: 1px solid; border-top-color: #808080; border-left-color: #808080; border-right-color: #ffffff; border-bottom-color: #ffffff; box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf; white-space: nowrap; }"
-    },
-    {
-      "name": "Sticky Note",
-      "kind": "custom",
-      "refersTo": "button-primary",
-      "description": "The hero introduction. The only warm, human element on the desktop. Rotated, torn, deliberately off-system.",
-      "html": "<div class=\"ds-sticky-note\"><div class=\"ds-sticky-name\">Isli Basha</div><div class=\"ds-sticky-role\">Full-Stack Developer</div><div class=\"ds-sticky-line\">Tirana, Albania</div><div class=\"ds-sticky-line\">Fast, minimal, useful things.</div></div>",
-      "css": ".ds-sticky-note { background: #fff9c4; color: #1a1a2e; font-family: 'IBM Plex Mono', monospace; padding: 14px 16px 22px; box-shadow: 2px 3px 0 rgba(0,0,0,0.12), 5px 8px 12px rgba(0,0,0,0.1); transform: rotate(3deg); line-height: 1.45; font-size: 0.875rem; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), 94% 100%, 86% calc(100% - 6px), 76% 100%, 65% calc(100% - 4px), 54% calc(100% - 10px), 42% calc(100% - 2px), 30% calc(100% - 8px), 18% calc(100% - 1px), 8% calc(100% - 6px), 0 calc(100% - 2px)); max-width: 240px; display: flex; flex-direction: column; gap: 3px; } .ds-sticky-name { font-weight: 700; font-size: 1.125rem; } .ds-sticky-role { font-weight: 500; color: #555570; } .ds-sticky-line { font-size: 0.8125rem; }"
     },
     {
       "name": "Terminal Block",

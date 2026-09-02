@@ -67,12 +67,6 @@ function mobileCssBlock() {
 }
 
 describe('mobile responsive polish', () => {
-  it('removes sticky note rotation in the mobile breakpoint', () => {
-    const block = mobileCssBlock();
-    expect(block).toContain('.sticky-note');
-    expect(block).toMatch(/transform\s*:\s*none/);
-  });
-
   it('makes windows full-width on mobile to prevent horizontal clipping', () => {
     const block = mobileCssBlock();
     expect(block).toContain('.win95-window');

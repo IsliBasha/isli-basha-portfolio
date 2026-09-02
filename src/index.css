@@ -11,7 +11,6 @@
 
 :root {
   color-scheme: light;
-  --font-hand: 'Caveat', cursive;
   --c-gray: #c0c0c0;
   --c-gray-dark: #808080;
   --c-gray-darker: #404040;
@@ -22,7 +21,6 @@
   --c-accent: #1a73e8;
   --c-text: #1a1a2e;
   --c-win-bg: #fdfdfd;
-  --c-note: #fff9c4;
   --c-term-bg: #0c0c0c;
   --c-term-fg: #33ff33;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;

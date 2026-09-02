@@ -76,6 +76,34 @@ describe('index.html noscript fallback', () => {
   });
 });
 
+describe('index.html web font payload', () => {
+  // Anchored on the stylesheet link, not the first googleapis href: the
+  // preconnect hint precedes it and carries no families. Throws rather than
+  // returning '', so a missing link fails loudly instead of passing a
+  // "no forbidden family" assertion by accident.
+  const fontHref = () => {
+    const m = indexHtml().match(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"/);
+    if (!m) throw new Error('no stylesheet <link> with an href in index.html');
+    return m[1];
+  };
+
+  const families = () => [...fontHref().matchAll(/family=([^:&]+)/g)].map((m) => m[1]);
+
+  it('requests exactly the families the UI renders, and no others', () => {
+    // Silkscreen and VT323 carry the Nokia port and the BIOS/POST screen.
+    expect(families().sort()).toEqual([
+      'IBM+Plex+Mono',
+      'IBM+Plex+Sans',
+      'Silkscreen',
+      'VT323',
+    ]);
+  });
+
+  it('does not request Caveat — no handwritten surface ships anymore', () => {
+    expect(indexHtml()).not.toMatch(/Caveat/);
+  });
+});
+
 describe('cv.html SEO', () => {
   const cvHtml = () => readFileSync(join(ROOT, 'public', 'cv.html'), 'utf8');
 
