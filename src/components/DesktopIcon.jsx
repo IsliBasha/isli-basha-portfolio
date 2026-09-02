@@ -121,7 +121,7 @@ export function DesktopIcon({ kind, label, target, href, defaultPos = { x: 16, y
       <span className="win95-desktop-icon__glyph">
         <AppGlyph kind={kind} />
       </span>
-      <span>{label}</span>
+      <span className="win95-desktop-icon__label">{label}</span>
     </Tag>
   );
 }

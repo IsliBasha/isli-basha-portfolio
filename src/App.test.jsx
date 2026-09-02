@@ -53,7 +53,7 @@ describe('App initial desktop state', () => {
   it('does not render any of the content windows on load', () => {
     render(<App />);
     expect(
-      screen.queryByRole('region', { name: 'about.txt' }),
+      screen.queryByRole('region', { name: 'about.txt - Notepad' }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('region', { name: 'projects' }),
@@ -78,7 +78,7 @@ describe('App initial desktop state', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: 'about.txt' }));
     expect(
-      screen.getByRole('region', { name: 'about.txt' }),
+      screen.getByRole('region', { name: 'about.txt - Notepad' }),
     ).toBeInTheDocument();
   });
 
