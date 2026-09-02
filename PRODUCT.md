@@ -29,7 +29,7 @@ Nostalgic, technical, dry-humored. Confident without performing confidence. "Fas
 2. **Show, don't tell.** Minesweeper, Snake, the terminal tree, and the boot sequence demonstrate craft. Avoid listing qualities; let the product embody them.
 3. **Minimal surface, maximum signal.** Every element earns its place. Nothing decorative without purpose. When in doubt, remove.
 4. **Performance is the argument.** A dev who claims to care about bundle size and render cost should have a site that is visibly fast. The portfolio is the proof of claim.
-5. **Dry wit over try-hard quirk.** The humor comes from restraint — an unexpected BSOD, a boot chime, a sticky note — not from shouting personality. Understatement is the register.
+5. **Dry wit over try-hard quirk.** The humor comes from restraint — an unexpected BSOD, a boot chime, a memory test that counts — not from shouting personality. Understatement is the register.
 
 ## Accessibility & Inclusion
 
