@@ -1,14 +1,8 @@
 import { useState } from 'react';
 import { projects as PROJECTS } from '../data/projects.js';
-
-const CATEGORIES = [
-  { id: 'all',      label: 'All',      icon: '🗂️' },
-  { id: 'work',     label: 'Work',     icon: '💼' },
-  { id: 'web',      label: 'Web',      icon: '🌐' },
-  { id: 'app',      label: 'App',      icon: '📱' },
-  { id: 'tool',     label: 'Tool',     icon: '🔧' },
-  { id: 'research', label: 'Research', icon: '🔬' },
-];
+import { ALL_OPEN_ICON } from '../lib/pixelIcons/categories.js';
+import { CATEGORIES } from './myWorkCategories.js';
+import { PixelIcon } from './PixelIcon.jsx';
 
 function folderItemStyle(active) {
   return {
@@ -278,16 +272,24 @@ export function MyWorkExplorer() {
       <div style={chrome.body}>
         <div style={chrome.sidebar}>
           <div style={chrome.sidebarHeading}>Categories</div>
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              type="button"
-              style={folderItemStyle(!q && filter === cat.id)}
-              onClick={() => handleFilter(cat.id)}
-            >
-              <span>{cat.icon}</span> {cat.label}
-            </button>
-          ))}
+          {CATEGORIES.map(cat => {
+            const isSelected = !q && filter === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                style={folderItemStyle(isSelected)}
+                onClick={() => handleFilter(cat.id)}
+              >
+                <PixelIcon
+                  className="explorer-folder-icon"
+                  id={isSelected && cat.id === 'all' ? ALL_OPEN_ICON : cat.icon}
+                  size={16}
+                />
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
 
         <div style={chrome.grid}>
@@ -298,7 +300,7 @@ export function MyWorkExplorer() {
               style={tileStyle(effectiveSelected?.id === p.id)}
               onClick={() => setSelected(p)}
             >
-              <span style={{ fontSize: '22px', lineHeight: 1 }}>{p.icon}</span>
+              <PixelIcon className="explorer-tile-icon" id={p.icon} size={32} />
               <span style={tileLabelStyle(effectiveSelected?.id === p.id)}>{p.name}</span>
             </button>
           ))}
