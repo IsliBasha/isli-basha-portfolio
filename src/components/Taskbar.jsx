@@ -1,16 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useSyncExternalStore } from 'react';
 import { useClock } from '../hooks/useClock.js';
 import { useWindowStack } from '../context/windowStackContext.js';
-import { clearWindowPositions } from '../hooks/useWindowPosition.js';
 import { AppGlyph } from '../lib/AppGlyph.jsx';
-
-const MENU_ITEMS = [
-  { id: 'about', label: 'About', icon: 'info' },
-  { id: 'mywork', label: 'Projects', icon: 'folder' },
-  { id: 'stack', label: 'Stack', icon: 'term' },
-  { id: 'contact', label: 'Contact', icon: 'mail' },
-  { id: 'stats', label: 'SiteCounter', icon: 'stats' },
-];
+import { PixelIcon } from './PixelIcon.jsx';
+import { StartMenu } from './StartMenu.jsx';
+import {
+  isChimeMuted,
+  setChimeMuted,
+  subscribeChimeMuted,
+} from '../lib/bootChime.js';
 
 function StartIcon() {
   return (
@@ -35,113 +33,88 @@ function StartIcon() {
   );
 }
 
-function MenuGlyph({ kind }) {
-  if (kind === 'info') {
-    return (
-      <svg viewBox="0 0 18 18" shapeRendering="crispEdges" aria-hidden="true">
-        <rect x="2" y="2" width="14" height="14" fill="#ffffff" stroke="#000000" />
-        <rect x="8" y="5" width="2" height="2" fill="#000080" />
-        <rect x="7" y="8" width="4" height="1" fill="#000080" />
-        <rect x="8" y="9" width="2" height="4" fill="#000080" />
-      </svg>
-    );
-  }
-  if (kind === 'folder') {
-    return (
-      <svg viewBox="0 0 18 18" shapeRendering="crispEdges" aria-hidden="true">
-        <rect x="1" y="5" width="16" height="11" fill="#f4c430" stroke="#000000" />
-        <rect x="1" y="3" width="7" height="3" fill="#f4c430" stroke="#000000" />
-      </svg>
-    );
-  }
-  if (kind === 'term') {
-    return (
-      <svg viewBox="0 0 18 18" shapeRendering="crispEdges" aria-hidden="true">
-        <rect x="1" y="2" width="16" height="13" fill="#0c0c0c" stroke="#000000" />
-        <text x="3" y="11" fontFamily="monospace" fontSize="7" fill="#33ff33">
-          &gt;_
-        </text>
-      </svg>
-    );
-  }
-  if (kind === 'stats') {
-    return (
-      <svg viewBox="0 0 18 18" shapeRendering="crispEdges" aria-hidden="true">
-        <rect x="1" y="1" width="16" height="16" fill="#c0c0c0" stroke="#000000" />
-        <rect x="3" y="12" width="2" height="4" fill="#000080" />
-        <rect x="7" y="9" width="2" height="7" fill="#000080" />
-        <rect x="11" y="6" width="2" height="10" fill="#000080" />
-        <rect x="2" y="15" width="14" height="1" fill="#808080" />
-      </svg>
-    );
-  }
-  if (kind === 'reset') {
-    return (
-      <svg viewBox="0 0 18 18" aria-hidden="true">
-        <path
-          d="M9 3 a6 6 0 1 1 -5.5 8.5"
-          fill="none"
-          stroke="#1a1a2e"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-        />
-        <polygon points="9,1 13,4 9,5" fill="#1a1a2e" />
-      </svg>
-    );
-  }
+/**
+ * The notification area: the boot-sound toggle and the clock, in one sunken
+ * well at the right-hand end of the taskbar.
+ */
+function SystemTray() {
+  const time = useClock();
+  // Subscribed rather than copied into state: localStorage is the one that
+  // knows, and it can change from another tab or from Display Properties.
+  // A local copy would show the speaker the visitor last clicked here, which
+  // is not the same thing as whether the next boot makes a sound.
+  // Audible is the server answer: nobody has said otherwise.
+  const muted = useSyncExternalStore(
+    subscribeChimeMuted,
+    isChimeMuted,
+    () => false,
+  );
+
+  const toggle = useCallback(() => {
+    setChimeMuted(!isChimeMuted());
+  }, []);
+
   return (
-    <svg viewBox="0 0 18 18" shapeRendering="crispEdges" aria-hidden="true">
-      <rect x="1" y="4" width="16" height="10" fill="#ffffff" stroke="#000000" />
-      <polyline
-        points="1,4 9,11 17,4"
-        fill="none"
-        stroke="#000000"
-        strokeWidth="1"
-      />
-    </svg>
+    <div className="win95-tray">
+      <button
+        type="button"
+        className="win95-tray__btn"
+        aria-label={`Boot sound: ${muted ? 'off' : 'on'}`}
+        aria-pressed={!muted}
+        onClick={toggle}
+      >
+        <PixelIcon id={muted ? 'speaker-muted' : 'speaker'} size={16} />
+      </button>
+      <div className="win95-tray__clock" aria-label={`Current time ${time}`}>
+        {time}
+      </div>
+    </div>
   );
 }
 
-export function Taskbar() {
+/**
+ * `reload` is threaded through to the Start menu because Reset desktop ends in
+ * one, and a test that clicks it cannot be allowed to navigate the runner.
+ * Undefined in the app, which is what leaves StartMenu's own default in place.
+ */
+export function Taskbar({ reload }) {
   const [open, setOpen] = useState(false);
-  const time = useClock();
-  const ref = useRef(null);
+  // Signed nonce handed to the Start menu: > 0 focuses its first item, < 0 its
+  // last. Arrowing out of the Start button is the only way into the menu from
+  // the keyboard, and the button cannot reach the items itself.
+  const [focusSignal, setFocusSignal] = useState(0);
   const btnRef = useRef(null);
   const { bringToFront, hide, openWindows } = useWindowStack();
 
-  useEffect(() => {
-    if (!open) return undefined;
-    const onDown = (e) => {
-      if (!ref.current) return;
-      if (!ref.current.contains(e.target) && !btnRef.current?.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    const onKey = (e) => {
-      if (e.key === 'Escape') {
-        setOpen(false);
-        btnRef.current?.focus();
-      }
-    };
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('keydown', onKey);
-    return () => {
-      window.removeEventListener('mousedown', onDown);
-      window.removeEventListener('keydown', onKey);
-    };
-  }, [open]);
+  const closeMenu = useCallback((reason) => {
+    setOpen(false);
+    setFocusSignal(0);
+    if (reason === 'escape') btnRef.current?.focus();
+  }, []);
 
-  const handleSelect = useCallback(
-    (id) => {
-      setOpen(false);
-      bringToFront(id);
-      const node = document.getElementById(id);
-      if (node) {
-        node.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        node.focus({ preventScroll: true });
+  const enterMenu = useCallback((direction) => {
+    setOpen(true);
+    setFocusSignal((previous) => (Math.abs(previous) + 1) * direction);
+  }, []);
+
+  const handleStartKeyDown = useCallback(
+    (event) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        enterMenu(1);
+        return;
+      }
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        enterMenu(-1);
+        return;
+      }
+      if (event.key === 'Escape' && open) {
+        event.preventDefault();
+        closeMenu('escape');
       }
     },
-    [bringToFront],
+    [closeMenu, enterMenu, open],
   );
 
   const handleTaskClick = useCallback(
@@ -159,14 +132,6 @@ export function Taskbar() {
     [bringToFront, hide],
   );
 
-  const handleResetDesktop = useCallback(() => {
-    setOpen(false);
-    clearWindowPositions();
-    if (typeof window !== 'undefined') {
-      window.location.reload();
-    }
-  }, []);
-
   return (
     <nav className="win95-taskbar" role="navigation" aria-label="Taskbar">
       <button
@@ -176,48 +141,22 @@ export function Taskbar() {
         aria-expanded={open}
         aria-haspopup="menu"
         aria-pressed={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          setFocusSignal(0);
+          setOpen((wasOpen) => !wasOpen);
+        }}
+        onKeyDown={handleStartKeyDown}
       >
         <StartIcon />
         <span>Start</span>
       </button>
-      {open ? (
-        <div
-          ref={ref}
-          className="win95-start-menu"
-          role="menu"
-          aria-label="Start menu"
-        >
-          <div className="win95-start-menu__stripe">sys95</div>
-          <ul className="win95-start-menu__list">
-            {MENU_ITEMS.map((item) => (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="win95-start-menu__item"
-                  onClick={() => handleSelect(item.id)}
-                >
-                  <MenuGlyph kind={item.icon} />
-                  <span>{item.label}</span>
-                </button>
-              </li>
-            ))}
-            <li role="separator" className="win95-start-menu__sep" />
-            <li>
-              <button
-                type="button"
-                role="menuitem"
-                className="win95-start-menu__item"
-                onClick={handleResetDesktop}
-              >
-                <MenuGlyph kind="reset" />
-                <span>Reset desktop</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-      ) : null}
+      <StartMenu
+        open={open}
+        onClose={closeMenu}
+        startButtonRef={btnRef}
+        focusSignal={focusSignal}
+        reload={reload}
+      />
       <ul className="win95-taskbar__tasks" aria-label="Open windows">
         {openWindows.map((entry) => {
           const cls = [
@@ -245,12 +184,7 @@ export function Taskbar() {
           );
         })}
       </ul>
-      <div
-        className="win95-taskbar__clock"
-        aria-label={`Current time ${time}`}
-      >
-        {time}
-      </div>
+      <SystemTray />
     </nav>
   );
 }

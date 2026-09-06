@@ -263,6 +263,7 @@ export function MyWorkExplorer() {
           onChange={e => setQuery(e.target.value)}
           placeholder="project name or tech…"
           aria-label="Search projects by name or technology"
+          data-start-find-target=""
         />
         {query && (
           <button type="button" style={chrome.clearBtn} onClick={() => setQuery('')}>✕</button>
