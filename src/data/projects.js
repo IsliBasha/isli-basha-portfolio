@@ -14,6 +14,8 @@
 // `screenshot` is the 1-bit dithered Nokia thumbnail and MUST stay in sync with
 // SOURCES in scripts/dither.js (projects.test.js enforces this). `preview` is
 // the full-colour image the desktop explorer shows; it has no such constraint.
+//
+// `icon` is an id in the src/lib/pixelIcons registry, never an emoji or a path.
 
 export const projects = [
   // ── Ofive Global — employed work. Repos live under a private org, so every
@@ -30,7 +32,7 @@ export const projects = [
     link: { href: 'https://ofive.io', label: 'Company →' },
     privateNote: null,
     iconType: 'python',
-    icon: 'briefcase',
+    icon: 'proj-ofive-lead-engine',
     preview: null,
   },
   {
@@ -45,7 +47,7 @@ export const projects = [
     link: { href: 'https://ofive.io', label: 'Company →' },
     privateNote: null,
     iconType: 'chip',
-    icon: 'briefcase',
+    icon: 'proj-ofive-shared-schema',
     preview: null,
   },
   {
@@ -60,7 +62,7 @@ export const projects = [
     link: { href: 'https://ofive.io', label: 'Company →' },
     privateNote: null,
     iconType: 'terminal',
-    icon: 'briefcase',
+    icon: 'proj-ofive-cloud-provisioning',
     preview: null,
   },
 
@@ -77,7 +79,7 @@ export const projects = [
     link: { href: 'https://mosvono.al', label: 'Visit →' },
     privateNote: null,
     iconType: 'globe',
-    icon: 'briefcase',
+    icon: 'proj-mos-vono',
     preview: null,
   },
   {
@@ -92,7 +94,7 @@ export const projects = [
     link: null,
     privateNote: 'Private · in build',
     iconType: 'typescript',
-    icon: 'briefcase',
+    icon: 'proj-ecovolt',
     preview: null,
   },
 
@@ -109,7 +111,7 @@ export const projects = [
     link: null,
     privateNote: 'Private repo',
     iconType: 'chat',
-    icon: 'app-window',
+    icon: 'proj-previsit',
     screenshot: '/nokia/previsit.png',
     preview: '/previsit-screenshot.jpeg',
   },
@@ -125,7 +127,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/publer-mcp', label: 'GitHub →' },
     privateNote: null,
     iconType: 'typescript',
-    icon: 'wrench',
+    icon: 'proj-publer-mcp',
     preview: null,
   },
   {
@@ -140,7 +142,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/mcp-odoo-fintech', label: 'GitHub →' },
     privateNote: null,
     iconType: 'typescript',
-    icon: 'wrench',
+    icon: 'proj-mcp-odoo-fintech',
     preview: null,
   },
   {
@@ -155,7 +157,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/playwright-saas-automator', label: 'GitHub →' },
     privateNote: null,
     iconType: 'typescript',
-    icon: 'wrench',
+    icon: 'proj-playwright-saas-automator',
     preview: null,
   },
   {
@@ -170,7 +172,7 @@ export const projects = [
     link: null,
     privateNote: 'Private repo',
     iconType: 'python',
-    icon: 'wrench',
+    icon: 'proj-copycat',
     preview: null,
   },
 
@@ -187,7 +189,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/me-dt-framework', label: 'GitHub →' },
     privateNote: null,
     iconType: 'network',
-    icon: 'book-flask',
+    icon: 'proj-medt',
     screenshot: '/nokia/medt.png',
     preview: '/medt-screenshot.jpeg',
   },
@@ -203,7 +205,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/rust-scraper', label: 'GitHub →' },
     privateNote: null,
     iconType: 'rust',
-    icon: 'wrench',
+    icon: 'proj-rust-scraper',
     screenshot: '/nokia/rust-scraper.png',
     preview: '/rust-scraper-screenshot.jpeg',
   },
@@ -219,7 +221,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/cf-worker-rust', label: 'GitHub →' },
     privateNote: null,
     iconType: 'rust',
-    icon: 'wrench',
+    icon: 'proj-cf-worker-rust',
     preview: null,
   },
   {
@@ -234,7 +236,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/Whatsapp-Chatbot', label: 'GitHub →' },
     privateNote: null,
     iconType: 'chat',
-    icon: 'wrench',
+    icon: 'proj-wabot',
     preview: null,
   },
   {
@@ -249,7 +251,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/linkedin-banner', label: 'GitHub →' },
     privateNote: null,
     iconType: 'terminal',
-    icon: 'wrench',
+    icon: 'proj-linkedin-banner',
     screenshot: '/nokia/linkedin-banner.png',
     preview: '/linkedin-banner-screenshot.png',
   },
@@ -267,7 +269,7 @@ export const projects = [
     link: { href: 'https://stani-hoxhes-website.pages.dev/', label: 'Visit →' },
     privateNote: null,
     iconType: 'globe',
-    icon: 'globe-doc',
+    icon: 'proj-stani-hoxhes',
     screenshot: '/nokia/stani-hoxhes.png',
     preview: '/stani-screenshot.jpeg',
   },
@@ -283,7 +285,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/meridian-build', label: 'GitHub →' },
     privateNote: null,
     iconType: 'globe',
-    icon: 'globe-doc',
+    icon: 'proj-meridian-build',
     preview: null,
   },
 
@@ -300,7 +302,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/FloraCare', label: 'GitHub →' },
     privateNote: null,
     iconType: 'android',
-    icon: 'app-window',
+    icon: 'proj-floracare',
     preview: null,
   },
   {
@@ -315,7 +317,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/mira-study', label: 'GitHub →' },
     privateNote: null,
     iconType: 'book',
-    icon: 'app-window',
+    icon: 'proj-mira-study',
     preview: null,
   },
 
@@ -332,7 +334,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/win95-architecture', label: 'GitHub →' },
     privateNote: null,
     iconType: 'chip',
-    icon: 'book-flask',
+    icon: 'proj-win95-arch',
     screenshot: '/nokia/win95-arch.png',
     preview: '/win95-screenshot.png',
   },
@@ -348,7 +350,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/java-advanced-programming', label: 'GitHub →' },
     privateNote: null,
     iconType: 'book',
-    icon: 'book-flask',
+    icon: 'proj-java-advanced',
     preview: null,
   },
   {
@@ -363,7 +365,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/mips-voting-system', label: 'GitHub →' },
     privateNote: null,
     iconType: 'chip',
-    icon: 'book-flask',
+    icon: 'proj-mips-voting',
     preview: null,
   },
   {
@@ -378,7 +380,7 @@ export const projects = [
     link: { href: 'https://github.com/IsliBasha/HamsterFaceRecognition', label: 'GitHub →' },
     privateNote: null,
     iconType: 'python',
-    icon: 'book-flask',
+    icon: 'proj-hamster',
     preview: null,
   },
 
@@ -395,7 +397,7 @@ export const projects = [
     link: null,
     privateNote: 'Private · work placement',
     iconType: 'android',
-    icon: 'briefcase',
+    icon: 'proj-warehouse',
     preview: null,
   },
   {
@@ -410,7 +412,7 @@ export const projects = [
     link: null,
     privateNote: 'Private · work placement',
     iconType: 'android',
-    icon: 'briefcase',
+    icon: 'proj-ionic-work',
     preview: null,
   },
 ];

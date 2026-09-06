@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, relative, resolve } from 'node:path';
 import { projects } from './projects.js';
 import { ICONS } from '../lib/pixelIcons/index.js';
-import { CATEGORY_ICONS } from '../lib/pixelIcons/categories.js';
 import projectIcons from '../lib/pixelIcons/projects.js';
 import { SOURCES } from '../../scripts/dither.js';
 
@@ -111,19 +110,18 @@ describe('projects data', () => {
     }
   });
 
-  // Today every icon is its category's, which means nothing catches a project
-  // moved between categories with its old icon left behind — it would keep
-  // drawing a briefcase in the Tool folder and no test would notice. An icon
-  // is legitimate only if it is the category's, or a deliberate per-project
-  // override registered in pixelIcons/projects.js.
-  it('keeps each icon either the category default or a registered override', () => {
+  // Every project carries its own drawing rather than its category's, and the
+  // id is derived from the project id rather than chosen. So a project renamed
+  // without its icon renamed fails here instead of silently falling back to the
+  // generic placeholder, and a project moved between categories can no longer
+  // sit in the Tool folder still drawing a briefcase — there is one legal icon
+  // per project and this is it.
+  it('draws every project with its own registered proj-<id> icon', () => {
     for (const p of projects) {
-      const isCategoryDefault = p.icon === CATEGORY_ICONS[p.category];
-      const isDeliberateOverride = Object.hasOwn(projectIcons, p.icon);
+      expect(p.icon, `${p.id} should draw its own icon`).toBe(`proj-${p.id}`);
       expect(
-        isCategoryDefault || isDeliberateOverride,
-        `${p.id} is category "${p.category}" but draws "${p.icon}", which is neither ` +
-          `the category icon "${CATEGORY_ICONS[p.category]}" nor a per-project override`,
+        Object.hasOwn(projectIcons, p.icon),
+        `${p.id} icon "${p.icon}" is not in the per-project registry`,
       ).toBe(true);
     }
   });
