@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BootSequence } from './BootSequence.jsx';
@@ -10,6 +10,7 @@ describe('BootSequence', () => {
 
   afterEach(() => {
     sessionStorage.clear();
+    vi.restoreAllMocks();
   });
 
   it('renders the BIOS screen on first mount', () => {
@@ -60,7 +61,11 @@ describe('BootSequence', () => {
       { timeout: 7000 },
     );
     expect(sessionStorage.getItem('isli-boot-seen')).toBe('1');
-  });
+    // Its own budget, not the suite's: this is the only test that sits out a
+    // real 4.5s boot, and waitFor asks for up to 7s of it. The 5s default kills
+    // it before its own timeout runs out; raising the default globally would
+    // hide a hang in every other test in the repo.
+  }, 10000);
 
   it('skips when Escape is pressed', async () => {
     const user = userEvent.setup();
@@ -75,6 +80,26 @@ describe('BootSequence', () => {
       screen.queryByRole('dialog', { name: /system boot/i }),
     ).not.toBeInTheDocument();
     expect(sessionStorage.getItem('isli-boot-seen')).toBe('1');
+  });
+
+  // A storage that refuses the write is a boot that replays on every
+  // navigation. The write stays swallowed — it runs inside the layout effect
+  // that removes the overlay — so the dev line is the only signal there is.
+  it('warns in dev when sessionStorage refuses the flag', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('quota exceeded', 'QuotaExceededError');
+    });
+    const user = userEvent.setup();
+
+    render(<BootSequence />);
+    await user.keyboard('{Escape}');
+
+    expect(
+      screen.queryByRole('dialog', { name: /system boot/i }),
+    ).not.toBeInTheDocument();
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][0]).toContain('replay on every navigation');
   });
 
   it('skips when the skip button is clicked', async () => {

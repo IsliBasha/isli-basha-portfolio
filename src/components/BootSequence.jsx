@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { playBootChime } from '../lib/bootChime.js';
+import { BootFlag } from './BootFlag.jsx';
 
 const STORAGE_KEY = 'isli-boot-seen';
 
@@ -31,8 +32,17 @@ function shouldSkipUpFront() {
 function markBootSeen() {
   try {
     window.sessionStorage.setItem(STORAGE_KEY, '1');
-  } catch {
-    /* fail silently */
+  } catch (err) {
+    // Still swallowed: this runs inside the layout effect that removes the
+    // overlay, and a throw there would abandon the commit that hides it. But a
+    // storage that refuses the write means the boot replays on every
+    // navigation, which is worth a line in dev rather than nothing anywhere.
+    if (import.meta.env.DEV) {
+      console.warn(
+        '[boot] could not record the boot flag; the splash will replay on every navigation',
+        err,
+      );
+    }
   }
 }
 
@@ -71,7 +81,11 @@ export function BootSequence() {
     return () => clearTimeout(t);
   }, [phase]);
 
-  useEffect(() => {
+  // Layout, not passive: this runs inside the commit that removes the overlay,
+  // so there is no window in which the boot looks finished on screen but has
+  // not been recorded. A passive effect leaves one, and a reload landing in it
+  // replays the whole boot.
+  useLayoutEffect(() => {
     if (phase === 'done') {
       markBootSeen();
     }
@@ -157,21 +171,7 @@ Memory Test: ${padded}K OK
 function SplashScreen() {
   return (
     <div className="boot-splash">
-      <svg
-        className="boot-splash__logo"
-        viewBox="0 0 16 15"
-        shapeRendering="crispEdges"
-        aria-hidden="true"
-      >
-        <polygon points="1,0 7,0 7,6 0,7"     fill="#bf1700" />
-        <polygon points="8,0 14,0 14,6 8,6"    fill="#1e7800" />
-        <polygon points="0,8 7,7 7,13 0,13"    fill="#1040c0" />
-        <polygon points="8,8 14,8 14,14 8,14"  fill="#cc9800" />
-        <rect x="7"  y="0" width="1" height="14" fill="#c0b890" />
-        <rect x="0"  y="7" width="7" height="1"  fill="#c0b890" />
-        <rect x="8"  y="7" width="6" height="1"  fill="#c0b890" />
-        <rect x="1"  y="14" width="13" height="1" fill="rgba(0,0,0,0.4)" />
-      </svg>
+      <BootFlag />
       <p className="boot-splash__tag">Starting Windows 95...</p>
       <div className="boot-splash__bar" aria-hidden="true">
         <span />
