@@ -1,18 +1,5 @@
 import { useEffect, useState } from 'react';
-
-const MODIFIER_KEYS = new Set([
-  'Control',
-  'Shift',
-  'Alt',
-  'Meta',
-  'CapsLock',
-  'NumLock',
-  'ScrollLock',
-  'Tab',
-  'OS',
-  'Hyper',
-  'Super',
-]);
+import { MODIFIER_KEYS } from '../lib/keys.js';
 
 export function BSOD() {
   const [visible, setVisible] = useState(false);
