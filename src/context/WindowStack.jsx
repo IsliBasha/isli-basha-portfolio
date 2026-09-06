@@ -11,6 +11,13 @@ export function WindowStackProvider({
   const [closed, setClosed] = useState(() => new Set(initialClosed));
   const [maximized, setMaximized] = useState(() => new Set());
   const [titles, setTitles] = useState(() => new Map());
+  // The window a user action just asked for, waiting to be focused. A
+  // launcher cannot focus a window it is opening for the first time: the
+  // <section> does not exist until React commits the state change, so the
+  // getElementById in that same tick found nothing and left focus on <body>
+  // while the titlebar painted active. The launcher records the intent here
+  // and the Window claims it from its own mount effect.
+  const [pendingFocusId, setPendingFocusId] = useState(null);
 
   // Only ids the desktop actually renders may enter the stack. The Start menu
   // and the Run box can both name ids the desktop does not render (e.g. a typo,
@@ -19,8 +26,12 @@ export function WindowStackProvider({
   // getZ hands the phantom the highest z-index on the desktop and every real
   // window is then measured against a stacking slot nothing occupies.
   const bringToFront = useCallback(
-    (id) => {
+    (id, { focus = false } = {}) => {
       if (!initialOrder.includes(id)) return;
+      // Opt-in, not the default: Window calls bringToFront on every mousedown
+      // inside itself, and focusing the container there would yank the caret
+      // out of whatever field or button the click actually landed on.
+      if (focus) setPendingFocusId(id);
       setOrder((prev) => {
         const without = prev.filter((x) => x !== id);
         return [...without, id];
@@ -72,6 +83,11 @@ export function WindowStackProvider({
       else next.add(id);
       return next;
     });
+  }, []);
+
+  /** Called by the Window that took the focus, so the intent fires once. */
+  const clearPendingFocus = useCallback((id) => {
+    setPendingFocusId((current) => (current === id ? null : current));
   }, []);
 
   const registerTitle = useCallback((id, title) => {
@@ -147,6 +163,8 @@ export function WindowStackProvider({
       hiddenWindows,
       openWindows,
       activeId,
+      pendingFocusId,
+      clearPendingFocus,
     }),
     [
       bringToFront,
@@ -161,6 +179,8 @@ export function WindowStackProvider({
       hiddenWindows,
       openWindows,
       activeId,
+      pendingFocusId,
+      clearPendingFocus,
     ],
   );
 

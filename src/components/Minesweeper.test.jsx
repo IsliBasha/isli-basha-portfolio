@@ -270,6 +270,20 @@ describe('Minesweeper faces', () => {
     expect(faceMap()).toEqual(ICONS['face-idle']);
   });
 
+  // Alt-Tab with the pointer still down: the mouseup lands in whatever took
+  // the focus, so this window never hears it and the face kept its mouth open
+  // until the next click on the board.
+  it('drops the "oh" face when the tab loses focus mid-press', () => {
+    render(<Minesweeper />);
+
+    fireEvent.mouseDown(cells()[0]);
+    expect(faceMap()).toEqual(ICONS['face-o']);
+
+    fireEvent.blur(window);
+
+    expect(faceMap()).toEqual(ICONS['face-idle']);
+  });
+
   // Right-dragging plants a flag. The face has no opinion about that, and the
   // native context menu eats the mouseup that would have ended the press, so
   // pulling the "oh" face on a right press left it stuck there.

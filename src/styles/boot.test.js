@@ -18,11 +18,18 @@ const MIN_CYCLE_SECONDS = 1.0;
 
 // Brace-counting reader: the boot rules we assert on include at-rules whose
 // bodies contain nested blocks, which a `[^}]*` regex would truncate.
+//
+// Throws rather than returning '' on every miss. An empty body passes every
+// `not.toMatch` in this file, so a renamed selector used to turn its whole
+// describe green instead of red. The search is anchored on `\n<head> {` for
+// the same reason in the other direction: `.boot-overlay` would otherwise
+// match `.boot-overlay--splash` and assert against the wrong rule.
 function blockBody(head) {
-  const start = css.indexOf('\n' + head);
-  if (start === -1) return '';
+  const anchor = '\n' + head + ' {';
+  const start = css.indexOf(anchor);
+  if (start === -1) throw new Error(`no \`${head}\` block in boot.css`);
   const open = css.indexOf('{', start);
-  if (open === -1) return '';
+  if (open === -1) throw new Error(`\`${head}\` has no body in boot.css`);
   let depth = 0;
   for (let i = open; i < css.length; i += 1) {
     if (css[i] === '{') depth += 1;
@@ -31,7 +38,7 @@ function blockBody(head) {
       if (depth === 0) return css.slice(open + 1, i);
     }
   }
-  return '';
+  throw new Error(`unterminated \`${head}\` block in boot.css`);
 }
 
 describe('POST screen typography', () => {
@@ -118,12 +125,15 @@ describe('boot splash flag', () => {
   it('never shears or rotates the flag', () => {
     for (const head of ['.boot-flag', '.boot-flag__frame', '@keyframes boot-flag-wave']) {
       const body = blockBody(head);
-      // blockBody answers '' for a head it cannot find, and '' satisfies the
-      // negative below for ever: renaming the rule would silence this check
-      // rather than fail it.
-      expect(body, `${head} block not found`).not.toBe('');
       expect(body, `${head} transforms the flag`).not.toMatch(/skew|rotate|matrix/i);
     }
+  });
+
+  // The negative above is only worth anything because a renamed or deleted
+  // rule cannot reach it: an empty body would satisfy it for ever. blockBody
+  // used to return '' on a miss, which is exactly how that silence happened.
+  it('fails loudly rather than emptily when a rule is renamed away', () => {
+    expect(() => blockBody('.boot-flag--gone')).toThrow(/no `\.boot-flag--gone` block/);
   });
 
   it('offsets frames 2 and 3 by thirds of the one declared cycle', () => {

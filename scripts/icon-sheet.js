@@ -14,7 +14,6 @@
 // that icon-sheet.test.js imports, and the half that reads argv and writes to
 // disk runs only when this file is the process entry point.
 
-/* global process */
 import { writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import system from '../src/lib/pixelIcons/system.js';
@@ -227,8 +226,12 @@ function main() {
     process.exit(1);
   }
 
+  // Rendered before the try, not inside it: a bug in renderSheet would
+  // otherwise be reported as "cannot write <path>", sending the reader to the
+  // filesystem for a problem in the SVG.
+  const svg = renderSheet();
   try {
-    writeFileSync(out, renderSheet());
+    writeFileSync(out, svg);
   } catch (err) {
     // A path under a directory that does not exist is the way this actually
     // fails, and node's default stack trace buries which path it was under a

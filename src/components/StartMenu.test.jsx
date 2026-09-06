@@ -1,27 +1,16 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
 import { Window } from './Window.jsx';
 import { Taskbar } from './Taskbar.jsx';
 import { MyWorkExplorer } from './MyWorkExplorer.jsx';
 import { WindowStackProvider } from '../context/WindowStack.jsx';
+// The desktop's own window list, not a restatement of it: if DesktopApp
+// gains a window and the Start menu does not, the coverage assertion below
+// is what says so.
+import { WINDOW_ORDER } from '../windowOrder.js';
 import { __TEST__ as POSITIONS } from '../hooks/useWindowPosition.js';
 
-// Read the desktop's own window list rather than restating it. If DesktopApp
-// gains a window and the Start menu does not, the coverage assertion below is
-// what says so.
-const DESKTOP_SOURCE = readFileSync(
-  resolve(dirname(fileURLToPath(import.meta.url)), '..', 'DesktopApp.jsx'),
-  'utf8',
-);
-const WINDOW_ORDER = (() => {
-  const block = DESKTOP_SOURCE.match(/const WINDOW_ORDER = \[([^\]]*)\]/);
-  if (!block) throw new Error('WINDOW_ORDER is no longer a literal array in DesktopApp.jsx');
-  return [...block[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
-})();
 
 // Display Properties reached WINDOW_ORDER with its own order. The menu has to
 // be able to reach it either way, so name it here and fold it in rather than
@@ -396,29 +385,19 @@ describe('Start menu items that name no window', () => {
 });
 
 describe('Start menu focus after a launch', () => {
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   // Every window on this desktop except the visitor counter starts closed, so
   // the launch that has to work is the one where nothing is mounted yet.
   it('puts focus in the window it just opened from closed', async () => {
-    // jsdom implements requestAnimationFrame as a ~16ms timer, so real time
-    // spent inside the awaited clicks can let the frame fire before the
-    // assertion that it has not. Faking rAF alone makes the frame a step this
-    // test takes on purpose; userEvent keeps real timers for its own waits.
-    vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] });
+    // No frame to fake any more. The Start menu asks for the focus through
+    // bringToFront(id, { focus: true }) and the Window claims it from its own
+    // effect, in the commit that first puts it on screen -- the same path the
+    // desktop icons and the taskbar buttons take. This used to look the
+    // element up by id a frame after the click, which meant faking rAF here
+    // just to hold the frame still long enough to assert on it.
     const user = userEvent.setup();
     render(<Desktop />);
 
     await walk(user, ['Programs', 'Games', 'snake.exe']);
-    expect(document.activeElement).toBe(document.body);
-
-    // In act because landing on the window fires its onFocus, which calls
-    // bringToFront -- the same reason nextFrame() wraps its own frame.
-    await act(async () => {
-      vi.advanceTimersToNextFrame();
-    });
 
     expect(document.activeElement).toBe(
       screen.getByRole('region', { name: 'snake.win' }),
@@ -447,7 +426,9 @@ describe('Start menu focus when a dialog closes', () => {
     render(<Desktop />);
 
     await walk(user, ['Run…']);
-    expect(screen.getByRole('dialog', { name: 'Run' })).toBeInTheDocument();
+    // findBy, not getBy: RunDialog is a lazy chunk, so the first open in this
+    // file genuinely has to wait for it to arrive.
+    expect(await screen.findByRole('dialog', { name: 'Run' })).toBeInTheDocument();
 
     await user.keyboard('{Escape}');
 
@@ -461,7 +442,7 @@ describe('Start menu focus when a dialog closes', () => {
 
     await walk(user, ['Shut Down…']);
     expect(
-      screen.getByRole('dialog', { name: 'Shut Down Windows' }),
+      await screen.findByRole('dialog', { name: 'Shut Down Windows' }),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'No' }));
@@ -535,7 +516,7 @@ describe('Start menu entries that are not windows', () => {
 
     await walk(user, ['Run…']);
 
-    expect(screen.getByRole('dialog', { name: 'Run' })).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: 'Run' })).toBeInTheDocument();
     expect(document.activeElement).toBe(screen.getByLabelText('Open:'));
   });
 
@@ -546,7 +527,7 @@ describe('Start menu entries that are not windows', () => {
     await walk(user, ['Shut Down…']);
 
     expect(
-      screen.getByRole('dialog', { name: 'Shut Down Windows' }),
+      await screen.findByRole('dialog', { name: 'Shut Down Windows' }),
     ).toBeInTheDocument();
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Yes' }));
   });

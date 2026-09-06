@@ -8,29 +8,22 @@ import { GLYPH_KINDS } from './glyphKinds.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const glyphSource = readFileSync(resolve(here, 'AppGlyph.jsx'), 'utf8');
+const desktopSource = readFileSync(resolve(here, '../DesktopApp.jsx'), 'utf8');
 
-// The ids DesktopApp mounts windows for. Each one is passed to AppGlyph twice:
-// once as the desktop icon's `kind`, once as the window's 16px title icon. A
-// kind with no artwork used to render nothing at all, leaving a 16px hole and
-// a stray titlebar gap that reads as a layout bug rather than a missing icon.
-const WINDOW_IDS = [
-  'about',
-  'stack',
-  'contact',
-  'stats',
-  'resume',
-  'minesweeper',
-  'snake',
-  'mywork',
-];
+// The `kind` on every desktop shortcut the app mounts, read out of the JSX
+// rather than kept as a second list here: AppGlyph's only caller is
+// DesktopIcon, so this is the complete set of kinds anything can ask for.
+const DESKTOP_ICON_KINDS = [...desktopSource.matchAll(/<DesktopIcon\s+kind="([^"]+)"/g)].map(
+  (m) => m[1],
+);
 
 function renderGlyph(kind, size) {
   const { container } = render(<AppGlyph kind={kind} size={size} />);
   return container.querySelector('svg');
 }
 
-describe('AppGlyph coverage for every mounted window', () => {
-  it.each(WINDOW_IDS)('draws artwork for the "%s" window', (kind) => {
+describe('AppGlyph coverage for every desktop shortcut', () => {
+  it.each(GLYPH_KINDS)('draws artwork for the "%s" shortcut', (kind) => {
     const svg = renderGlyph(kind);
     expect(svg).not.toBeNull();
     expect(
@@ -38,10 +31,14 @@ describe('AppGlyph coverage for every mounted window', () => {
     ).toBeGreaterThan(0);
   });
 
-  it('lists every window id as a handled kind', () => {
-    for (const id of WINDOW_IDS) {
-      expect(GLYPH_KINDS).toContain(id);
-    }
+  it('draws exactly the kinds the desktop puts a shortcut on screen for', () => {
+    // Both directions in one assertion. A kind with no shortcut is artwork
+    // nothing can ask for -- `projects` sat here long after its window was
+    // gone, and SiteCounter.exe's bar chart joined it the day the taskbar
+    // stopped calling AppGlyph -- and a shortcut with no kind renders the
+    // generic-application fallback on the desktop.
+    expect(DESKTOP_ICON_KINDS.length).toBeGreaterThan(0);
+    expect([...GLYPH_KINDS].sort()).toEqual([...DESKTOP_ICON_KINDS].sort());
   });
 
   it('honours the 16px title-icon size', () => {

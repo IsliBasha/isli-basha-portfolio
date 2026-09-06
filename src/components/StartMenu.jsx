@@ -1,17 +1,22 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PixelIcon } from './PixelIcon.jsx';
 import { SystemDialog } from './SystemDialog.jsx';
-import { RunDialog } from './RunDialog.jsx';
-import { ShutDown } from './ShutDown.jsx';
+import { ChunkBoundary } from './ChunkBoundary.jsx';
 import { useWindowStack } from '../context/windowStackContext.js';
 import { clearWindowPositions } from '../hooks/useWindowPosition.js';
+
+// Split out of the first load: both are modal, both are one Start-menu item
+// deep, and neither is on the path to a painted desktop. Rendered only while
+// they are the open dialog, so the import fires on the click that opens them
+// rather than at boot. Nothing to show meanwhile — a spinner for a chunk that
+// arrives in the same breath is worse than the dialog simply appearing.
+const RunDialog = lazy(() =>
+  import('./RunDialog.jsx').then((m) => ({ default: m.RunDialog })),
+);
+const ShutDown = lazy(() =>
+  import('./ShutDown.jsx').then((m) => ({ default: m.ShutDown })),
+);
 
 /**
  * The Start menu tree. `target` is a WindowStack id; `action` is something the
@@ -344,29 +349,32 @@ export function StartMenu({
   }, [open, onClose, startButtonRef]);
 
   /**
-   * Launch a window and put focus in it. `onFrame` runs in the same frame,
-   * once the window has focus, for a caller that wants somewhere more specific
+   * Launch a window and put focus in it. `onFrame` runs a frame later, once
+   * the window is on screen, for a caller that wants somewhere more specific
    * inside it.
    *
-   * The frame is not a flourish. bringToFront is a state update, and every
-   * window on this desktop except the visitor counter starts closed, so on the
-   * first launch the element does not exist until React commits: looking it up
-   * in this tick found nothing and left focus on <body> every single time.
+   * The focus itself is no longer this function's business: `focus: true`
+   * records the intent on the stack and the Window claims it from its own
+   * effect, which is the same path the desktop icons and the taskbar buttons
+   * take. This used to look the element up by id a frame after the click,
+   * which worked but was a second mechanism for one job -- and a launcher that
+   * missed the frame simply left focus on <body>.
+   *
+   * The frame that remains is not a flourish. bringToFront is a state update,
+   * and every window on this desktop except the visitor counter starts closed,
+   * so on a first launch neither the window nor anything inside it exists
+   * until React commits.
    */
   const openWindow = useCallback(
     (id, onFrame) => {
-      bringToFront(id);
+      bringToFront(id, { focus: true });
       window.requestAnimationFrame(() => {
-        // An id no Window claims — `display` before its order lands — has
-        // nothing to focus. bringToFront ignores such an id outright, so
-        // there is nothing to undo here either.
-        const node = document.getElementById(id);
-        if (!node) return;
-        // Optional call: jsdom has no scrollIntoView, and on desktop the
-        // viewport is locked anyway. It earns its keep on mobile, where the
-        // desktop is a scrolling stack of windows.
-        node.scrollIntoView?.({ block: 'center' });
-        node.focus({ preventScroll: true });
+        // Below 1024px the desktop is a scrolling column rather than a fixed
+        // screen, and the window that just opened may be well down it.
+        // Optional call: jsdom has no scrollIntoView. An id no Window claims
+        // resolves to nothing here, which is also what bringToFront did with
+        // it, so there is nothing to undo.
+        document.getElementById(id)?.scrollIntoView?.({ block: 'center' });
         onFrame?.();
       });
     },
@@ -452,16 +460,23 @@ export function StartMenu({
             message={HELP_MESSAGE}
             onClose={closeDialog}
           />
-          <RunDialog
-            open={dialog === 'run'}
-            onClose={closeDialog}
-            onOpenWindow={openWindow}
-          />
-          <ShutDown
-            open={dialog === 'shut-down'}
-            onClose={closeDialog}
-            reload={reload}
-          />
+          {/* Keyed on the choice so each dialog gets its own boundary: this
+              one is mounted for the life of the page (Taskbar renders the
+              menu open or shut), and a boundary that has caught once never
+              renders children again. onDismiss clears the choice, which is
+              what makes the remount happen. hasWindowFrame is false because
+              these children are portalled to the body, where the in-window
+              note would be a loose line of text on the desktop. */}
+          <ChunkBoundary key={dialog} onDismiss={closeDialog} hasWindowFrame={false}>
+            <Suspense fallback={null}>
+              {dialog === 'run' ? (
+                <RunDialog open onClose={closeDialog} onOpenWindow={openWindow} />
+              ) : null}
+              {dialog === 'shut-down' ? (
+                <ShutDown open onClose={closeDialog} reload={reload} />
+              ) : null}
+            </Suspense>
+          </ChunkBoundary>
         </>,
         document.body,
       )}

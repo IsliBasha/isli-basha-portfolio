@@ -116,11 +116,19 @@ export function Minesweeper() {
 
   // A press that ends outside the board still ends: without this the face
   // would stay in its "oh" state until the next click anywhere on the grid.
+  //
+  // `blur` for the same reason one step further out. Alt-Tab with the button
+  // still down and the mouseup lands in the other application, so this window
+  // never hears it and the face keeps its mouth open until the next click.
   useEffect(() => {
     if (!pressing) return undefined;
     const release = () => setPressing(false);
     window.addEventListener('mouseup', release);
-    return () => window.removeEventListener('mouseup', release);
+    window.addEventListener('blur', release);
+    return () => {
+      window.removeEventListener('mouseup', release);
+      window.removeEventListener('blur', release);
+    };
   }, [pressing]);
 
   const startTimer = useCallback(() => {

@@ -71,28 +71,33 @@ export function subscribeChimeMuted(onChange) {
 }
 
 /**
- * Persist the tray's mute state. Storage failing costs the preference at the
- * next visit, not the page and not the toggle: the choice is kept in memory
- * for this session, so subscribers re-reading isChimeMuted() see it.
+ * Persist the mute state, for both writers: the taskbar tray's speaker and
+ * Display Properties' Boot sound checkbox. Storage failing costs the
+ * preference at the next visit, not the page and not the toggle: the choice is
+ * kept in memory for this session, so subscribers re-reading isChimeMuted()
+ * see it.
  *
- * Display settings (order 05) writes this same key through its own helper for
- * now; order 07 is what makes it call this one, so both surfaces agree without
- * a reload.
+ * Returns whether storage actually kept it, which is what lets the Display
+ * Properties sheet tell the visitor their settings will not survive a reload.
  */
 export function setChimeMuted(muted) {
+  let stored;
   try {
     if (muted) window.localStorage.setItem(CHIME_MUTE_KEY, '1');
     else window.localStorage.removeItem(CHIME_MUTE_KEY);
     // Storage now holds the answer, so drop any stand-in from an earlier
     // refusal rather than letting it outrank a real write.
     mutedFallback = null;
+    stored = true;
   } catch {
     // Private mode or a full quota. Remember the choice here instead: the tray
     // renders isChimeMuted(), so without this the speaker would re-read the
     // stale stored value and look like a dead button.
     mutedFallback = muted;
+    stored = false;
   }
   announceMuteChange();
+  return stored;
 }
 
 function nowOrNull() {

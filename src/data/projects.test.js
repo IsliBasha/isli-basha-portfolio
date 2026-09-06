@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, join, relative, resolve } from 'node:path';
+import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { projects } from './projects.js';
 import { ICONS } from '../lib/pixelIcons/index.js';
 import projectIcons from '../lib/pixelIcons/projects.js';
@@ -43,6 +43,19 @@ describe('projects data', () => {
     for (const p of projects) {
       if (!p.screenshot) continue;
       expect(p.screenshot, `${p.id} screenshot path`).toBe(`/nokia/${p.id}.png`);
+    }
+  });
+
+  it('previews the WebP built from the capture, not the capture itself', () => {
+    // The captures live in assets/screenshots/ and are never served. A preview
+    // still pointing at a .jpeg or .png is a 404 in the explorer's detail pane.
+    const byId = new Map(SOURCES.map((s) => [s.id, s.file]));
+    for (const p of projects) {
+      if (!p.preview) continue;
+      const capture = byId.get(p.id);
+      expect(capture, `${p.id} has a preview but no capture`).toBeDefined();
+      const webp = `${basename(capture, extname(capture))}.webp`;
+      expect(p.preview, `${p.id} preview path`).toBe(`/${webp}`);
     }
   });
 
@@ -162,10 +175,10 @@ const PENDING_EMOJI_FILES = [];
 // Only the Nokia port itself, not any directory that happens to be called
 // nokia further down the tree.
 const NOKIA_ROOT = join(SRC_ROOT, 'nokia');
-const TEST_FILE = /(\.(test|spec)\.[jt]sx?)$/;
+const TEST_FILE = /(\.(test|spec)\.[mc]?[jt]sx?)$/;
 // Text the desktop can actually render. Reading a binary that lands under src/
 // would fail the suite with a message about emoji, which is the wrong lead.
-const READABLE = /\.(jsx?|tsx?|css|html)$/;
+const READABLE = /\.([mc]?[jt]sx?|css|html)$/;
 
 function sourceFiles(dir = SRC_ROOT) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {

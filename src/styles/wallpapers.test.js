@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { WALLPAPERS, WALLPAPER_COLOURS } from '../hooks/useDisplaySettings.js';
+import { MOBILE_QUERY } from '../nokia/useIsMobile.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const css = readFileSync(resolve(here, '..', 'index.css'), 'utf8');
@@ -82,15 +83,26 @@ describe('wallpaper variants', () => {
   });
 
   it('keeps every variant behind the breakpoint App.jsx splits on', () => {
-    // Below 769px the Nokia port is what renders; it has no Display
+    // Below the mobile line the Nokia port is what renders; it has no Display
     // Properties, so a variant rule outside this query would only ever cost a
     // phone the download.
-    const desktopOnly = mediaBlock('(min-width: 769px)');
+    const desktopOnly = mediaBlock(`not all and ${MOBILE_QUERY}`);
     for (const id of VARIANTS) {
       expect(desktopOnly).toContain(`html[data-wallpaper='${id}']`);
     }
     expect(occurrences(desktopOnly, 'win95-clouds-16.png')).toBe(1);
     expect(occurrences(css, 'win95-clouds-16.png')).toBe(1);
+  });
+
+  it('scopes the variants with the exact complement of the mobile query', () => {
+    // (min-width: 769px) is NOT the complement of (max-width: 768px). A
+    // viewport 768.5px wide matches neither — and fractional widths are
+    // ordinary the moment the OS scales the display — so the Win95 desktop
+    // would render with none of its wallpaper rules applying. `not all and`
+    // is the complement by construction, and derived from the one constant
+    // App.jsx splits on so the two cannot drift apart.
+    expect(css).toContain(`@media not all and ${MOBILE_QUERY}`);
+    expect(css).not.toMatch(/@media\s*\(min-width:\s*769px\)/);
   });
 
   it('still pins the wallpaper in the desktop breakpoint own body rule', () => {

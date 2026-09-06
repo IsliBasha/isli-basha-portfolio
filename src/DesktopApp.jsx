@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useRef, useState } from 'react';
 import { WindowStackProvider } from './context/WindowStack.jsx';
 import { Window } from './components/Window.jsx';
 import { Taskbar } from './components/Taskbar.jsx';
@@ -11,36 +11,29 @@ import { BSOD } from './components/BSOD.jsx';
 import { BootSequence } from './components/BootSequence.jsx';
 import { Screensaver } from './components/Screensaver.jsx';
 import { ContextMenu } from './components/ContextMenu.jsx';
-import { ResumeViewer } from './components/ResumeViewer.jsx';
 import { VisitorCounterContent } from './components/VisitorCounter.jsx';
 import { MyWorkExplorer } from './components/MyWorkExplorer.jsx';
-import { DisplayProperties } from './components/DisplayProperties.jsx';
 import { PixelIcon } from './components/PixelIcon.jsx';
-import { AppGlyph } from './lib/AppGlyph.jsx';
+import { ChunkBoundary } from './components/ChunkBoundary.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
 import { bio } from './data/bio.js';
+import { WINDOW_ORDER, INITIALLY_CLOSED } from './windowOrder.js';
+import { WINDOW_ICONS } from './lib/windowIcons.js';
 
-const WINDOW_ORDER = [
-  'about',
-  'stack',
-  'contact',
-  'stats',
-  'resume',
-  'minesweeper',
-  'snake',
-  'mywork',
-  'display',
-];
-const INITIALLY_CLOSED = [
-  'about',
-  'stack',
-  'contact',
-  'resume',
-  'minesweeper',
-  'snake',
-  'mywork',
-  'display',
-];
+// Split out of the first load. Both windows start closed and are opened by a
+// deliberate act — the resume icon, the desktop's right-click Properties — so
+// their code has no business in the bundle that has to paint the boot screen.
+// A <Window> renders nothing while it is closed, so the import does not fire
+// until one is actually opened; the fallback is nothing at all, because these
+// are hundredths of a second after a click, not a page navigation.
+const ResumeViewer = lazy(() =>
+  import('./components/ResumeViewer.jsx').then((m) => ({ default: m.ResumeViewer })),
+);
+const DisplayProperties = lazy(() =>
+  import('./components/DisplayProperties.jsx').then((m) => ({
+    default: m.DisplayProperties,
+  })),
+);
 
 function NotepadAbout() {
   return (
@@ -234,7 +227,15 @@ export function DesktopApp() {
         Skip to projects
       </a>
       <main className="desktop-area" onContextMenu={handleContextMenu}>
-        <div className="desktop-icons" aria-label="Desktop shortcuts">
+        {/* The skip link's destination. tabIndex={-1} because a <div> is not
+            focusable otherwise, and a skip link that moves the scroll without
+            moving focus leaves the next Tab back at the top of the page. */}
+        <div
+          id="projects"
+          tabIndex={-1}
+          className="desktop-icons"
+          aria-label="Desktop shortcuts"
+        >
           <DesktopIcon kind="about"       label="about.txt"       target="about"       defaultPos={{ x: 16, y: 16  }} />
           <DesktopIcon kind="stack"       label="cmd"             target="stack"       defaultPos={{ x: 16, y: 96  }} />
           <DesktopIcon kind="contact"     label="contact.exe"     target="contact"     defaultPos={{ x: 16, y: 176 }} />
@@ -247,7 +248,7 @@ export function DesktopApp() {
         <Window
           id="about"
           title="about.txt - Notepad"
-          icon={<AppGlyph kind="about" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.about} size={16} />}
           className="win-about"
           bootDelayMs={0}
           contentClassName="win-about__content"
@@ -258,7 +259,7 @@ export function DesktopApp() {
         <Window
           id="stack"
           title="cmd"
-          icon={<AppGlyph kind="stack" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.stack} size={16} />}
           className="win-stack"
           bootDelayMs={240}
           contentClassName="win-stack__content"
@@ -269,7 +270,7 @@ export function DesktopApp() {
         <Window
           id="contact"
           title="contact.exe"
-          icon={<AppGlyph kind="contact" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.contact} size={16} />}
           className="win-contact"
           bootDelayMs={360}
           contentClassName="win-contact__content"
@@ -280,7 +281,7 @@ export function DesktopApp() {
         <Window
           id="stats"
           title="SiteCounter.exe"
-          icon={<AppGlyph kind="stats" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.stats} size={16} />}
           className="win-stats"
           bootDelayMs={0}
           contentClassName="win-stats__content"
@@ -291,18 +292,22 @@ export function DesktopApp() {
         <Window
           id="resume"
           title="resume.pdf - Adobe Acrobat"
-          icon={<AppGlyph kind="resume" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.resume} size={16} />}
           className="win-resume"
           bootDelayMs={0}
           contentClassName="win-resume__content"
         >
-          <ResumeViewer />
+          <ChunkBoundary>
+            <Suspense fallback={null}>
+              <ResumeViewer />
+            </Suspense>
+          </ChunkBoundary>
         </Window>
 
         <Window
           id="minesweeper"
           title="minesweeper.exe"
-          icon={<AppGlyph kind="minesweeper" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.minesweeper} size={16} />}
           className="win-minesweeper"
           bootDelayMs={0}
           contentClassName="win-minesweeper__content"
@@ -313,7 +318,7 @@ export function DesktopApp() {
         <Window
           id="snake"
           title="snake.exe"
-          icon={<AppGlyph kind="snake" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.snake} size={16} />}
           className="win-snake"
           bootDelayMs={0}
           contentClassName="win-snake__content"
@@ -324,7 +329,7 @@ export function DesktopApp() {
         <Window
           id="mywork"
           title="my work"
-          icon={<AppGlyph kind="mywork" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.mywork} size={16} />}
           className="win-mywork"
           bootDelayMs={0}
           contentClassName="win-mywork__content"
@@ -333,17 +338,20 @@ export function DesktopApp() {
         </Window>
 
         {/* No desktop icon: this one is reached the way Win95 reached it, from
-            the desktop's right-click Properties. `app-window` is a stand-in --
-            the display icon lands with the rest of the system set. */}
+            the desktop's right-click Properties. */}
         <Window
           id="display"
           title="Display Properties"
-          icon={<PixelIcon id="app-window" size={16} />}
+          icon={<PixelIcon id={WINDOW_ICONS.display} size={16} />}
           className="win-display"
           bootDelayMs={0}
           contentClassName="win-display__content"
         >
-          <DisplayProperties />
+          <ChunkBoundary>
+            <Suspense fallback={null}>
+              <DisplayProperties />
+            </Suspense>
+          </ChunkBoundary>
         </Window>
       </main>
       <Taskbar />

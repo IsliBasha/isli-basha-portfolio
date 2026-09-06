@@ -382,6 +382,18 @@ describe('explorer chrome — status bar panels', () => {
     expect(panel).toMatch(/border-top-color\s*:\s*var\(--c-gray-dark\)/);
     expect(panel).toMatch(/border-bottom-color\s*:\s*#ffffff/);
   });
+
+  it('keeps the fixed second-panel width inside the explorer window', () => {
+    // contact.exe and SiteCounter.exe use the same status-bar classes with one
+    // panel each. An unscoped adjacent-sibling rule would hand the next
+    // two-panel window a 140px column sized for "1 object selected".
+    expect(css).toMatch(
+      /\.win-mywork__content\s+\.explorer-statusbar__panel\s*\+\s*\.explorer-statusbar__panel/,
+    );
+    expect(css).not.toMatch(
+      /(^|\n)\.explorer-statusbar__panel\s*\+\s*\.explorer-statusbar__panel/,
+    );
+  });
 });
 
 describe('games chrome', () => {
@@ -442,5 +454,23 @@ describe('contact chrome', () => {
     expect(label).toMatch(/font-size\s*:\s*0\.75rem/);
     expect(label).not.toMatch(/text-transform/);
     expect(label).not.toMatch(/letter-spacing/);
+  });
+});
+
+describe('custom properties', () => {
+  it('declares every token win95.css asks for', () => {
+    // A var() naming a property nobody declares does not fail loudly: the
+    // declaration is simply invalid at computed-value time and the element
+    // inherits instead. `.win95-context-menu__item` asked for --font-ui for
+    // months and quietly rendered in whatever it inherited.
+    const used = [
+      ...new Set([...css.matchAll(/var\(\s*(--[\w-]+)/g)].map((m) => m[1])),
+    ];
+    const declared = new Set(
+      [...`${css}\n${tokensCss}`.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]),
+    );
+
+    expect(used.length).toBeGreaterThan(0);
+    expect(used.filter((token) => !declared.has(token))).toEqual([]);
   });
 });
