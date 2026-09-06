@@ -1,11 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createGame, tick, turn } from './snake.js';
 
+// Hands out one pre-decided value per placeFood() call and throws once the
+// queue runs dry, so a test that spawns more food than it planned for fails
+// with that sentence rather than picking up a random cell.
 function fixedFoodRng(foodCoords) {
   const queue = [...foodCoords];
   return () => {
     const next = queue.shift();
-    if (!next) throw new Error('fixedFoodRng exhausted');
+    if (next === undefined) throw new Error('fixedFoodRng exhausted');
     return next;
   };
 }
@@ -37,6 +40,27 @@ describe('snake createGame', () => {
     );
     expect(collides).toBe(false);
   });
+
+  // Everything below this line picks the opening food cell on purpose, which
+  // only works if createGame actually spends the rng it is handed. If it ever
+  // falls back to Math.random the two calls here stop landing on the corners
+  // and every deterministic test in this file goes back to being a coin flip.
+  it('places the opening food with the injected rng, not Math.random', () => {
+    const rng = vi.fn(fixedFoodRng([0]));
+    const game = createGame({ width: 10, height: 10, rng });
+
+    expect(rng).toHaveBeenCalledTimes(1);
+    // 100 cells less the 3 the snake occupies leaves 97 free in row-major
+    // order; index 0 is the top-left corner.
+    expect(game.food).toEqual({ x: 0, y: 0 });
+    expect(game.foodRng).toBe(rng);
+  });
+
+  it('walks the whole free list, so the rng picks the cell and not the order', () => {
+    // 0.999 * 97 = 96.9 -> index 96, the last free cell: bottom-right.
+    const game = createGame({ width: 10, height: 10, rng: fixedFoodRng([0.999]) });
+    expect(game.food).toEqual({ x: 9, y: 9 });
+  });
 });
 
 describe('snake tick', () => {
@@ -47,10 +71,23 @@ describe('snake tick', () => {
     expect(next.snake[0]).toEqual({ x: prevHead.x + 1, y: prevHead.y });
   });
 
+  // The default rng put the opening food anywhere, including (6,5) — directly
+  // in front of a head that starts at (5,5) moving right. Roughly one run in a
+  // hundred the snake ate on the first tick and grew, and this failed for a
+  // reason that had nothing to do with what it is testing.
   it('keeps snake length constant when not eating', () => {
-    const game = createGame({ width: 10, height: 10 });
+    const game = createGame({
+      width: 10,
+      height: 10,
+      rng: fixedFoodRng([0]),
+    });
+    expect(game.food).toEqual({ x: 0, y: 0 });
+
     const next = tick(game);
+
+    expect(next.snake[0]).toEqual({ x: 6, y: 5 });
     expect(next.snake).toHaveLength(game.snake.length);
+    expect(next.score).toBe(0);
   });
 
   it('grows the snake and increments score when eating food', () => {

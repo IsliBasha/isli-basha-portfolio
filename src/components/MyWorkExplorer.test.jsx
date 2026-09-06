@@ -112,3 +112,234 @@ describe('MyWorkExplorer icons', () => {
     expect(container.querySelectorAll('.explorer-tile-icon')).toHaveLength(webProjects.length);
   });
 });
+
+describe('MyWorkExplorer selection', () => {
+  function tiles(container) {
+    return [...container.querySelectorAll('.explorer-tile')];
+  }
+
+  it('marks exactly one tile selected, and it is the one showing in the detail pane', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const selected = tiles(container).filter(
+      (tile) => tile.dataset.selected === 'true',
+    );
+
+    expect(selected).toHaveLength(1);
+    expect(selected[0].textContent).toContain(projects[0].name);
+    expect(selected[0]).toHaveAttribute('aria-current', 'true');
+  });
+
+  // The whole tile used to fill with titlebar navy, which put a second block
+  // of the one colour reserved for the active window behind a 32px icon.
+  it('paints the label and leaves the icon and the tile box unpainted', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const [selected] = tiles(container).filter((t) => t.dataset.selected === 'true');
+
+    expect(selected.querySelector('.explorer-tile__label')).not.toBeNull();
+    expect(selected.getAttribute('style')).toBeNull();
+    expect(selected.querySelector('.explorer-tile-icon').getAttribute('style')).toBeNull();
+  });
+
+  it('moves the selection to the tile that was clicked', async () => {
+    const user = userEvent.setup();
+    const { container } = render(<MyWorkExplorer />);
+    const third = tiles(container)[2];
+
+    await user.click(third);
+
+    expect(third.dataset.selected).toBe('true');
+    expect(
+      tiles(container).filter((tile) => tile.dataset.selected === 'true'),
+    ).toHaveLength(1);
+  });
+});
+
+describe('MyWorkExplorer detail pane', () => {
+  /**
+   * "Company →" in the data reads "Company" on the button. Same strip the
+   * component does: taking the first word instead would agree with it only for
+   * as long as every link label stays one word.
+   */
+  function destinationOf(project) {
+    return project.link.label.replace(/\s*→\s*$/u, '');
+  }
+
+  it('opens the project link through a plain chrome button, not a filled pill', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const link = container.querySelector('.explorer-open-btn');
+
+    expect(link.tagName.toLowerCase()).toBe('a');
+    expect(link).toHaveClass('win-btn');
+    // The blue fill was applied inline; a leftover style attribute would put
+    // it straight back regardless of what the stylesheet says.
+    expect(link.getAttribute('style')).toBeNull();
+    expect(link).toHaveAttribute('href', projects[0].link.href);
+  });
+
+  // "Open" said nothing about where it opened. The label the data carries does
+  // — minus the trailing arrow, which is a desktop affordance the button has no
+  // use for.
+  it('names the destination on the button', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const link = container.querySelector('.explorer-open-btn');
+
+    expect(link.textContent).toBe(destinationOf(projects[0]));
+    expect(link.textContent).not.toContain('→');
+  });
+
+  it('follows the selection to a project that goes somewhere else', async () => {
+    const user = userEvent.setup();
+    const repo = projects.find((p) => p.link?.label.startsWith('GitHub'));
+    const { container } = render(<MyWorkExplorer />);
+
+    const tile = [...container.querySelectorAll('.explorer-tile')].find((t) =>
+      t.textContent.includes(repo.name),
+    );
+    await user.click(tile);
+
+    expect(container.querySelector('.explorer-open-btn').textContent).toBe('GitHub');
+  });
+
+  it('pairs the destination with the project name in the accessible name', () => {
+    const { container } = render(<MyWorkExplorer />);
+    expect(container.querySelector('.explorer-open-btn')).toHaveAttribute(
+      'aria-label',
+      `${destinationOf(projects[0])} — ${projects[0].name}`,
+    );
+  });
+
+  it('opens in a new tab without handing over the referrer', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const link = container.querySelector('.explorer-open-btn');
+
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link.getAttribute('rel').split(/\s+/).sort()).toEqual([
+      'noopener',
+      'noreferrer',
+    ]);
+  });
+
+  it('keeps the sunken note, not a button, for a project with no link', async () => {
+    const user = userEvent.setup();
+    const linkless = projects.find((p) => p.link === null);
+    const { container } = render(<MyWorkExplorer />);
+
+    const tile = [...container.querySelectorAll('.explorer-tile')].find((t) =>
+      t.textContent.includes(linkless.name),
+    );
+    await user.click(tile);
+
+    expect(container.querySelector('.explorer-open-btn')).toBeNull();
+    expect(screen.getByText(linkless.privateNote)).toBeInTheDocument();
+  });
+});
+
+describe('MyWorkExplorer status bar', () => {
+  function panels(container) {
+    return [...container.querySelectorAll('.explorer-statusbar__panel')];
+  }
+
+  it('splits the status bar into two sunken panels', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const [count, selection] = panels(container);
+
+    expect(panels(container)).toHaveLength(2);
+    expect(count).toHaveTextContent(`${projects.length} objects`);
+    expect(selection).toHaveTextContent('1 object selected');
+  });
+
+  it('reports the match count while a search is running', async () => {
+    const user = userEvent.setup();
+    const { container } = render(<MyWorkExplorer />);
+
+    await user.type(screen.getByLabelText(/search projects/i), projects[0].name);
+
+    expect(panels(container)[0]).toHaveTextContent(`matching '${projects[0].name}'`);
+  });
+
+  // The second panel stays in the DOM with nothing in it: a panel that
+  // disappears lets the first one jump wider the moment a search misses.
+  it('keeps the second panel present and empty when nothing is selected', async () => {
+    const user = userEvent.setup();
+    const { container } = render(<MyWorkExplorer />);
+
+    await user.type(screen.getByLabelText(/search projects/i), 'zzzznothing');
+
+    expect(panels(container)).toHaveLength(2);
+    expect(panels(container)[0]).toHaveTextContent("0 objects matching 'zzzznothing'");
+    expect(panels(container)[1].textContent).toBe('');
+  });
+});
+
+describe('MyWorkExplorer sidebar', () => {
+  function rows(container) {
+    return [...container.querySelectorAll('.explorer-folder-item')];
+  }
+
+  it('marks exactly one category active, from the stylesheet and not inline', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const active = rows(container).filter((r) => r.dataset.selected === 'true');
+
+    expect(rows(container)).toHaveLength(CATEGORIES.length);
+    expect(active).toHaveLength(1);
+    expect(active[0]).toHaveTextContent(CATEGORIES[0].label);
+    for (const row of rows(container)) {
+      expect(row.getAttribute('style')).toBeNull();
+    }
+  });
+
+  // The row used to fill navy edge to edge, which painted the 16px folder icon
+  // into the one colour reserved for the active window — the same thing the
+  // tiles were doing. Only the name is in the painted span now.
+  it('wraps the category name in the span the highlight paints, icon outside it', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const [active] = rows(container).filter((r) => r.dataset.selected === 'true');
+    const label = active.querySelector('.explorer-folder-item__label');
+
+    expect(label.textContent).toBe(CATEGORIES[0].label);
+    expect(label.querySelector('svg')).toBeNull();
+    expect(active.querySelector('.explorer-folder-icon')).not.toBeNull();
+  });
+
+  it('moves the highlight to the category that was clicked', async () => {
+    const user = userEvent.setup();
+    const { container } = render(<MyWorkExplorer />);
+
+    await user.click(categoryButton('Web'));
+
+    const active = rows(container).filter((r) => r.dataset.selected === 'true');
+    expect(active).toHaveLength(1);
+    expect(active[0]).toHaveTextContent('Web');
+  });
+});
+
+describe('MyWorkExplorer grid', () => {
+  // The 25 tiles are taller than the window at every size it opens at. The
+  // grid is a grid item, so without room to shrink it sized itself to its
+  // content and .explorer-body simply cut the last row off — no scrollbar,
+  // no clue that six projects were missing.
+  it('renders every project in a scrollable grid, last row included', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const grid = container.querySelector('.explorer-tile-grid');
+
+    expect(grid).not.toBeNull();
+    expect(grid.querySelectorAll('.explorer-tile')).toHaveLength(projects.length);
+    expect(grid.lastElementChild.textContent).toContain(
+      projects[projects.length - 1].name,
+    );
+  });
+
+  // The detail pane under the grid is a fixed 140px. On a window dragged down
+  // to the 220x140 resize floor the pane took the last of the height and left
+  // the grid at 0px, so the file list showed no files at all.
+  it('floors the grid at a full tile row so it never collapses to nothing', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const body = container.querySelector('.explorer-tile-grid').parentElement;
+
+    // A tile is a 32px icon over up to three lines of 0.65rem label: 91px at
+    // its tallest, and the grid adds 8px of padding above and below it. At 91
+    // the floor was the tile without its padding, so the row it guarantees was
+    // 16px short of a whole one.
+    expect(Number.parseInt(body.style.minHeight, 10)).toBeGreaterThanOrEqual(107);
+  });
+});

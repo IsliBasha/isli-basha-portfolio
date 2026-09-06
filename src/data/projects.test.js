@@ -155,11 +155,9 @@ const EMOJI = /\p{Extended_Pictographic}/u;
 // Files that still hold a pictographic character, each waiting on the order
 // that owns it. The list must shrink and never grow: the assertion is exact
 // equality, so clearing the last emoji out of one of these files fails this
-// test until its entry is deleted too.
-const PENDING_EMOJI_FILES = [
-  // The Minesweeper smiley button — games-icon order.
-  'components/Minesweeper.jsx',
-];
+// test until its entry is deleted too. Empty since the Minesweeper faces, flag
+// and mine became pixel icons — nothing in the desktop is a font glyph now.
+const PENDING_EMOJI_FILES = [];
 
 // Only the Nokia port itself, not any directory that happens to be called
 // nokia further down the tree.

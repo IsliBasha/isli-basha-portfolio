@@ -5,10 +5,21 @@ import {
   toggleFlag,
   countFlags,
 } from '../lib/minesweeper.js';
+import { PixelIcon } from './PixelIcon.jsx';
+import { SevenSegment } from './SevenSegment.jsx';
+import { SystemDialog } from './SystemDialog.jsx';
 
 const ROWS = 9;
 const COLS = 9;
 const MINES = 10;
+
+// Win95's counters were three digits and stopped there; the timer wrapped at
+// 999 rather than growing the display.
+const COUNTER_DIGITS = 3;
+const MAX_SECONDS = 999;
+
+const HELP_TEXT =
+  'Minesweeper — sys95 edition. Left-click to reveal, right-click to flag.';
 
 const NUMBER_COLORS = {
   1: '#0000ff',
@@ -21,9 +32,11 @@ const NUMBER_COLORS = {
   8: '#808080',
 };
 
-function pad3(n) {
-  return String(Math.max(0, Math.min(999, n))).padStart(3, '0');
-}
+const FACE_FOR_STATUS = {
+  playing: 'face-idle',
+  won: 'face-win',
+  lost: 'face-dead',
+};
 
 function CellView({ cell, status, onReveal, onToggleFlag }) {
   const disabled = status !== 'playing';
@@ -46,17 +59,16 @@ function CellView({ cell, status, onReveal, onToggleFlag }) {
   if (cell.isRevealed) classes.push('ms-cell--revealed');
   if (cell.isRevealed && cell.isMine) classes.push('ms-cell--mine');
 
-  let content = '';
+  let content = null;
   let colorStyle;
   if (cell.isRevealed) {
-    if (cell.isMine) content = '✺';
+    if (cell.isMine) content = <PixelIcon id="ms-mine" size={16} />;
     else if (cell.adjacent > 0) {
       content = String(cell.adjacent);
       colorStyle = { color: NUMBER_COLORS[cell.adjacent] };
     }
   } else if (cell.isFlagged) {
-    content = '⚑';
-    colorStyle = { color: '#cc1616' };
+    content = <PixelIcon id="ms-flag" size={16} />;
   }
 
   return (
@@ -82,6 +94,8 @@ export function Minesweeper() {
   );
   const [status, setStatus] = useState('playing');
   const [seconds, setSeconds] = useState(0);
+  const [pressing, setPressing] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const startedRef = useRef(false);
   const timerRef = useRef(null);
 
@@ -100,10 +114,19 @@ export function Minesweeper() {
     if (status !== 'playing') stopTimer();
   }, [status, stopTimer]);
 
+  // A press that ends outside the board still ends: without this the face
+  // would stay in its "oh" state until the next click anywhere on the grid.
+  useEffect(() => {
+    if (!pressing) return undefined;
+    const release = () => setPressing(false);
+    window.addEventListener('mouseup', release);
+    return () => window.removeEventListener('mouseup', release);
+  }, [pressing]);
+
   const startTimer = useCallback(() => {
     if (timerRef.current !== null) return;
     timerRef.current = setInterval(() => {
-      setSeconds((s) => Math.min(999, s + 1));
+      setSeconds((s) => Math.min(MAX_SECONDS, s + 1));
     }, 1000);
   }, []);
 
@@ -140,69 +163,113 @@ export function Minesweeper() {
     setBoard((prev) => toggleFlag(prev, row, col));
   }, []);
 
+  const closeHelp = useCallback(() => setHelpOpen(false), []);
+
   const handleReset = useCallback(() => {
     stopTimer();
     startedRef.current = false;
+    setPressing(false);
     setBoard(createBoard({ rows: ROWS, cols: COLS, mines: MINES }));
     setStatus('playing');
     setSeconds(0);
   }, [stopTimer]);
 
   const flagged = useMemo(() => countFlags(board), [board]);
-  const remaining = Math.max(0, MINES - flagged);
+  // Over-flagging shows a negative count rather than sticking at 000: the
+  // readout is the only feedback that says how many flags are unaccounted for,
+  // and clamping it made an over-flagged board look like a solved one.
+  const remaining = MINES - flagged;
 
-  let face = '🙂';
-  if (status === 'won') face = '😎';
-  if (status === 'lost') face = '😵';
+  const face =
+    status === 'playing' && pressing
+      ? 'face-o'
+      : FACE_FOR_STATUS[status] ?? 'face-idle';
 
   return (
     <div className="ms-root">
-      <div className="ms-statusbar win-bevel-in">
-        <span className="ms-counter" aria-label="Mines remaining">
-          {pad3(remaining)}
-        </span>
+      <div className="explorer-menubar" role="menubar">
         <button
           type="button"
-          className="ms-face"
-          aria-label="New game"
-          title="New game"
+          className="explorer-menu-item"
+          role="menuitem"
           onClick={handleReset}
         >
-          {face}
+          Game
         </button>
-        <span className="ms-counter" aria-label="Timer">
-          {pad3(seconds)}
-        </span>
+        <button
+          type="button"
+          className="explorer-menu-item"
+          role="menuitem"
+          onClick={() => setHelpOpen(true)}
+        >
+          Help
+        </button>
       </div>
-      <div
-        role="grid"
-        aria-label="Minesweeper board"
-        className="ms-board win-bevel-in"
-      >
-        {board.map((row) => (
-          <div className="ms-row" role="row" key={row[0].row}>
-            {row.map((cell) => (
-              <CellView
-                key={`${cell.row}-${cell.col}`}
-                cell={cell}
-                status={status}
-                onReveal={handleReveal}
-                onToggleFlag={handleToggleFlag}
-              />
-            ))}
-          </div>
-        ))}
+      <div className="ms-body">
+        <div className="ms-statusbar win-bevel-in">
+          <span className="ms-counter" role="group" aria-label="Mines remaining">
+            <SevenSegment value={remaining} digits={COUNTER_DIGITS} />
+          </span>
+          <button
+            type="button"
+            className="ms-face"
+            aria-label="New game"
+            title="New game"
+            onClick={handleReset}
+          >
+            <PixelIcon id={face} size={24} />
+          </button>
+          <span className="ms-counter" role="group" aria-label="Timer">
+            <SevenSegment value={seconds} digits={COUNTER_DIGITS} />
+          </span>
+        </div>
+        <div
+          role="grid"
+          aria-label="Minesweeper board"
+          className="ms-board win-bevel-in"
+          onMouseDown={(e) => {
+            // Left button only: a right press plants a flag, which the face has
+            // no opinion about.
+            if (e.button === 0 && status === 'playing') setPressing(true);
+          }}
+          onMouseUp={() => setPressing(false)}
+          onMouseLeave={() => setPressing(false)}
+          // The native menu swallows the mouseup that would end the press, so
+          // without this a right-click on the board's padding or on a gap
+          // between cells leaves the face stuck in its "oh" state.
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          {board.map((row) => (
+            <div className="ms-row" role="row" key={row[0].row}>
+              {row.map((cell) => (
+                <CellView
+                  key={`${cell.row}-${cell.col}`}
+                  cell={cell}
+                  status={status}
+                  onReveal={handleReveal}
+                  onToggleFlag={handleToggleFlag}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+        {status === 'lost' && (
+          <p className="ms-message" role="status">
+            Boom! Click the face to try again.
+          </p>
+        )}
+        {status === 'won' && (
+          <p className="ms-message ms-message--win" role="status">
+            Cleared! Nice work.
+          </p>
+        )}
       </div>
-      {status === 'lost' && (
-        <p className="ms-message" role="status">
-          Boom! Click the face to try again.
-        </p>
-      )}
-      {status === 'won' && (
-        <p className="ms-message ms-message--win" role="status">
-          Cleared! Nice work.
-        </p>
-      )}
+      <SystemDialog
+        open={helpOpen}
+        title="Minesweeper"
+        message={HELP_TEXT}
+        onClose={closeHelp}
+      />
     </div>
   );
 }
