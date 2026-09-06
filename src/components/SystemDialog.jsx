@@ -16,8 +16,29 @@ function InfoGlyph() {
   );
 }
 
-export function SystemDialog({ open, title = 'Message', message, onClose }) {
+export function SystemDialog({
+  open,
+  title = 'Message',
+  message,
+  onClose = () => {},
+}) {
   const btnRef = useRef(null);
+
+  // The current onClose, reachable from the focus effect below without being a
+  // dependency of it. Keyed on the callback, that effect re-ran on every parent
+  // render that passed a fresh closure — Minesweeper re-renders once a second
+  // while its clock runs — and every re-run went through the cleanup, which
+  // hands focus back to whatever held it before the dialog opened. Focus left
+  // the OK button and came back once a second. Holding the callback in a ref
+  // means no caller can re-arm that by passing an inline arrow.
+  //
+  // Synced in an effect rather than written during render: a ref write in the
+  // render body is what react-hooks/refs exists to stop, and nothing reads
+  // .current until a keydown, which is long after this has run.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) return undefined;
@@ -26,7 +47,7 @@ export function SystemDialog({ open, title = 'Message', message, onClose }) {
     const onKey = (e) => {
       if (e.key === 'Escape' || e.key === 'Enter') {
         e.preventDefault();
-        onClose();
+        onCloseRef.current();
       }
       if (e.key === 'Tab') {
         // Trap focus on the single OK button
@@ -37,9 +58,16 @@ export function SystemDialog({ open, title = 'Message', message, onClose }) {
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('keydown', onKey);
-      if (prev && typeof prev.focus === 'function') prev.focus();
+      // A detached node keeps its .focus method, so the old typeof check
+      // passed and the call moved nothing — focus fell to <body>. Reached
+      // whenever the trigger goes with the dialog: ContextMenu tears down
+      // its menu in the same commit, and closing a Minesweeper window
+      // takes its Help item along. Nothing left in the tree here is a
+      // sensible anchor — the dialog is unmounting too — so an unreachable
+      // trigger simply gets no handover.
+      if (prev?.isConnected) prev.focus();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 

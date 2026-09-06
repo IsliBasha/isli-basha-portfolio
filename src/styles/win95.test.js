@@ -265,3 +265,182 @@ describe('chrome foundation — desktop icon selection', () => {
     expect(label).toMatch(/white-space\s*:\s*normal/);
   });
 });
+
+describe('explorer chrome — grid scrolling', () => {
+  // The 25 project tiles are taller than the window at every size it opens at.
+  // .explorer-tile-grid is a grid item inside the two-column body, and a grid
+  // item's default `min-height: auto` sizes it to its content, so `overflow-y`
+  // never engaged and the parent clipped the last row instead. Both
+  // declarations are load-bearing; either one alone brings the clipping back.
+  it('lets the tile grid shrink so it can scroll instead of being clipped', () => {
+    const grid = topLevelRuleBody('.explorer-tile-grid');
+    expect(grid).toMatch(/overflow-y\s*:\s*auto/);
+    expect(grid).toMatch(/min-height\s*:\s*0/);
+  });
+
+  // Below the window's resize floor the explorer asks for more height than the
+  // client area has. Clipping there hid the bottom of the window with no clue
+  // it was there; scrolling puts it a drag away.
+  it('scrolls the explorer window content rather than clipping it', () => {
+    const content = declarationBlockFor('.win95-window__content.win-mywork__content');
+    expect(content).toMatch(/overflow\s*:\s*auto/);
+  });
+
+  it('keeps the detail pane at a fixed height so the grid absorbs the resize', () => {
+    // The pane is inline-styled in MyWorkExplorer.jsx; what the stylesheet
+    // must not do is give the grid a fixed height that would fight it.
+    const grid = topLevelRuleBody('.explorer-tile-grid');
+    expect(grid).not.toMatch(/(^|[^-])height\s*:/);
+  });
+});
+
+describe('explorer chrome — tile selection', () => {
+  const SELECTED_LABEL = ".explorer-tile[data-selected='true'] .explorer-tile__label";
+  const FOCUSED_LABEL = '.explorer-tile:focus-visible .explorer-tile__label';
+  const SELECTED_AND_FOCUSED_LABEL =
+    ".explorer-tile[data-selected='true']:focus-visible .explorer-tile__label";
+
+  it('highlights the tile label, not the whole tile', () => {
+    const tile = topLevelRuleBody('.explorer-tile');
+    expect(tile).toMatch(/background\s*:\s*transparent/);
+    expect(tile).not.toMatch(/--c-title-from|#000080/);
+
+    const highlight = declarationBlockFor(SELECTED_LABEL);
+    expect(highlight).toMatch(/background\s*:\s*var\(--c-title-from\)/);
+    expect(highlight).toMatch(/color\s*:\s*#ffffff/);
+  });
+
+  // Selection and focus used to share one declaration block, so a tile the
+  // keyboard had merely landed on looked exactly like the tile whose project
+  // was in the detail pane. The fill means selected; the marquee means the
+  // keyboard is here.
+  it('marks focus with a marquee that repaints nothing', () => {
+    expect(declarationBlockFor(SELECTED_LABEL)).not.toMatch(/outline/);
+
+    const focus = declarationBlockFor(FOCUSED_LABEL);
+    expect(focus).toMatch(/outline\s*:\s*1px dotted var\(--c-text\)/);
+    expect(focus).toMatch(/outline-offset\s*:\s*1px/);
+    expect(focus).not.toMatch(/background|color\s*:/);
+  });
+
+  // At +1px on a selected tile the marquee would sit on the grid's near-white
+  // background, where white is invisible, so it moves inside the navy.
+  it('turns the marquee white inside the fill when both states are on', () => {
+    const both = declarationBlockFor(SELECTED_AND_FOCUSED_LABEL);
+    expect(both).toMatch(/outline-color\s*:\s*#ffffff/);
+    expect(both).toMatch(/outline-offset\s*:\s*-1px/);
+  });
+
+  it('leaves the tile box itself without a second focus ring', () => {
+    expect(topLevelRuleBody('.explorer-tile:focus-visible')).toMatch(
+      /outline\s*:\s*none/,
+    );
+  });
+});
+
+describe('explorer chrome — sidebar rows', () => {
+  it('paints the category name and leaves the row and its icon alone', () => {
+    const row = topLevelRuleBody('.explorer-folder-item');
+    expect(row).toMatch(/background\s*:\s*transparent/);
+    expect(row).not.toMatch(/--c-title-from|#000080/);
+
+    const highlight = declarationBlockFor(
+      ".explorer-folder-item[data-selected='true'] .explorer-folder-item__label",
+    );
+    expect(highlight).toMatch(/background\s*:\s*var\(--c-title-from\)/);
+    expect(highlight).toMatch(/color\s*:\s*#ffffff/);
+  });
+
+  // The tiles' split again: fold these two rules into one and a row the
+  // keyboard has merely reached wears the fill of the row that is open.
+  it('gives a focused row the same marquee as a focused tile', () => {
+    expect(
+      declarationBlockFor(
+        ".explorer-folder-item[data-selected='true'] .explorer-folder-item__label",
+      ),
+    ).not.toMatch(/outline/);
+
+    const focus = declarationBlockFor(
+      '.explorer-folder-item:focus-visible .explorer-folder-item__label',
+    );
+    expect(focus).toMatch(/outline\s*:\s*1px dotted var\(--c-text\)/);
+
+    const both = declarationBlockFor(
+      ".explorer-folder-item[data-selected='true']:focus-visible .explorer-folder-item__label",
+    );
+    expect(both).toMatch(/outline-color\s*:\s*#ffffff/);
+  });
+});
+
+describe('explorer chrome — status bar panels', () => {
+  it('draws the status bar as sunken panels in the muted text colour', () => {
+    const bar = topLevelRuleBody('.explorer-statusbar');
+    expect(bar).toMatch(/display\s*:\s*flex/);
+    expect(bar).toMatch(/color\s*:\s*var\(--c-text-muted\)/);
+
+    const panel = topLevelRuleBody('.explorer-statusbar__panel');
+    expect(panel).toMatch(/border-top-color\s*:\s*var\(--c-gray-dark\)/);
+    expect(panel).toMatch(/border-bottom-color\s*:\s*#ffffff/);
+  });
+});
+
+describe('games chrome', () => {
+  // The counters are SVG now. A leftover font-family would silently win over
+  // nothing and reintroduce a third type family for six numerals.
+  it('names no seven-segment webfont anywhere in the stylesheet', () => {
+    expect(css).not.toMatch(/DSEG7|Share Tech Mono/);
+  });
+
+  it('positions the counter so its off-screen text stays inside the display', () => {
+    // .seven-seg__value is position: absolute. Without a positioned ancestor it
+    // resolves against the page, and a 1px clipped box parked at the document
+    // origin is a scrollbar waiting to happen.
+    expect(topLevelRuleBody('.seven-seg')).toMatch(/position\s*:\s*relative/);
+    expect(topLevelRuleBody('.seven-seg__value')).toMatch(/position\s*:\s*absolute/);
+  });
+
+  it('leaves the snake food square and the head unglowed', () => {
+    const food = topLevelRuleBody('.snake-cell--food');
+    expect(food).not.toMatch(/border-radius/);
+
+    const head = topLevelRuleBody('.snake-cell--head');
+    expect(head).not.toMatch(/box-shadow/);
+  });
+});
+
+describe('pdf viewer chrome', () => {
+  it('paints the download link accent blue rather than titlebar navy', () => {
+    expect(topLevelRuleBody('.pdf-download-link')).toMatch(
+      /color\s*:\s*var\(--c-accent\)/,
+    );
+  });
+
+  // --c-title-from is the active titlebar fill. Used as a text colour it reads
+  // as a near-black that happens to be blue, and it competes with the one
+  // window that is supposed to be wearing it.
+  it('never paints text with the titlebar fill', () => {
+    expect(css).not.toMatch(
+      /(^|\n)\s*color:\s*(var\(--c-title-from\)|#000080\b)/i,
+    );
+  });
+});
+
+describe('contact chrome', () => {
+  it('lines the contact labels and values up on two grid tracks', () => {
+    const links = topLevelRuleBody('.contact-links');
+    expect(links).toMatch(/display\s*:\s*grid/);
+    expect(links).toMatch(/grid-template-columns\s*:\s*max-content 1fr/);
+
+    const label = topLevelRuleBody('.contact-links__label');
+    expect(label).not.toMatch(/width\s*:\s*72px/);
+  });
+
+  it('sets the message label as a field label, not a section heading', () => {
+    const label = topLevelRuleBody('.contact-form__label');
+    expect(label).toMatch(/font-family\s*:\s*var\(--font-mono\)/);
+    expect(label).toMatch(/font-weight\s*:\s*700/);
+    expect(label).toMatch(/font-size\s*:\s*0\.75rem/);
+    expect(label).not.toMatch(/text-transform/);
+    expect(label).not.toMatch(/letter-spacing/);
+  });
+});

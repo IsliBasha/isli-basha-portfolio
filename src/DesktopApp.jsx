@@ -91,27 +91,29 @@ function ContactExe() {
         ))}
       </div>
       <div className="contact-body">
-        <ul className="contact-links">
-          <li>
-            <span className="contact-links__label">Email:</span>
+        <dl className="contact-links">
+          <dt className="contact-links__label">Email:</dt>
+          <dd className="contact-links__value">
             <a href="mailto:islibasha1@gmail.com">islibasha1@gmail.com</a>
-          </li>
-          <li>
-            <span className="contact-links__label">GitHub:</span>
+          </dd>
+          <dt className="contact-links__label">GitHub:</dt>
+          <dd className="contact-links__value">
             <a href="https://github.com/IsliBasha" target="_blank" rel="noreferrer noopener">
               github.com/IsliBasha
             </a>
-          </li>
-          <li>
-            <span className="contact-links__label">LinkedIn:</span>
+          </dd>
+          <dt className="contact-links__label">LinkedIn:</dt>
+          <dd className="contact-links__value">
             <a href="https://linkedin.com/in/islibasha" target="_blank" rel="noreferrer noopener">
               linkedin.com/in/islibasha
             </a>
-          </li>
-        </ul>
+          </dd>
+        </dl>
         <ContactForm />
       </div>
-      <div className="explorer-statusbar">Ready</div>
+      <div className="explorer-statusbar">
+        <span className="explorer-statusbar__panel">Ready</span>
+      </div>
     </>
   );
 }
@@ -161,7 +163,7 @@ function ContactForm() {
     <>
       <form onSubmit={handleSubmit} className="contact-form">
         <label htmlFor="contact-msg" className="contact-form__label">
-          Quick Message
+          Message:
         </label>
         <textarea
           ref={textareaRef}

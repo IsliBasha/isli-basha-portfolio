@@ -41,7 +41,14 @@ export function VisitorCounterContent() {
         </div>
       </button>
 
-      <div className="explorer-statusbar">Online</div>
+      <div className="explorer-statusbar">
+        {/* The panel used to read Online while the display above it still
+            showed ---,--- because no count had arrived. It reports the same
+            thing the numerals do now. */}
+        <span className="explorer-statusbar__panel">
+          {count == null ? 'Offline' : 'Online'}
+        </span>
+      </div>
 
       <SystemDialog
         open={dialog}
