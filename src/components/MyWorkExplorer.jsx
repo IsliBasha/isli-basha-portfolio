@@ -229,6 +229,7 @@ export function MyWorkExplorer() {
                 type="button"
                 className="explorer-folder-item"
                 data-selected={isSelected ? 'true' : 'false'}
+                aria-current={isSelected ? 'true' : undefined}
                 onClick={() => handleFilter(cat.id)}
               >
                 <PixelIcon

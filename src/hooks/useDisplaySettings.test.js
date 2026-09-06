@@ -4,22 +4,21 @@ import {
   useDisplaySettings,
   applyStoredWallpaper,
   applyWallpaper,
-  readChimeMuted,
   readStoredSettings,
-  writeChimeMuted,
   DEFAULT_SETTINGS,
   WALLPAPERS,
   WALLPAPER_COLOURS,
 } from './useDisplaySettings.js';
+// The sheet's checkbox and the taskbar tray's speaker are the same control.
+// These are the tray's half of it, imported here to drive it from outside.
+import {
+  isChimeMuted,
+  setChimeMuted,
+  playBootChime,
+} from '../lib/bootChime.js';
 
 const STORAGE_KEY = 'isli-display';
 const CHIME_MUTED_KEY = 'isli-chime-muted';
-
-// TODO(order-07): assert playBootChime() resolves false after
-// writeChimeMuted(true). The mute is only half a feature until something
-// reads it, and the reader is src/lib/bootChime.js, which order 04 owns and
-// this branch must not touch — asserting it here would mean writing a fake
-// reader and proving nothing about the real one.
 
 const stored = () => JSON.parse(window.localStorage.getItem(STORAGE_KEY));
 const wallpaperAttr = () => document.documentElement.dataset.wallpaper;
@@ -27,6 +26,10 @@ const wallpaperAttr = () => document.documentElement.dataset.wallpaper;
 beforeEach(() => {
   window.localStorage.clear();
   document.documentElement.removeAttribute('data-wallpaper');
+  // bootChime keeps a session copy of the preference when a write is refused.
+  // A successful write clears it, so this also resets what a storage-failure
+  // test left behind for the next one.
+  setChimeMuted(false);
 });
 
 afterEach(() => {
@@ -99,27 +102,13 @@ describe('reading stored display settings', () => {
 });
 
 describe('the boot chime mute', () => {
-  it('is off when the key is absent and on when it holds 1', () => {
-    expect(readChimeMuted()).toBe(false);
-    window.localStorage.setItem(CHIME_MUTED_KEY, '1');
-    expect(readChimeMuted()).toBe(true);
-  });
+  it('reads the one store the tray writes, not a second copy of it', () => {
+    expect(readStoredSettings().chime).toBe(true);
 
-  it('unmutes by taking the key away, not by writing a second falsy spelling', () => {
-    writeChimeMuted(true);
+    setChimeMuted(true);
+
     expect(window.localStorage.getItem(CHIME_MUTED_KEY)).toBe('1');
-
-    writeChimeMuted(false);
-    expect(window.localStorage.getItem(CHIME_MUTED_KEY)).toBeNull();
-  });
-
-  it('reports failure rather than throwing when storage refuses', () => {
-    vi.spyOn(console, 'warn').mockImplementation(() => {});
-    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-      throw new DOMException('QuotaExceededError');
-    });
-
-    expect(writeChimeMuted(true)).toBe(false);
+    expect(readStoredSettings().chime).toBe(false);
   });
 
   it('answers "plays" when storage refuses to be read at all', () => {
@@ -127,8 +116,48 @@ describe('the boot chime mute', () => {
       throw new DOMException('The operation is insecure.', 'SecurityError');
     });
 
-    expect(readChimeMuted()).toBe(false);
     expect(readStoredSettings().chime).toBe(true);
+  });
+
+  // The mute was only half a feature until something read it. The reader is
+  // playBootChime, so assert against the real one rather than a stand-in.
+  it('actually silences the chime the boot sequence plays', async () => {
+    const { result } = renderHook(() => useDisplaySettings());
+
+    act(() => {
+      result.current.apply({ chime: false });
+    });
+
+    await expect(playBootChime()).resolves.toBe(false);
+  });
+
+  it('shows a mute the tray sets while the sheet is open, with no other render', () => {
+    const { result } = renderHook(() => useDisplaySettings());
+    expect(result.current.settings.chime).toBe(true);
+
+    // The taskbar tray's speaker, clicked with this sheet already on screen.
+    // Nothing else touches the sheet: if the two kept separate readers, the
+    // checkbox would still say the chime plays.
+    act(() => setChimeMuted(true));
+
+    expect(result.current.settings.chime).toBe(false);
+  });
+
+  it('moves the tray when the sheet is the one that saves', () => {
+    const { result } = renderHook(() => useDisplaySettings());
+
+    act(() => {
+      result.current.apply({ chime: false });
+    });
+
+    // isChimeMuted is the tray's own snapshot.
+    expect(isChimeMuted()).toBe(true);
+
+    act(() => {
+      result.current.apply({ chime: true });
+    });
+
+    expect(isChimeMuted()).toBe(false);
   });
 });
 
@@ -316,6 +345,38 @@ describe('useDisplaySettings', () => {
     // The choice still applies to this session; it just will not survive a reload.
     expect(result.current.settings.wallpaper).toBe('teal');
     expect(wallpaperAttr()).toBe('teal');
+  });
+
+  it('keeps the boolean setChimeMuted hands back when only the chime is refused', () => {
+    // MUTATION CHECK: report success from setChimeMuted's catch --
+    //   catch { mutedFallback = muted; stored = false; }  ->  stored = true
+    // -- and this fails. The test above cannot catch it: it breaks every
+    // write, so the wallpaper alone already makes apply() answer false and the
+    // chime's answer is never read. Here the wallpaper write goes through, so
+    // the false can only have come from the chime.
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const realSetItem = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (key, value) {
+      if (key === CHIME_MUTED_KEY) throw new DOMException('QuotaExceededError');
+      return realSetItem.call(this, key, value);
+    });
+    const { result } = renderHook(() => useDisplaySettings());
+
+    let saved;
+    act(() => {
+      saved = result.current.apply({ chime: false });
+    });
+
+    expect(saved).toBe(false);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('storage refused the boot sound setting'),
+    );
+    expect(stored()).toEqual({ wallpaper: 'clouds' });
+    // The visitor still gets the silence they asked for this session: the tray
+    // and this sheet both read isChimeMuted(), which prefers the session copy
+    // setChimeMuted keeps when a write is refused.
+    expect(isChimeMuted()).toBe(true);
+    expect(result.current.settings.chime).toBe(false);
   });
 
   it('offers exactly the four wallpapers the stylesheet has rules for', () => {

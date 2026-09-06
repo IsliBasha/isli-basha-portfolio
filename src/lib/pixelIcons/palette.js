@@ -9,7 +9,10 @@
 // what lets an icon sit on the explorer's white grid and on its navy
 // selection highlight without carrying a background of its own.
 
-export const PALETTE = {
+// Frozen because `const` only pins the binding: every icon is coloured by
+// reading these keys at render time, so one stray assignment would repaint the
+// whole set for the rest of the session.
+export const PALETTE = Object.freeze({
   k: '#000000', // black — every outline
   d: '#808080', // gray — shadow side of a bevel
   g: '#c0c0c0', // silver — the chrome fill
@@ -26,7 +29,7 @@ export const PALETTE = {
   B: '#000080', // navy — title bars
   m: '#ff00ff', // fuchsia
   M: '#800080', // purple
-};
+});
 
 export const TRANSPARENT = '.';
 

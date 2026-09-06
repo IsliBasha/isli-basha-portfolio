@@ -89,8 +89,14 @@ body {
 
    Behind the same 768px line App.jsx splits on: below it the Nokia port is what
    renders, it has no Display Properties, and a rule left outside this query
-   would have a phone fetching the 16-colour PNG for a desktop it never shows. */
-@media (min-width: 769px) {
+   would have a phone fetching the 16-colour PNG for a desktop it never shows.
+
+   Written as the negation of that line rather than as (min-width: 769px). The
+   two are not the same query: a viewport 768.5px wide — ordinary once the OS
+   scales the display — matches neither, which would put the Win95 desktop on
+   screen with none of its wallpaper rules applying. `not all and (…)` is the
+   complement of (…) by construction, so there is no gap to fall into. */
+@media not all and (max-width: 768px) {
   html[data-wallpaper='teal'] body {
     background-image: none;
     background-color: #008080;

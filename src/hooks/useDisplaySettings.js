@@ -1,17 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from 'react';
+import {
+  isChimeMuted,
+  setChimeMuted,
+  subscribeChimeMuted,
+} from '../lib/bootChime.js';
 
 const STORAGE_KEY = 'isli-display';
 
-// The one store for the boot chime, written by this sheet and by the taskbar
-// tray and by nothing else. '1' is muted; the key's absence is "plays", so
-// there is no second falsy spelling for a reader to get wrong.
-//
-// It is a separate key rather than a field of the settings object because the
-// two writers save at different moments: a sheet that has been open since
-// before the tray muted the chime would otherwise put the mute back as a side
-// effect of saving a wallpaper.
-const CHIME_MUTED_KEY = 'isli-chime-muted';
-const CHIME_MUTED_VALUE = '1';
+// The boot chime is not part of this blob. It lives in src/lib/bootChime.js,
+// under its own key, because the two writers save at different moments: a
+// sheet that has been open since before the tray muted the chime would
+// otherwise put the mute back as a side effect of saving a wallpaper. Reading
+// and writing it through that module rather than a second copy of the same
+// two functions is what makes the tray's speaker and this sheet's checkbox
+// one control with two faces.
 
 /** The four wallpapers the Background page offers, in list order. */
 export const WALLPAPERS = ['clouds', 'clouds-16', 'teal', 'setup'];
@@ -50,35 +58,6 @@ function warnInDev(message) {
 
 function normaliseWallpaper(value) {
   return WALLPAPERS.includes(value) ? value : DEFAULT_WALLPAPER;
-}
-
-/**
- * Is the boot chime muted?
- *
- * Storage that throws on access — Safari's private mode, a blocked
- * third-party context — answers "not muted": a browser refusing to tell us
- * should not silently turn a sound off.
- */
-export function readChimeMuted() {
-  if (typeof window === 'undefined') return false;
-  try {
-    return window.localStorage.getItem(CHIME_MUTED_KEY) === CHIME_MUTED_VALUE;
-  } catch {
-    return false;
-  }
-}
-
-/** Mute or unmute. Absent means on, so unmuting removes the key. */
-export function writeChimeMuted(muted) {
-  if (typeof window === 'undefined') return false;
-  try {
-    if (muted) window.localStorage.setItem(CHIME_MUTED_KEY, CHIME_MUTED_VALUE);
-    else window.localStorage.removeItem(CHIME_MUTED_KEY);
-    return true;
-  } catch {
-    warnInDev('storage refused the boot sound setting; it will not survive a reload');
-    return false;
-  }
 }
 
 /**
@@ -125,15 +104,15 @@ function readStoredWallpaper() {
  * blob: an older build stored a `chime` field there, and it is ignored.
  */
 export function readStoredSettings() {
-  return { wallpaper: readStoredWallpaper(), chime: !readChimeMuted() };
+  return { wallpaper: readStoredWallpaper(), chime: !isChimeMuted() };
 }
 
 /**
  * Persist the wallpaper, reporting whether it survived.
  *
- * The chime is deliberately absent from what is written here — see
- * CHIME_MUTED_KEY. A legacy `chime` field left by an older build is dropped
- * by the first save.
+ * The chime is deliberately absent from what is written here — it belongs to
+ * src/lib/bootChime.js. A legacy `chime` field left by an older build is
+ * dropped by the first save.
  */
 function writeStoredSettings(settings) {
   if (typeof window === 'undefined') return false;
@@ -193,7 +172,12 @@ export function useDisplaySettings() {
   const [draftWallpaper, setDraftWallpaper] = useState(persistedWallpaper);
   const [chimeDraft, setChimeDraft] = useState(null);
 
-  const chime = chimeDraft ?? !readChimeMuted();
+  // Subscribed, not merely read: the tray's speaker writes the same store, and
+  // without a subscription the checkbox would only catch up on whatever else
+  // happened to re-render this sheet. The server snapshot is "audible" — the
+  // static export has no storage to ask.
+  const muted = useSyncExternalStore(subscribeChimeMuted, isChimeMuted, () => false);
+  const chime = chimeDraft ?? !muted;
 
   useEffect(() => {
     applyWallpaper(draftWallpaper);
@@ -230,7 +214,10 @@ export function useDisplaySettings() {
       // Only when the checkbox was actually moved. Saving a wallpaper is not
       // a statement about the chime, and writing one anyway is how a mute set
       // from the tray gets quietly undone.
-      if (nextChime !== null && !writeChimeMuted(!nextChime)) saved = false;
+      if (nextChime !== null && !setChimeMuted(!nextChime)) {
+        warnInDev('storage refused the boot sound setting; it will not survive a reload');
+        saved = false;
+      }
 
       setPersistedWallpaper(wallpaper);
       setDraftWallpaper(wallpaper);

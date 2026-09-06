@@ -288,6 +288,23 @@ describe('MyWorkExplorer sidebar', () => {
     }
   });
 
+  // data-selected paints the row; aria-current is what says so out loud. The
+  // tiles carried both and the sidebar only the first, so a screen reader
+  // heard no difference between the open category and the other four.
+  it('says which category is current, not only which one is painted', () => {
+    const { container } = render(<MyWorkExplorer />);
+    const current = rows(container).filter(
+      (r) => r.getAttribute('aria-current') === 'true',
+    );
+
+    expect(current).toHaveLength(1);
+    expect(current[0].dataset.selected).toBe('true');
+    for (const row of rows(container)) {
+      if (row.dataset.selected === 'true') continue;
+      expect(row.getAttribute('aria-current')).toBeNull();
+    }
+  });
+
   // The row used to fill navy edge to edge, which painted the 16px folder icon
   // into the one colour reserved for the active window — the same thing the
   // tiles were doing. Only the name is in the painted span now.

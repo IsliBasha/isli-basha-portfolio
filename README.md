@@ -4,16 +4,18 @@ Personal portfolio of **Isli Basha** — Agent & Automation Specialist at Ofive 
 
 **Live: [islibasha.dev](https://islibasha.dev)**
 
-![Windows 95 desktop simulation — desktop icons, taskbar, and SiteCounter.exe window](screenshot.png)
+![Windows 95 desktop simulation — desktop shortcuts, the taskbar and Start button, about.txt open in Notepad and the my work explorer showing project tiles](screenshot.png)
 
 ## What's inside
 
 **Desktop (Win95):**
 
-- Boot sequence, draggable/resizable windows, taskbar with Start menu
+- BIOS/memory-check boot sequence, draggable and resizable windows, a taskbar that minimises and restores them
+- The full Start menu tree — Programs, Documents and Settings fly-outs, Find, Help, Run and Shut Down
+- Display Properties on the desktop's right-click Properties: four wallpapers with live preview, and the boot-sound switch it shares with the tray speaker
 - DOS-style terminal (`cmd`) with real commands
 - Playable Minesweeper and Snake
-- `my work` folder with 20 projects, `resume.pdf` viewer, contact window
+- `my work` explorer with 25 projects, `resume.pdf` viewer, contact window
 
 **Mobile (Nokia 3310):**
 
@@ -28,7 +30,7 @@ Personal portfolio of **Isli Basha** — Agent & Automation Specialist at Ofive 
 
 ## Stack
 
-React 19 + Vite, hand-rolled Win95 CSS (no UI library), Vitest (328 tests).
+React 19 + Vite, hand-rolled Win95 CSS (no UI library), Vitest (796 tests).
 
 ## Run it
 
@@ -36,5 +38,14 @@ React 19 + Vite, hand-rolled Win95 CSS (no UI library), Vitest (328 tests).
 npm install
 npm run dev      # local dev server
 npm test         # run the test suite
-npm run build    # production build (pre-dithers screenshots)
+npm run build    # production build (pre-dithers screenshots, regenerates static SEO)
+npm run lint     # eslint, zero problems expected
+```
+
+Two build steps are run by hand rather than from `prebuild`, because their
+outputs are committed and neither encoder is a dependency of this repo:
+
+```bash
+node scripts/build-screenshots.js   # assets/screenshots/*.{jpeg,png} -> public/*.webp
+node scripts/build-wallpapers.js    # the desktop photo -> WebP + 16-colour PNG
 ```

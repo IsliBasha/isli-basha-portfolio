@@ -71,11 +71,6 @@ components:
     textColor: "{colors.ink}"
     rounded: "{rounded.none}"
     padding: "4px 6px"
-  project-card:
-    backgroundColor: "{colors.chrome-lighter}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-    padding: "12px"
 ---
 
 # Design System: Isli Basha — Portfolio
@@ -119,7 +114,7 @@ A faithful Win95 environment with two expressive additions: the sky desktop grad
 - **Chrome Light** (#dfdfdf): Highlight edge of bevels (top/left in bevel-out).
 - **Chrome Dark** (#808080): Shadow edge of bevels (right/bottom in bevel-out).
 - **Bevel Black** (#000000): Outer bevel edge only — the right/bottom border of a raised surface and the deepest inset layer of a sunken one. Never a text or surface colour.
-- **Chrome Lighter** (#ececec): Project card surface — one step lighter than POST Gray.
+- **Chrome Lighter** (#ececec): The explorer's detail pane — one step lighter than POST Gray.
 - **Win Background** (#fdfdfd): Window content area. Near-white, never pure white.
 - **Ink** (#1a1a2e): All body text. Deep navy-tinted near-black — never pure black.
 - **Text Muted** (#404040): De-emphasised text — status bars, counters, hints. The one step down from Ink.
@@ -140,14 +135,16 @@ A faithful Win95 environment with two expressive additions: the sky desktop grad
 
 ### Hierarchy
 - **Display** (Mono, 700, 2.4rem, lh 1.2, ls 0.04em): Boot splash brand text only. Never used in the running UI.
-- **Headline** (Mono, 700, 1rem, lh 1.3, ls 0.02em): Window section headings (`~/ whoami`), project card names. OS-register text that identifies content.
-- **Title** (Mono, 700, 0.8125rem, lh 1.2, ls 0.02em): Titlebar labels, taskbar task labels, clock, start menu items. System chrome typography.
+- **Headline** (Mono, 700, 1rem, lh 1.3, ls 0.02em): Window section headings (`~/ whoami`). OS-register text that identifies content.
+- **Title** (Mono, 700, 0.8125rem, lh 1.2, ls 0.02em): Titlebar labels, taskbar task labels, clock. System chrome typography.
 - **Body** (Sans, 400, 0.9375rem, lh 1.55): All human-facing content — about text, contact items. Max line length 65–70ch.
 - **Label** (Mono, 500, 0.75rem, lh 1.3): Stack pills, captions, terminal lines, form labels. Smallest readable system text.
 
 ### Named Rules
 
-**The System/Human Split Rule.** IBM Plex Mono is the OS speaking. IBM Plex Sans is the person. This split is not aesthetic preference — it is the structural logic of the interface. Any new element that belongs to OS chrome uses Mono. Any element that is content from Isli uses Sans. No exceptions.
+**The System/Human Split Rule.** IBM Plex Mono is the OS speaking. IBM Plex Sans is the person. This split is not aesthetic preference — it is the structural logic of the interface. Any new element that belongs to OS chrome uses Mono. Any element that is content from Isli uses Sans.
+
+The menus are the one place the split answers to the era instead: Start menu and fly-out labels ship in Sans 0.875rem, because Win95 set its menus in MS Sans Serif and reserved the fixed-width face for terminals and file listings. Titlebars, the taskbar and the clock — the chrome around the menus — stay Mono.
 
 ## 4. Elevation
 
@@ -155,9 +152,8 @@ Elevation is theatrical, not ambient. Surfaces do not float — they perform. Th
 
 ### Shadow Vocabulary
 - **Bevel-out** (border: white top/left, Bevel Black right/bottom + inset Chrome Light/Dark): Default raised state. Windows, buttons, taskbar, start menu.
-- **Bevel-in** (border: Chrome Dark top/left, white right/bottom + inset Bevel Black/Chrome Light): Pressed or sunken state. Active buttons, focused inputs, window content areas, project cards on hover.
+- **Bevel-in** (border: Chrome Dark top/left, white right/bottom + inset Bevel Black/Chrome Light): Pressed or sunken state. Active buttons, focused inputs, window content areas, the explorer's status-bar panels, the tray well.
 - **Win drop shadow** (`box-shadow: 4px 4px 0px rgba(0,0,0,0.18)`): Window frames and dialogs. Pixel-offset, no blur — keeps the hardware aesthetic.
-- **Sticky shadow** (`2px 3px 0 rgba(0,0,0,0.12), 5px 8px 12px rgba(0,0,0,0.1)`): Two-layer soft shadow on the sticky note only. The sole ambient-style shadow in the system.
 
 ### Named Rules
 
@@ -189,18 +185,10 @@ The signature component. Draggable, resizable OS window with titlebar, content a
 - **Frame:** POST Gray surface, bevel-out borders, win drop shadow. No rotation — every window sits square on the pixel grid so its 1px bevel stays 1px.
 - **Titlebar:** Flat Navy (#000080), white Mono text, 700, 0.8125rem. Grab cursor when draggable.
 - **Titlebar — inactive:** Every window except the one on top fills with Inactive Gray (#808080) and drops its label to #c0c0c0. The titlebar buttons keep their normal chrome.
-- **Title icon:** The window's own 16x16 AppGlyph, the same `kind` its desktop icon uses, sits left of the label.
+- **Title icon:** A 16x16 `PixelIcon` from the system registry — notepad, dos, mail, pdf, mine, snake, folder, stats, display — sits left of the label. Drawn on a 16-unit grid rather than a 32-unit `AppGlyph` scaled to half: at 0.5 scale every 1px rule in that artwork lands on a half-pixel and the browser resamples it. The taskbar button draws the same icon from the same map (`src/lib/windowIcons.js`), so a window wears one picture wherever it appears; `AppGlyph` is now the 32px desktop shortcuts and nothing else.
 - **Content area:** Bevel-in inset border, Win Background (#fdfdfd), 1rem padding.
 - **Titlebar buttons:** 16x14px, bevel-out. Glyphs are inline SVG bitmaps on the 16x14 grid (`shapeRendering="crispEdges"`), never font characters. Close sits 2px clear of maximize and turns #d44 on hover.
 - **Entry animation:** `win-boot` — 300ms cubic-bezier(0.2, 0.8, 0.25, 1), scales from opacity/scale 0.92 to 1. Decisive, no ease-in.
-
-### Project Cards
-
-Raised panels inside the Projects window. Unique interaction: cards press in on hover (bevel-out to bevel-in), as if being physically clicked.
-
-- **Surface:** Chrome Lighter (#ececec), bevel-out at rest.
-- **Hover:** Bevel-in — borders and shadows invert. The card presses like a held button.
-- **Internal:** Name in Mono 700/1rem, description in Sans 0.8125rem/1.45, stack pills as win-sunken chips. Min height 160px.
 
 ### Explorer (my work)
 
@@ -245,7 +233,7 @@ The control-panel property sheet, opened from the desktop's right-click Properti
 
 ### Desktop Icons
 
-96px icon slots; labels wrap only when a single word exceeds the slot (minesweeper.exe). Transparent by default, hover reveals the selection state.
+96px icon slots on the desktop, 88px below 1024px where they stop being an absolutely-positioned field and become a wrapping row; labels wrap only when a single word exceeds the slot (minesweeper.exe). Transparent by default, hover reveals the selection state.
 
 - **Hover/Focus/Active:** the **label** highlights, not the slot — solid titlebar navy (#000080) behind white text with a 1px dotted white rectangle inset 1px. The 32px glyph and the slot itself stay untouched, exactly as Win95 drew a selected shortcut.
 - **Label:** IBM Plex Mono 0.75rem, white text with 1px black text-shadow for legibility against the sky. A name wider than the slot wraps to a second line rather than bleeding past it. The text-shadow drops while the label is highlighted — the navy fill already carries the contrast.
@@ -290,11 +278,11 @@ The Windows flag on the splash, drawn as pixel art rather than as geometry: thre
 - **Do** animate with `transform` and `opacity` only. Use `cubic-bezier(0.2, 0.8, 0.25, 1)` or similar ease-out-expo curves.
 
 ### Don't:
-- **Don't** add `border-radius` to OS chrome components. The bevel requires sharp corners. Boot splash panes (4px) are an animation artifact, not a vocabulary item.
-- **Don't** add blurred `box-shadow` values to new components. The win drop shadow (`4px 4px 0px`) is the only pixel-offset shadow; the sticky note is the only ambient blur.
+- **Don't** add `border-radius` to OS chrome components. The bevel requires sharp corners — there is no radius anywhere in the system, the boot splash flag included.
+- **Don't** add blurred `box-shadow` values to new components. The win drop shadow (`4px 4px 0px`) is the only shadow in the system, and it has no blur.
 - **Don't** ship a generic dark-mode portfolio with hero sections, glowing stack badges, or a scrolling timeline — that is the primary anti-reference.
 - **Don't** use gradient text (`background-clip: text + gradient background`). Titlebars are a flat surface fill. Text is a solid color.
-- **Don't** rotate OS chrome. Windows, buttons, the taskbar and every bevelled surface stay square on the pixel grid — a rotated 1px border is a resampled smear. The sticky note is the one deliberate exception, and it is not OS chrome.
+- **Don't** rotate OS chrome. Windows, buttons, the taskbar and every bevelled surface stay square on the pixel grid — a rotated 1px border is a resampled smear. The Start menu's `sys95` stripe is the one rotated thing on the desktop, and it is type, not chrome.
 - **Don't** use Active Window Blue as a decorative accent, background tint, or fill outside titlebars and focus rings. Rarity is the point.
 - **Don't** add a `border-left` or `border-right` stripe larger than 1px as a colored accent on cards or list items. Use the bevel system or a background tint instead.
 - **Don't** animate `width`, `height`, `top`, `left`, `margin`, or `padding` for motion effects. Transform and opacity only.

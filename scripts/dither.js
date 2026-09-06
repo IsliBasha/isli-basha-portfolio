@@ -1,5 +1,25 @@
+/**
+ * The shared half of the Nokia thumbnail pipeline: which captures exist, and
+ * the downsample / grayscale / Atkinson-dither steps dither-screenshots.js
+ * runs them through. Also read by build-screenshots.js, which encodes the same
+ * captures as WebP for the desktop explorer.
+ *
+ * The dithered PNGs under public/nokia/ are committed, and deliberately not
+ * pinned to a hash: a re-run on a different pngjs or jpeg-js can shift bytes
+ * without changing the picture, and a byte-identity guard would fail a
+ * legitimate regeneration rather than catch anything. Eyeball
+ * `git diff --stat` after a run instead — a real change to a capture moves one
+ * file by kilobytes, a decoder difference moves several by a handful of bytes.
+ */
+
 const INK = { r: 0x2c, g: 0x2a, b: 0x10 };
 const THRESHOLD = 128;
+
+// Where the captures live, relative to the repo root. Not `public/`: they are
+// sources, and putting them there shipped a 131 KB JPEG of a picture the site
+// only ever shows as a 20 KB WebP (build-screenshots.js) and a 240px 1-bit
+// thumbnail (dither-screenshots.js).
+export const SOURCE_DIR = 'assets/screenshots';
 
 // Source screenshot -> Nokia project id. Only projects with a real captured
 // screenshot get a dithered image; the rest keep the hatch-pattern

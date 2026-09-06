@@ -800,6 +800,18 @@
   padding: 0.25rem 0 0.75rem;
 }
 
+/* The line ChunkBoundary leaves in a window whose chunk never arrived. An
+   errored window and one still loading are otherwise the same empty frame,
+   and the dialog that said so is gone the moment OK is clicked. */
+.chunk-error-note {
+  margin: 0;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--c-text-muted);
+}
+
 /* ============================================================
    Desktop area
    Mobile: vertical stack (scrollable). Desktop: locked viewport
@@ -1430,9 +1442,7 @@
   box-shadow: inset 0 1px 0 var(--c-gray-darker);
 }
 
-/* Win95's status bar was a row of sunken panels, not a strip of loose text.
-   The second panel keeps its width whether or not it has anything to say, so
-   the first one does not resize as the selection changes. */
+/* Win95's status bar was a row of sunken panels, not a strip of loose text. */
 .explorer-statusbar__panel {
   padding: 1px 6px;
   border: 1px solid;
@@ -1450,7 +1460,12 @@
   min-width: 0;
 }
 
-.explorer-statusbar__panel + .explorer-statusbar__panel {
+/* The explorer's second panel keeps its width whether or not it has anything
+   to say, so the first one does not resize as the selection changes. Scoped to
+   the explorer: contact.exe and SiteCounter.exe share the status-bar classes
+   but carry a single panel each, and a third two-panel caller would otherwise
+   inherit a 140px column sized for "1 object selected". */
+.win-mywork__content .explorer-statusbar__panel + .explorer-statusbar__panel {
   flex: 0 0 auto;
   width: 140px;
 }
@@ -1681,7 +1696,11 @@ textarea.win-field {
     position: static;
     display: flex;
     flex-direction: row;
-    gap: 0.75rem;
+    /* Tighter than the 0.75rem this used to be. The icons are a wrapping row
+       here, not a fixed grid, and at 820px seven 96px slots plus 0.75rem gaps
+       overflowed the row by a few pixels — enough to push the last one onto a
+       line of its own with the six above it spread wide. */
+    gap: 0.5rem;
     flex-wrap: wrap;
     margin-bottom: 0.25rem;
     pointer-events: auto;
@@ -1692,8 +1711,12 @@ textarea.win-field {
     pointer-events: auto;
   }
 
+  /* Narrower than the desktop's 96px so a row of them fits a tablet without
+     wrapping mid-word. The label's own wrapping rules (overflow-wrap: anywhere,
+     line-height: 1.15) are unconditional and already apply here, which is what
+     keeps "minesweeper.exe" inside 88px instead of over its neighbour. */
   .win95-desktop-icon {
-    width: 96px;
+    width: 88px;
   }
 
   .win95-window {
@@ -1798,8 +1821,14 @@ textarea.win-field {
   padding: 3px 20px 3px 24px;
   background: none;
   border: none;
-  font-family: var(--font-ui);
-  font-size: 0.8rem;
+  /* Windows 95 set a context menu exactly as it set a Start-menu row: MS Sans
+     Serif at the same size, which is why these two declarations match
+     `.win95-start-menu__item` and are meant to keep matching it. This asked
+     for --font-ui, which nothing declares, so for months it fell back to the
+     inherited Sans and looked right by accident; declaring the token that did
+     exist turned the desktop's right-click menu monospace instead. */
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
   color: var(--c-text);
   cursor: default;
   white-space: nowrap;
