@@ -69,6 +69,50 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* The same picture at a tenth the bytes, as a separate declaration so it is a
+   progressive enhancement: a browser that cannot parse image-set() or the
+   type() hint drops this rule entirely and keeps the JPEG shorthand above.
+   Only background-image is set, so the shorthand's center/cover/no-repeat and
+   the fixed attachment below both survive. */
+body {
+  background-image: image-set(
+    url('/win95-clouds-bg.webp') type('image/webp'),
+    url('/win95-clouds-bg.jpg') type('image/jpeg')
+  );
+}
+
+/* Wallpapers, set from Display Properties via <html data-wallpaper>. "clouds"
+   is the absence of the attribute, so the default costs no rule at all.
+   Longhands throughout, never the `background` shorthand: the shorthand resets
+   background-attachment, and these selectors outrank the min-width:1024px rule
+   below that pins the desktop wallpaper with `fixed`.
+
+   Behind the same 768px line App.jsx splits on: below it the Nokia port is what
+   renders, it has no Display Properties, and a rule left outside this query
+   would have a phone fetching the 16-colour PNG for a desktop it never shows. */
+@media (min-width: 769px) {
+  html[data-wallpaper='teal'] body {
+    background-image: none;
+    background-color: #008080;
+  }
+
+  html[data-wallpaper='setup'] body {
+    background-image: linear-gradient(180deg, #0000a8 0%, #000050 100%);
+    background-color: #000050;
+  }
+
+  html[data-wallpaper='clouds-16'] body {
+    background-image: url('/win95-clouds-16.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* The point of this wallpaper is that it is dithered at a real Win95
+       desktop resolution. Smoothing it back up to the viewport would sand off
+       the crosshatch it exists for. */
+    image-rendering: pixelated;
+  }
+}
+
 #root {
   min-height: 100vh;
   min-height: 100dvh;

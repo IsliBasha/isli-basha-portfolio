@@ -14,6 +14,8 @@ import { ContextMenu } from './components/ContextMenu.jsx';
 import { ResumeViewer } from './components/ResumeViewer.jsx';
 import { VisitorCounterContent } from './components/VisitorCounter.jsx';
 import { MyWorkExplorer } from './components/MyWorkExplorer.jsx';
+import { DisplayProperties } from './components/DisplayProperties.jsx';
+import { PixelIcon } from './components/PixelIcon.jsx';
 import { AppGlyph } from './lib/AppGlyph.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
 import { bio } from './data/bio.js';
@@ -27,6 +29,7 @@ const WINDOW_ORDER = [
   'minesweeper',
   'snake',
   'mywork',
+  'display',
 ];
 const INITIALLY_CLOSED = [
   'about',
@@ -36,6 +39,7 @@ const INITIALLY_CLOSED = [
   'minesweeper',
   'snake',
   'mywork',
+  'display',
 ];
 
 function NotepadAbout() {
@@ -324,6 +328,20 @@ export function DesktopApp() {
           contentClassName="win-mywork__content"
         >
           <MyWorkExplorer />
+        </Window>
+
+        {/* No desktop icon: this one is reached the way Win95 reached it, from
+            the desktop's right-click Properties. `app-window` is a stand-in --
+            the display icon lands with the rest of the system set. */}
+        <Window
+          id="display"
+          title="Display Properties"
+          icon={<PixelIcon id="app-window" size={16} />}
+          className="win-display"
+          bootDelayMs={0}
+          contentClassName="win-display__content"
+        >
+          <DisplayProperties />
         </Window>
       </main>
       <Taskbar />

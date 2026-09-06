@@ -159,8 +159,6 @@ const EMOJI = /\p{Extended_Pictographic}/u;
 // equality, so clearing the last emoji out of one of these files fails this
 // test until its entry is deleted too.
 const PENDING_EMOJI_FILES = [
-  // Submenu marker in the desktop context menu — shell-glyph order.
-  'components/ContextMenu.jsx',
   // The Minesweeper smiley button — games-icon order.
   'components/Minesweeper.jsx',
 ];
