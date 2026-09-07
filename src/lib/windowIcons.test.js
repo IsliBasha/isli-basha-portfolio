@@ -15,8 +15,8 @@ describe('the window-icon map', () => {
     // Both directions. A window missing from the map hands PixelIcon
     // `undefined` and gets the generic-application fallback on its taskbar
     // button -- which is what Display Properties got while the taskbar was
-    // still drawing AppGlyphs. An entry for an id no Window claims is dead
-    // weight nothing renders.
+    // still drawing the 32-unit shortcut artwork. An entry for an id no Window
+    // claims is dead weight nothing renders.
     expect([...WINDOW_ORDER].sort()).toEqual(Object.keys(WINDOW_ICONS).sort());
   });
 
@@ -32,13 +32,14 @@ describe('the window-icon map', () => {
 
   it('is what both the titlebars and the taskbar button read', () => {
     // The two surfaces drew the same window differently for months: native
-    // 16-unit PixelIcons in the titlebar, a halved 32-unit AppGlyph on the
-    // taskbar. Read the sources back so a future edit cannot quietly
-    // reintroduce a second source of truth.
+    // 16-unit PixelIcons in the titlebar, a halved 32-unit shortcut glyph on
+    // the taskbar. Read the sources back so a future edit cannot quietly
+    // reintroduce a second source of truth -- DesktopGlyph is the 32-unit
+    // artwork now, and it belongs to the desktop and nowhere else.
     for (const id of WINDOW_ORDER) {
       expect(desktopSource).toContain(`<PixelIcon id={WINDOW_ICONS.${id}} size={16} />`);
     }
     expect(taskbarSource).toContain('<PixelIcon id={WINDOW_ICONS[entry.id]} size={16} />');
-    expect(taskbarSource).not.toContain('<AppGlyph');
+    expect(taskbarSource).not.toContain('<DesktopGlyph');
   });
 });
