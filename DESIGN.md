@@ -113,7 +113,7 @@ A faithful Win95 environment with two expressive additions: the sky desktop grad
 - **Panic Blue** (#0000aa): BSOD background only. A single-use emergency color that owns its moment completely and appears nowhere else.
 
 ### Neutral
-- **Bootup Horizon** (gradient: #d6eaf8 → #aed6f1): The desktop background. Cool, pale, ambient. The environment everything lives inside.
+- **Bootup Horizon** (gradient: #d6eaf8 → #aed6f1): The desktop background. Cool, pale, ambient. The environment everything lives inside. Display Properties swaps it for one of four wallpapers — the clouds photo, the same photo ordered-dithered against the VGA palette (the sky half of it: it lands on six colours, and leaving the reds and magentas out of the plan is what keeps the sky blue instead of speckled), flat Teal (#008080), or the Setup gradient (#0000a8 → #000050) the installer ran on. Teal and Setup are the two backgrounds a real Win95 showed when it was not showing a picture; all four keep the same pale, receding role, so nothing on the desktop has to change contrast when one is chosen.
 - **POST Gray** (#c0c0c0): System chrome — the surface of every window, button, and taskbar element. The single most-used color in the system.
 - **Chrome Light** (#dfdfdf): Highlight edge of bevels (top/left in bevel-out).
 - **Chrome Dark** (#808080): Shadow edge of bevels (right/bottom in bevel-out).
@@ -208,6 +208,17 @@ The stack window. A phosphor CRT display.
 - **Background:** Terminal Black (#0c0c0c). **Text:** Phosphor Green (#33ff33). IBM Plex Mono, 0.8125rem, 1.55 lh.
 - **Border:** 1px solid Bevel Black, inset shadow.
 - **Cursor:** 8px block, green, blinks at 1s steps(1) — no smooth fade.
+
+### Display Properties
+
+The control-panel property sheet, opened from the desktop's right-click Properties. The one component in the system built as a tabbed sheet rather than a plain window.
+
+- **Tabs:** Bevel-out tabs on a bevel-out sheet, sharing the POST Gray surface. The selected tab is 2px taller and sits over the sheet's top edge, so the frame line breaks under it — that break is the whole reason a tab reads as the front of a stack. One tab stop for the strip; ArrowLeft/Right move between pages and wrap, Home/End jump to the ends. Escape is Cancel and Enter is OK from anywhere in the sheet that is not itself a control, as they were in every Win95 dialog.
+- **Window content:** POST Gray, not Win Background. A property sheet has no sunken client area — the tab control sits straight on the dialog face, so `.win-display__content` drops the inset well every other window has.
+- **Monitor preview:** A 96x72 pixel monitor above the list, bevelled on the same light source as the chrome, its screen showing the selected wallpaper. Decorative — the listbox beneath already announces the selection.
+- **Wallpaper list:** Sunken listbox, IBM Plex Sans. Selection is the only state it draws: no hover tint, exactly as a Win95 listbox behaved. Arrow keys clamp at the ends rather than wrapping, because each step repaints the whole desktop.
+- **Checkbox:** 13x13, bevel-in, with the tick drawn as pixel art via `box-shadow` offsets rather than a rotated pair of borders — at -45deg a 2px border is a resampled smear, and this chrome lands on whole pixels.
+- **Buttons:** OK / Cancel / Apply, right-aligned. Selecting a wallpaper previews it on the real desktop immediately; Apply saves and stays, OK saves and closes, Cancel puts back the last saved choice and closes. The live preview is the reason Cancel has to exist.
 
 ### Desktop Icons
 

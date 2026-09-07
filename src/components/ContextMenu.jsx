@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { SystemDialog } from './SystemDialog.jsx';
+import { useWindowStack } from '../context/windowStackContext.js';
 
 const ITEMS = [
   { label: 'New Folder', key: 'new-folder' },
-  { label: 'Arrange Icons By ▶', key: 'arrange' },
+  // `submenu` draws the right-pointing marker as a CSS triangle. It used to
+  // be a literal U+25B6, which a colour-emoji font renders as an anti-aliased
+  // pictograph -- the one thing this desktop's chrome must never contain.
+  { label: 'Arrange Icons By', key: 'arrange', submenu: true },
   { label: '---' },
   { label: 'Refresh', key: 'refresh' },
   { label: '---' },
@@ -13,20 +17,10 @@ const ITEMS = [
   { label: 'Properties', key: 'properties' },
 ];
 
-function getPropertiesMessage() {
-  const res = `${window.innerWidth}×${window.innerHeight}`;
-  return [
-    'OS    : Microsoft Windows 95 (React 19)',
-    'CPU  : Intel 80486 DX/2',
-    'RAM  : Sufficient',
-    `RES  : ${res}`,
-    'THEME: Classic',
-  ].join('\n');
-}
-
 export function ContextMenu({ x, y, onClose }) {
   const menuRef = useRef(null);
-  const [dialog, setDialog] = useState(null);
+  const { bringToFront } = useWindowStack();
+  const [notImplemented, setNotImplemented] = useState(false);
 
   const clampedX = Math.min(x, window.innerWidth - 190);
   const clampedY = Math.min(y, window.innerHeight - 280);
@@ -46,10 +40,13 @@ export function ContextMenu({ x, y, onClose }) {
 
   const handleItem = (key) => {
     if (key === 'properties') {
-      setDialog({ title: 'Desktop Properties', message: getPropertiesMessage() });
-    } else {
-      setDialog({ title: 'Desktop', message: 'This feature is not implemented.' });
+      // The desktop's Properties is the Display Properties sheet, exactly as it
+      // was in Win95 -- not a dialog reciting the machine's specs.
+      bringToFront('display');
+      onClose();
+      return;
     }
+    setNotImplemented(true);
   };
 
   return (
@@ -69,7 +66,11 @@ export function ContextMenu({ x, y, onClose }) {
               <button
                 type="button"
                 role="menuitem"
-                className="win95-context-menu__item"
+                className={
+                  item.submenu
+                    ? 'win95-context-menu__item win95-context-menu__item--submenu'
+                    : 'win95-context-menu__item'
+                }
                 onClick={() => handleItem(item.key)}
               >
                 {item.label}
@@ -79,10 +80,10 @@ export function ContextMenu({ x, y, onClose }) {
         )}
       </ul>
       <SystemDialog
-        open={dialog !== null}
-        title={dialog?.title ?? 'Desktop'}
-        message={dialog?.message ?? ''}
-        onClose={() => { setDialog(null); onClose(); }}
+        open={notImplemented}
+        title="Desktop"
+        message="This feature is not implemented."
+        onClose={() => { setNotImplemented(false); onClose(); }}
       />
     </>
   );
