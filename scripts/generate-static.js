@@ -9,7 +9,6 @@
 // Only the text between the marker comments is touched; everything around them
 // is hand-written and stays that way.
 
-/* global process */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';

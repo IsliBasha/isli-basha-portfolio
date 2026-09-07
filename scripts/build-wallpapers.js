@@ -1,4 +1,3 @@
-/* global Buffer, process */
 /**
  * Regenerates the two derived desktop wallpapers from the one source photo,
  * `public/win95-clouds-bg.jpg` (1600x1200, 395 KB):
@@ -15,20 +14,19 @@
  *
  * Run by hand, not from `prebuild`: both outputs are committed, the source
  * changes roughly never, and the WebP half needs an encoder that is not a
- * dependency of this repo (see encodeWebp below). Wiring it into every build
+ * dependency of this repo (see scripts/webp.js). Wiring it into every build
  * would make `npm run build` fail on a machine that has neither encoder, for
  * no gain.
  *
  *   node scripts/build-wallpapers.js
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
-import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { deflateSync } from 'node:zlib';
 import path from 'node:path';
 import jpeg from 'jpeg-js';
 import { downsample } from './dither.js';
+import { encodeWebp, readWebpSize } from './webp.js';
 import { PALETTE } from '../src/lib/pixelIcons/palette.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -52,168 +50,6 @@ const PNG16_WIDTHS = [800, 640];
 // and at eight colours and 4 bits a pixel there is no excuse for it to weigh
 // more than an icon sheet. Enforced below, not merely aspired to.
 const PNG16_MAX_BYTES = 64 * 1024;
-
-// ── WebP ────────────────────────────────────────────────────────────────────
-
-/**
- * Encodes the source JPEG to WebP with whichever encoder the machine has.
- *
- * Three paths, best first. Neither of the first two is a dependency of this
- * repo: `cwebp` ships with libwebp (`brew install webp`) and `sharp` is a
- * ~30 MB install of per-platform binaries that nothing at runtime or in the
- * test suite needs. macOS `sips` is deliberately not tried -- ImageIO reads
- * WebP but cannot write it ("Can't write format: org.webmproject.webp").
- *
- * The third is a headless Chromium canvas, and on a machine with neither of
- * the others it is the one that runs -- it is what produced the committed
- * public/win95-clouds-bg.webp. Playwright is already here for screenshots and
- * its canvas encoder is the same libwebp underneath. It is last because it
- * spends a browser launch on one image, and because Playwright is resolved
- * from outside this repo, so a bare import may not find it:
- *
- *   WALLPAPER_PLAYWRIGHT=~/.claude/tools/screenshot/node_modules/playwright \
- *     node scripts/build-wallpapers.js
- */
-async function encodeWebp() {
-  if (hasCommand('cwebp')) {
-    execFileSync(
-      'cwebp',
-      ['-q', String(WEBP_QUALITY), '-resize', '1600', '1200', SOURCE, '-o', WEBP_OUT],
-      // cwebp writes its progress and its complaints to stderr. Inherited, so
-      // a failed encode says why on this terminal instead of disappearing
-      // into an ignored pipe; stdout stays quiet because it is only the
-      // banner.
-      { stdio: ['ignore', 'ignore', 'inherit'] },
-    );
-    return 'cwebp';
-  }
-
-  const sharp = await tryImport('sharp');
-  if (sharp) {
-    await sharp.default(SOURCE)
-      .resize(1600, 1200)
-      .webp({ quality: WEBP_QUALITY })
-      .toFile(WEBP_OUT);
-    return 'sharp';
-  }
-
-  const playwright = await tryImport(process.env.WALLPAPER_PLAYWRIGHT ?? 'playwright');
-  if (playwright) return encodeWebpWithChromium(playwright);
-
-  throw new Error(
-    'no WebP encoder found. Install one of:\n' +
-      '  brew install webp      (gives you cwebp, ~2 MB, preferred)\n' +
-      '  npm i -D sharp         (~30 MB of platform binaries)\n' +
-      'or point WALLPAPER_PLAYWRIGHT at a Playwright install.\n' +
-      'public/win95-clouds-bg.webp is committed, so this is only needed to ' +
-      'regenerate it.',
-  );
-}
-
-/** Resolve an optional encoder without making it a dependency. */
-async function tryImport(specifier) {
-  try {
-    return await import(specifier);
-  } catch {
-    // WALLPAPER_PLAYWRIGHT is a directory path, and ESM does not do directory
-    // or package-entry resolution on one -- only require() does. Playwright is
-    // CommonJS regardless, so this is the path that actually resolves it.
-    try {
-      return createRequire(import.meta.url)(specifier);
-    } catch {
-      return null;
-    }
-  }
-}
-
-async function encodeWebpWithChromium(playwright) {
-  const { chromium } = playwright.chromium ? playwright : playwright.default;
-  const browser = await chromium.launch();
-  try {
-    const page = await browser.newPage();
-    const source = `data:image/jpeg;base64,${readFileSync(SOURCE).toString('base64')}`;
-    const encoded = await page.evaluate(
-      async ([src, quality]) => {
-        const img = new Image();
-        img.src = src;
-        await img.decode();
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        canvas.getContext('2d').drawImage(img, 0, 0);
-        const url = canvas.toDataURL('image/webp', quality);
-        // A browser that cannot encode WebP quietly returns a PNG data URL
-        // instead of failing, which would write a 2 MB PNG called .webp.
-        if (!url.startsWith('data:image/webp')) {
-          throw new Error('this browser encoded ' + url.slice(5, 20) + ', not WebP');
-        }
-        return url.slice(url.indexOf(',') + 1);
-      },
-      [source, WEBP_QUALITY / 100],
-    );
-    writeFileSync(WEBP_OUT, Buffer.from(encoded, 'base64'));
-  } finally {
-    await browser.close();
-  }
-  return 'chromium canvas';
-}
-
-/**
- * The dimensions a WebP file actually carries, read back off the bytes.
- *
- * Reported instead of the numbers this script asked for, because `-resize`
- * and a canvas both round, and three encoders are three chances for the
- * output to be something other than what was requested. Simple lossy files
- * carry the size in the VP8 frame header, lossless in VP8L's first bits, and
- * anything with alpha or metadata in the VP8X canvas header.
- */
-function readWebpSize(buffer) {
-  if (
-    buffer.length < 16 ||
-    buffer.toString('ascii', 0, 4) !== 'RIFF' ||
-    buffer.toString('ascii', 8, 12) !== 'WEBP'
-  ) {
-    return null;
-  }
-
-  let offset = 12;
-  while (offset + 8 <= buffer.length) {
-    const type = buffer.toString('ascii', offset, offset + 4);
-    const size = buffer.readUInt32LE(offset + 4);
-    const body = buffer.subarray(offset + 8, offset + 8 + size);
-
-    if (type === 'VP8X' && body.length >= 10) {
-      return {
-        width: (body[4] | (body[5] << 8) | (body[6] << 16)) + 1,
-        height: (body[7] | (body[8] << 8) | (body[9] << 16)) + 1,
-      };
-    }
-    if (type === 'VP8 ' && body.length >= 10) {
-      // 3-byte frame tag, the 0x9d 0x01 0x2a start code, then 14-bit sizes.
-      return {
-        width: body.readUInt16LE(6) & 0x3fff,
-        height: body.readUInt16LE(8) & 0x3fff,
-      };
-    }
-    if (type === 'VP8L' && body.length >= 5) {
-      const bits = body.readUInt32LE(1);
-      return { width: (bits & 0x3fff) + 1, height: ((bits >>> 14) & 0x3fff) + 1 };
-    }
-    // RIFF chunks are padded to an even length; the pad byte is not counted
-    // in the size field, and skipping it desynchronises every chunk after.
-    offset += 8 + size + (size % 2);
-  }
-  return null;
-}
-
-function hasCommand(name) {
-  try {
-    execFileSync('which', [name], { stdio: 'ignore' });
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 // ── 16-colour wallpaper ─────────────────────────────────────────────────────
 
@@ -494,7 +330,13 @@ async function main() {
     );
   }
 
-  const encoder = await encodeWebp();
+  const encoder = await encodeWebp({
+    source: SOURCE,
+    out: WEBP_OUT,
+    quality: WEBP_QUALITY,
+    resize: [1600, 1200],
+    playwright: process.env.WALLPAPER_PLAYWRIGHT,
+  });
   const webpBytes = readFileSync(WEBP_OUT);
   const size = readWebpSize(webpBytes);
   const ratio = (sourceBytes.length / webpBytes.length).toFixed(1);

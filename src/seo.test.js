@@ -14,9 +14,24 @@ describe('index.html OG / social meta tags', () => {
     expect(indexHtml()).toMatch(/property="og:description"/);
   });
 
-  it('has og:image pointing to screenshot.png', () => {
+  it('has og:image pointing at a file that is really in public/', () => {
+    // JPEG rather than the README's PNG: the same 1280x800 capture is 517 KB
+    // lossless and 175 KB at q85, and every crawler re-encodes it anyway.
+    // scripts/build-og-image.js is what rebuilds it.
     expect(indexHtml()).toMatch(/property="og:image"/);
-    expect(indexHtml()).toMatch(/screenshot\.png/);
+    expect(indexHtml()).toMatch(/screenshot\.jpg/);
+    expect(indexHtml(), 'the PNG copy of the OG image was deleted').not.toMatch(
+      /screenshot\.png/,
+    );
+    expect(existsSync(join(ROOT, 'public', 'screenshot.jpg'))).toBe(true);
+  });
+
+  it('shows the same card image on Twitter as on OpenGraph', () => {
+    const og = indexHtml().match(/property="og:image" content="([^"]+)"/)?.[1];
+    const twitter = indexHtml().match(/name="twitter:image" content="([^"]+)"/)?.[1];
+
+    expect(og).toBeTruthy();
+    expect(twitter).toBe(og);
   });
 
   it('has og:url pointing to islibasha.dev', () => {
@@ -77,13 +92,15 @@ describe('index.html noscript fallback', () => {
 });
 
 describe('index.html web font payload', () => {
-  // Anchored on the stylesheet link, not the first googleapis href: the
+  // Anchored on the preload link, not the first googleapis href: the
   // preconnect hint precedes it and carries no families. Throws rather than
   // returning '', so a missing link fails loudly instead of passing a
   // "no forbidden family" assertion by accident.
   const fontHref = () => {
-    const m = indexHtml().match(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"/);
-    if (!m) throw new Error('no stylesheet <link> with an href in index.html');
+    const m = indexHtml().match(
+      /<link\s+rel="preload"\s+as="style"\s+href="([^"]+)"/,
+    );
+    if (!m) throw new Error('no font preload <link> with an href in index.html');
     return m[1];
   };
 
@@ -101,6 +118,29 @@ describe('index.html web font payload', () => {
 
   it('does not request Caveat — no handwritten surface ships anymore', () => {
     expect(indexHtml()).not.toMatch(/Caveat/);
+  });
+
+  it('fetches the font CSS without blocking the first paint', () => {
+    // A plain stylesheet link holds rendering until Google Fonts answers.
+    // The preload + onload swap keeps the request at the same priority and
+    // lets the boot screen paint in the fallback face meanwhile.
+    expect(fontHref()).toContain('display=swap');
+    expect(indexHtml()).toMatch(/onload="this\.onload=null;this\.rel='stylesheet'"/);
+  });
+
+  it('leaves the blocking stylesheet only inside <noscript>', () => {
+    // onload never fires with scripting off, so that reader needs the plain
+    // link — and nowhere else, or the block is back.
+    const html = indexHtml();
+    const blocking = [...html.matchAll(/<link[^>]*rel="stylesheet"[^>]*>/g)].map(
+      (m) => m[0],
+    );
+    expect(blocking).toHaveLength(1);
+    expect(blocking[0]).toContain('fonts.googleapis.com');
+
+    const noscript = html.match(/<noscript>\s*<link[^>]*rel="stylesheet"[^>]*>/);
+    expect(noscript, 'the stylesheet link is not inside <noscript>').not.toBeNull();
+    expect(noscript[0]).toContain(fontHref());
   });
 });
 

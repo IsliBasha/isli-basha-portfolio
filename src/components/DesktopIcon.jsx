@@ -90,12 +90,14 @@ export function DesktopIcon({ kind, label, target, href, defaultPos = { x: 16, y
       if (href) return;
       e.preventDefault();
       if (!target) return;
-      bringToFront(target);
-      const node = document.getElementById(target);
-      if (node) {
-        node.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        node.focus({ preventScroll: true });
-      }
+      bringToFront(target, { focus: true });
+      // Focus is the Window's job now (it may not exist yet on a first open).
+      // The scroll only means anything for a window already on screen, which
+      // is the one case where the node is here to scroll. Optional call:
+      // jsdom has no scrollIntoView.
+      document
+        .getElementById(target)
+        ?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
     },
     [bringToFront, target, href],
   );

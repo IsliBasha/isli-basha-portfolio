@@ -49,3 +49,32 @@ describe('vercel.json security headers', () => {
     expect(h?.value).toBeTruthy();
   });
 });
+
+describe('the CSP and index.html are one decision, not two', () => {
+  const scriptSrc = () => {
+    const csp = getVercelHeaders().find(h => h.key === 'Content-Security-Policy');
+    return csp?.value.match(/script-src([^;]*)/)?.[1] ?? '';
+  };
+
+  // The font stylesheet is loaded as a preload and swapped to a stylesheet by
+  // an inline `onload=` attribute, which is the only reason it does not block
+  // the first paint. An event-handler attribute is script as far as CSP is
+  // concerned, and 'unsafe-inline' is the only thing that permits one: the
+  // moment a nonce appears in script-src, browsers stop honouring
+  // 'unsafe-inline' for handler attributes and the swap dies silently — the
+  // page keeps the preload and never gets the fonts. So tightening this header
+  // means deleting that attribute first, and this test is where that is
+  // written down.
+  it('keeps script-src permissive while index.html swaps the fonts inline', () => {
+    const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
+    expect(
+      html,
+      'the inline font swap is gone — take this coupling out and tighten script-src',
+    ).toMatch(/onload="this\.onload=null;this\.rel='stylesheet'"/);
+
+    expect(scriptSrc()).toContain("'unsafe-inline'");
+    expect(scriptSrc(), 'a nonce here would silently kill the font swap').not.toMatch(
+      /'nonce-/,
+    );
+  });
+});

@@ -1,7 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BootSequence } from './BootSequence.jsx';
+
+// Longer than any single entry in BootSequence's PHASE_DURATIONS, so the
+// clock lands past whichever phase is on screen without this test having to
+// restate the component's timings.
+const PAST_ANY_PHASE = 5000;
 
 describe('BootSequence', () => {
   beforeEach(() => {
@@ -50,22 +55,33 @@ describe('BootSequence', () => {
     window.matchMedia = original;
   });
 
-  it('marks sessionStorage when the boot sequence ends', async () => {
-    render(<BootSequence />);
-    await waitFor(
-      () => {
-        expect(
-          screen.queryByRole('dialog', { name: /system boot/i }),
-        ).not.toBeInTheDocument();
-      },
-      { timeout: 7000 },
-    );
-    expect(sessionStorage.getItem('isli-boot-seen')).toBe('1');
-    // Its own budget, not the suite's: this is the only test that sits out a
-    // real 4.5s boot, and waitFor asks for up to 7s of it. The 5s default kills
-    // it before its own timeout runs out; raising the default globally would
-    // hide a hang in every other test in the repo.
-  }, 10000);
+  it('marks sessionStorage when the boot sequence ends', () => {
+    // Driven, not waited out. The boot is 4.5s of real time, and a test that
+    // sits through it needs a budget bigger than the suite's default and still
+    // loses the race under parallel load. Each phase schedules the next from
+    // an effect, so the clock has to be advanced once per phase — a single
+    // jump past the whole sequence would stop at the first one.
+    vi.useFakeTimers();
+    try {
+      render(<BootSequence />);
+      expect(screen.getByText(/AMI BIOS/i)).toBeInTheDocument();
+
+      act(() => vi.advanceTimersByTime(PAST_ANY_PHASE));
+      expect(screen.getByText(/Memory Test/i)).toBeInTheDocument();
+
+      act(() => vi.advanceTimersByTime(PAST_ANY_PHASE));
+      expect(screen.getByText(/Starting Windows 95/i)).toBeInTheDocument();
+
+      act(() => vi.advanceTimersByTime(PAST_ANY_PHASE));
+
+      expect(
+        screen.queryByRole('dialog', { name: /system boot/i }),
+      ).not.toBeInTheDocument();
+      expect(sessionStorage.getItem('isli-boot-seen')).toBe('1');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 
   it('skips when Escape is pressed', async () => {
     const user = userEvent.setup();

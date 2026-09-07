@@ -11,9 +11,10 @@
 // instead of a button. Never point a link at a private GitHub repo: it 404s for
 // everyone who isn't signed in as the owner.
 //
-// `screenshot` is the 1-bit dithered Nokia thumbnail and MUST stay in sync with
-// SOURCES in scripts/dither.js (projects.test.js enforces this). `preview` is
-// the full-colour image the desktop explorer shows; it has no such constraint.
+// `screenshot` is the 1-bit dithered Nokia thumbnail and `preview` the
+// full-colour image the desktop explorer shows. Both are built from the same
+// capture in assets/screenshots/, listed as SOURCES in scripts/dither.js, and
+// both must stay in sync with it — projects.test.js enforces that.
 //
 // `icon` is an id in the src/lib/pixelIcons registry, never an emoji or a path.
 
@@ -113,7 +114,7 @@ export const projects = [
     iconType: 'chat',
     icon: 'proj-previsit',
     screenshot: '/nokia/previsit.png',
-    preview: '/previsit-screenshot.jpeg',
+    preview: '/previsit-screenshot.webp',
   },
   {
     id: 'publer-mcp',
@@ -191,7 +192,7 @@ export const projects = [
     iconType: 'network',
     icon: 'proj-medt',
     screenshot: '/nokia/medt.png',
-    preview: '/medt-screenshot.jpeg',
+    preview: '/medt-screenshot.webp',
   },
   {
     id: 'rust-scraper',
@@ -207,7 +208,7 @@ export const projects = [
     iconType: 'rust',
     icon: 'proj-rust-scraper',
     screenshot: '/nokia/rust-scraper.png',
-    preview: '/rust-scraper-screenshot.jpeg',
+    preview: '/rust-scraper-screenshot.webp',
   },
   {
     id: 'cf-worker-rust',
@@ -253,7 +254,7 @@ export const projects = [
     iconType: 'terminal',
     icon: 'proj-linkedin-banner',
     screenshot: '/nokia/linkedin-banner.png',
-    preview: '/linkedin-banner-screenshot.png',
+    preview: '/linkedin-banner-screenshot.webp',
   },
 
   // ── Client websites ──────────────────────────────────────────────────────
@@ -271,7 +272,7 @@ export const projects = [
     iconType: 'globe',
     icon: 'proj-stani-hoxhes',
     screenshot: '/nokia/stani-hoxhes.png',
-    preview: '/stani-screenshot.jpeg',
+    preview: '/stani-screenshot.webp',
   },
   {
     id: 'meridian-build',
@@ -336,7 +337,7 @@ export const projects = [
     iconType: 'chip',
     icon: 'proj-win95-arch',
     screenshot: '/nokia/win95-arch.png',
-    preview: '/win95-screenshot.png',
+    preview: '/win95-screenshot.webp',
   },
   {
     id: 'java-advanced',

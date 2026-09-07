@@ -1,3 +1,9 @@
+// The 32-unit artwork for the desktop shortcuts, and nothing else: the taskbar
+// buttons and the titlebars both draw the native 16-unit PixelIcon named by
+// src/lib/windowIcons.js. SiteCounter.exe's bar chart lived here until that
+// change took its last caller away — it has no desktop shortcut, so nothing
+// could ask for it.
+//
 // The kinds handled below are listed in ./glyphKinds.js; anything else lands
 // on the generic-application fallback at the bottom of this file.
 export function AppGlyph({ kind, size = 32 }) {
@@ -20,15 +26,6 @@ export function AppGlyph({ kind, size = 32 }) {
         <rect x="8" y="17" width="14" height="1" fill="#808080" />
         <rect x="8" y="20" width="12" height="1" fill="#808080" />
         <rect x="8" y="23" width="14" height="1" fill="#808080" />
-      </svg>
-    );
-  }
-  if (kind === 'projects') {
-    return (
-      <svg {...props}>
-        <rect x="2" y="8" width="28" height="20" fill="#f4c430" stroke="#000000" />
-        <rect x="2" y="5" width="13" height="4" fill="#f4c430" stroke="#000000" />
-        <rect x="4" y="10" width="24" height="1" fill="#a8861e" />
       </svg>
     );
   }
@@ -77,18 +74,6 @@ export function AppGlyph({ kind, size = 32 }) {
         <rect x="22" y="14" width="2" height="4" fill="#000000" />
         <rect x="14" y="22" width="4" height="2" fill="#000000" />
         <rect x="8" y="14" width="2" height="4" fill="#000000" />
-      </svg>
-    );
-  }
-  if (kind === 'stats') {
-    return (
-      <svg {...props}>
-        <rect x="2" y="4" width="28" height="24" fill="#c0c0c0" stroke="#000000" />
-        <rect x="5" y="19" width="4" height="7" fill="#000080" />
-        <rect x="11" y="13" width="4" height="13" fill="#000080" />
-        <rect x="17" y="9" width="4" height="17" fill="#000080" />
-        <rect x="23" y="16" width="4" height="10" fill="#000080" />
-        <rect x="4" y="26" width="25" height="1" fill="#808080" />
       </svg>
     );
   }

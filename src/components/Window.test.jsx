@@ -15,6 +15,36 @@ function GhostLauncher({ id }) {
   );
 }
 
+// A launcher whose window is gone again by the time the intent is committed:
+// a taskbar click that closes it in the same batch, or a Run… box naming a
+// window the visitor had already shut. One handler, so React commits both
+// updates together and the Window renders null with the intent standing.
+function OpenThenClose({ id }) {
+  const { bringToFront, close } = useWindowStack();
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        bringToFront(id, { focus: true });
+        close(id);
+      }}
+    >
+      open-and-close
+    </button>
+  );
+}
+
+// A desktop icon or taskbar task: opens the window and asks for the focus,
+// which is the ordinary path every launcher takes.
+function FocusLauncher({ id }) {
+  const { bringToFront } = useWindowStack();
+  return (
+    <button type="button" onClick={() => bringToFront(id, { focus: true })}>
+      launch-focused
+    </button>
+  );
+}
+
 function renderWindow(props = {}) {
   return render(
     <WindowStackProvider initialOrder={['test-win']}>
@@ -281,5 +311,36 @@ describe('Window resize handles', () => {
     expect(container.querySelector('[data-resize="right"]')).toBeNull();
     expect(container.querySelector('[data-resize="bottom"]')).toBeNull();
     expect(container.querySelector('[data-resize="corner"]')).toBeNull();
+  });
+});
+
+describe('Window focus intent', () => {
+  it('drops an intent it could not claim, so the next launch of the same window still lands', async () => {
+    const user = userEvent.setup();
+    render(
+      <WindowStackProvider initialOrder={['test-win']}>
+        <OpenThenClose id="test-win" />
+        <FocusLauncher id="test-win" />
+        <Window id="test-win" title="test.exe">
+          <p>window body</p>
+        </Window>
+      </WindowStackProvider>,
+    );
+
+    // The window is closed in the same commit that records the intent, so
+    // there is no <section> for the focus to land on and the claim fails.
+    await user.click(screen.getByRole('button', { name: 'open-and-close' }));
+    expect(screen.queryByText('window body')).not.toBeInTheDocument();
+
+    // Same id, and this time the window stays. An intent left standing from
+    // the first click makes this one a no-op: setPendingFocusId is handed a
+    // value it already holds, React bails out of the update, and the effect
+    // that claims the focus never re-runs. The window opens and the focus
+    // stays on the launcher -- the window is un-keyboardable until something
+    // else overwrites the stale id.
+    await user.click(screen.getByRole('button', { name: 'launch-focused' }));
+
+    expect(screen.getByText('window body')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'test.exe' })).toHaveFocus();
   });
 });

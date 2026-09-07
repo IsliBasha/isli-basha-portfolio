@@ -42,7 +42,7 @@ export function ContextMenu({ x, y, onClose }) {
     if (key === 'properties') {
       // The desktop's Properties is the Display Properties sheet, exactly as it
       // was in Win95 -- not a dialog reciting the machine's specs.
-      bringToFront('display');
+      bringToFront('display', { focus: true });
       onClose();
       return;
     }

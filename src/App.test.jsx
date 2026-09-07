@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App.jsx';
 
@@ -56,7 +56,7 @@ describe('App initial desktop state', () => {
       screen.queryByRole('region', { name: 'about.txt - Notepad' }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('region', { name: 'projects' }),
+      screen.queryByRole('region', { name: 'my work' }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('region', { name: 'cmd' }),
@@ -134,7 +134,8 @@ describe('Menu bar items — decorative only', () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(screen.getByRole('button', { name: 'resume.pdf' }));
-    const [first] = screen.getAllByRole('menuitem');
+    // The viewer is a lazy chunk; its menu bar arrives a tick after the window.
+    const [first] = await screen.findAllByRole('menuitem');
     await user.click(first);
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
   });
@@ -192,6 +193,37 @@ describe('Contact window labels', () => {
   });
 });
 
+describe('Opening a window puts focus in it', () => {
+  // The launcher used to call getElementById in its own click handler, which
+  // on a FIRST open ran before React had rendered the <section>: focus stayed
+  // on <body> while the titlebar painted active, so the next Tab restarted
+  // from the top of the desktop.
+  it('focuses the window region when its desktop icon opens it', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: 'about.txt' }));
+
+    const region = screen.getByRole('region', { name: 'about.txt - Notepad' });
+    expect(document.activeElement).toBe(region);
+  });
+
+  it('focuses the window again when the taskbar restores it', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: 'about.txt' }));
+    await user.click(screen.getByRole('button', { name: 'Minimize about.txt - Notepad' }));
+    await user.click(
+      screen.getByRole('button', { name: /about\.txt - Notepad/ }),
+    );
+
+    expect(document.activeElement).toBe(
+      screen.getByRole('region', { name: 'about.txt - Notepad' }),
+    );
+  });
+});
+
 describe('Window status bars', () => {
   // .explorer-statusbar became a flex row of sunken panels for the explorer's
   // two-panel bar. The other two windows using the class rendered bare text,
@@ -217,5 +249,42 @@ describe('Window status bars', () => {
 
     expect(panel).toHaveTextContent('Offline');
     expect(bar.textContent.trim()).toBe('Offline');
+  });
+
+  it('turns Online and shows the numerals once /api/visit answers', async () => {
+    // The rejecting default in src/test/setup.js keeps every other test in
+    // this suite offline, which left the Online half of the panel — and the
+    // six-digit odometer above it — with no test at all.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve({ json: () => Promise.resolve({ count: 1234 }) })),
+    );
+    render(<App />);
+
+    const bar = document.querySelector('.win-stats .explorer-statusbar');
+    expect(await within(bar).findByText('Online')).toBeInTheDocument();
+    // Zero-padded to six the way a 90s hit counter was.
+    expect(document.querySelector('.win-stats .visitor-win__count')).toHaveTextContent(
+      '001,234',
+    );
+
+    vi.unstubAllGlobals();
+  });
+});
+
+describe('Skip link', () => {
+  it('points at an element that is really on the page', () => {
+    // It pointed at #projects for months, and nothing on the desktop carried
+    // that id: pressing it moved neither the scroll nor the focus.
+    render(<App />);
+    const link = screen.getByRole('link', { name: /skip to projects/i });
+    const id = link.getAttribute('href').slice(1);
+
+    const target = document.getElementById(id);
+    expect(target, `nothing on the page has id="${id}"`).not.toBeNull();
+    // Without this a <div> is not focusable, and a skip link that moves the
+    // scroll but not the focus drops the next Tab back at the top of the page.
+    expect(target).toHaveAttribute('tabindex', '-1');
+    expect(target).toContainElement(screen.getByRole('button', { name: 'my work' }));
   });
 });

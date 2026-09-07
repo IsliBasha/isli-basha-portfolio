@@ -41,9 +41,13 @@ export function RunDialog({ open, onClose, onOpenWindow }) {
   const fieldId = useId();
 
   // Every way out runs through here, which is why the box is cleared on the
-  // way out rather than on the way in: the dialog stays mounted while closed,
-  // and reopening Run with last time's failed name still in it, selected and
-  // ready to submit again, is not what the box did.
+  // way out rather than on the way in. Belt and braces since the Run chunk
+  // went lazy: StartMenu now renders this only while it is the open dialog,
+  // so it unmounts on the way out and React drops the state anyway. The reset
+  // stays because "closing clears the box" is the behaviour rather than a
+  // by-product of how the dialog happens to be mounted — while it was kept
+  // mounted, reopening Run showed last time's failed name, selected and ready
+  // to submit again, which is not what the box did.
   const dismiss = useCallback(() => {
     setValue('');
     setNotFound(null);

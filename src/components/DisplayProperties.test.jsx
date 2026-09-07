@@ -230,6 +230,39 @@ describe('Apply, OK and Cancel', () => {
   });
 });
 
+describe('Enter on a focused dialog button', () => {
+  // The sheet answers Enter from anywhere inside it as "OK", the way a Win95
+  // dialog did. A button already does something with Enter, and its click
+  // lands AFTER the sheet's keydown handler, which is why that handler skips
+  // `button, input` targets — these two are the cases that motivated it.
+  it('OKs once when Enter lands on a focused OK', async () => {
+    const user = userEvent.setup();
+    renderSheet();
+
+    await user.click(option('Teal'));
+    screen.getByRole('button', { name: 'OK' }).focus();
+    await user.keyboard('{Enter}');
+
+    expect(stored()).toEqual({ wallpaper: 'teal' });
+    expect(isClosed()).toBe('true');
+  });
+
+  it('cancels, and saves nothing, when Enter lands on a focused Cancel', async () => {
+    const user = userEvent.setup();
+    renderSheet();
+
+    await user.click(option('Teal'));
+    screen.getByRole('button', { name: 'Cancel' }).focus();
+    await user.keyboard('{Enter}');
+
+    // Without the exception the sheet's own handler would run first and save
+    // the preview, then Cancel would close a sheet that had already OK'd.
+    expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
+    expect(wallpaperAttr()).toBeUndefined();
+    expect(isClosed()).toBe('true');
+  });
+});
+
 describe('the boot sound checkbox', () => {
   it('is on by default and mutes through the one key that stores it', async () => {
     const user = userEvent.setup();

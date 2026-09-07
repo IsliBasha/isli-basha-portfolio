@@ -48,6 +48,9 @@ export function ShutDown({ open, onClose, reload = defaultReload }) {
   // Every way back to a closed dialog runs through here, which is why the
   // choice is cleared on the way out rather than on the way in: an effect that
   // reset it when `open` flipped would re-render the dialog for nothing.
+  // Harmless rather than load-bearing since this chunk went lazy — StartMenu
+  // renders it only while it is the open dialog, so it unmounts on the way out
+  // and React throws the three pieces of state away with it.
   const dismiss = useCallback(() => {
     setMode('shut-down');
     setPoweredOff(false);

@@ -1,9 +1,9 @@
 import { useCallback, useRef, useState, useSyncExternalStore } from 'react';
 import { useClock } from '../hooks/useClock.js';
 import { useWindowStack } from '../context/windowStackContext.js';
-import { AppGlyph } from '../lib/AppGlyph.jsx';
 import { PixelIcon } from './PixelIcon.jsx';
 import { StartMenu } from './StartMenu.jsx';
+import { WINDOW_ICONS } from '../lib/windowIcons.js';
 import {
   isChimeMuted,
   setChimeMuted,
@@ -120,14 +120,14 @@ export function Taskbar({ reload }) {
   const handleTaskClick = useCallback(
     (entry) => {
       if (entry.hidden) {
-        bringToFront(entry.id);
+        bringToFront(entry.id, { focus: true });
         return;
       }
       if (entry.active) {
         hide(entry.id, entry.title);
         return;
       }
-      bringToFront(entry.id);
+      bringToFront(entry.id, { focus: true });
     },
     [bringToFront, hide],
   );
@@ -175,8 +175,13 @@ export function Taskbar({ reload }) {
                 aria-pressed={entry.active && !entry.hidden}
                 onClick={() => handleTaskClick(entry)}
               >
+                {/* The same 16-unit icon the window's own titlebar draws, from
+                    the one map both read. The 32-unit AppGlyph that used to be
+                    here was scaled to half, so every 1px rule in it landed on
+                    a half-pixel — and Display Properties, which AppGlyph has
+                    no artwork for, got the generic-application fallback. */}
                 <span className="win95-taskbar__task-icon" aria-hidden="true">
-                  <AppGlyph kind={entry.id} size={16} />
+                  <PixelIcon id={WINDOW_ICONS[entry.id]} size={16} />
                 </span>
                 <span className="win95-taskbar__task-label">{entry.title}</span>
               </button>

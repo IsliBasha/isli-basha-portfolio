@@ -136,6 +136,8 @@ export function Window({
     isClosed,
     isMaximized,
     activeId,
+    pendingFocusId,
+    clearPendingFocus,
   } = useWindowStack();
 
   useEffect(() => {
@@ -284,6 +286,30 @@ export function Window({
   const handleFocus = useCallback(() => {
     bringToFront(id);
   }, [bringToFront, id]);
+
+  // A launcher (desktop icon, taskbar task, desktop Properties) records which
+  // window it opened rather than focusing it, because on a first open this
+  // <section> is still unrendered when the click handler runs. The ref is null
+  // while the window is closed or minimised, so this waits for the render that
+  // actually puts it on screen and only then takes the focus.
+  useEffect(() => {
+    if (pendingFocusId !== id) return;
+    const el = containerRef.current;
+    if (!el) {
+      // This window is the one the intent named, and it has no element to
+      // give the focus to -- closed again in the same commit, or hidden by a
+      // taskbar click that landed first. Left standing, the id would sit in
+      // the stack until some other launcher overwrote it, and the next
+      // launcher that asked for THIS window would hand setPendingFocusId a
+      // value it already holds: React bails out of an identical update, this
+      // effect never re-runs, and the window opens with the focus still on
+      // the icon that opened it. Cleared by id, so a newer intent survives.
+      clearPendingFocus(id);
+      return;
+    }
+    el.focus({ preventScroll: true });
+    clearPendingFocus(id);
+  }, [pendingFocusId, id, clearPendingFocus]);
 
   const handleMinimize = useCallback(
     (event) => {

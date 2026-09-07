@@ -1,5 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { downsample, toGrayscale, atkinsonDither, toInkRgba, DITHER_INK } from './dither.js';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, extname, basename, resolve } from 'node:path';
+import {
+  downsample,
+  toGrayscale,
+  atkinsonDither,
+  toInkRgba,
+  DITHER_INK,
+  SOURCES,
+  SOURCE_DIR,
+} from './dither.js';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 function solidImage(width, height, [r, g, b, a]) {
   const data = new Uint8ClampedArray(width * height * 4);
@@ -85,5 +98,27 @@ describe('toInkRgba', () => {
       255,
     ]);
     expect(rgba[7]).toBe(0); // second pixel's alpha byte
+  });
+});
+
+describe('screenshot sources', () => {
+  // The captures moved out of public/ when the previews became WebP: shipping
+  // a 131 KB JPEG of a picture the site only ever shows at 42 KB was 300 KB of
+  // dead weight in the deploy. Both readers — this dither pipeline and
+  // build-screenshots.js — take them from assets/screenshots/ now, and neither
+  // fails until build time if that drifts.
+  it.each(SOURCES)('has the capture $file on disk for $id', ({ file }) => {
+    expect(existsSync(resolve(ROOT, SOURCE_DIR, file))).toBe(true);
+  });
+
+  it('keeps every capture out of the shipped directory', () => {
+    for (const { file } of SOURCES) {
+      expect(existsSync(resolve(ROOT, 'public', file)), `public/${file}`).toBe(false);
+    }
+  });
+
+  it.each(SOURCES)('ships a WebP preview built from $file', ({ file }) => {
+    const webp = `${basename(file, extname(file))}.webp`;
+    expect(existsSync(resolve(ROOT, 'public', webp)), `public/${webp}`).toBe(true);
   });
 });
