@@ -543,6 +543,44 @@ const folderDocs = [
   '................',
 ];
 
+/**
+ * The Start button's flag — the boot splash's 48x28 wave compressed onto the
+ * 16-grid, so the two Windows flags on the site are one drawing at two sizes.
+ * Four panes inside a black outline that steps with the wave, split by a 1px
+ * black cross, each pane carrying a single column of its dark twin a pixel in
+ * from its left edge, where the boot flag's fold turns away from the light.
+ *
+ * Two things did not survive the compression. The trail is gone: on this grid
+ * its squares are single loose pixels of red in the taskbar's silver, which
+ * reads as dirt on the button rather than as paint flying off a flag, and the
+ * three columns it wants are the ones that keep each pane a legible block. The
+ * crest glints are gone for the inverse reason — one white pixel on a silver
+ * button reads as a hole in the paint, not as light on it.
+ *
+ * Nine colours, where every other icon in this file stays at six or under:
+ * four panes, their four dark twins, and the outline. Six would mean dropping
+ * the twins, and a flag with no fold on this grid is four flat squares in a
+ * cross.
+ */
+const startFlag = [
+  '............kkkk',
+  '...kkkkk...klllk',
+  'kkkrrrrkkkkllllk',
+  'krRrrrrklLlllllk',
+  'krRrrrrklLlllllk',
+  'krRrrrrklLlllllk',
+  'krRrrrrklLllkkkk',
+  'krRkkkkklLlkyyyk',
+  'kkkbbbbkkkkyyyyk',
+  'kbBbbbbkyYyyyyyk',
+  'kbBbbbbkyYyyyyyk',
+  'kbBbbbbkyYyyyyyk',
+  'kbBbbbbkyYyykkkk',
+  'kbBkkkkkyYyk....',
+  'kkk.....kkk.....',
+  '................',
+];
+
 export const SHELL_ICONS = {
   notepad,
   dos,
@@ -560,6 +598,7 @@ export const SHELL_ICONS = {
   'speaker-muted': speakerMuted,
   programs,
   'folder-docs': folderDocs,
+  'start-flag': startFlag,
 };
 
 export default { ...EXPLORER_ICONS, ...SHELL_ICONS };

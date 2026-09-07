@@ -1,14 +1,36 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Window } from './Window.jsx';
 import { Taskbar } from './Taskbar.jsx';
 import { WindowStackProvider } from '../context/WindowStack.jsx';
+import { ICONS, PALETTE, TRANSPARENT } from '../lib/pixelIcons/index.js';
 import {
   CHIME_MUTE_KEY,
   isChimeMuted,
   setChimeMuted,
 } from '../lib/bootChime.js';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const taskbarSource = readFileSync(resolve(here, 'Taskbar.jsx'), 'utf8');
+
+// The colours the hand-drawn Start flag mixed for itself, kept here by value
+// so the assertion that they are gone names the one that came back.
+const RETIRED_FLAG_COLOURS = [
+  '#bf1700',
+  '#1e7800',
+  '#1040c0',
+  '#cc9800',
+  '#c0b890',
+];
+
+function startFlagSvg() {
+  const startBtn = screen.getByRole('button', { name: /^start$/i });
+  return startBtn.querySelector('svg.win95-start-btn__icon');
+}
 
 function Harness() {
   return (
@@ -49,23 +71,76 @@ describe('Start button Win95 logo', () => {
     expect(svg).toHaveAttribute('aria-hidden', 'true');
   });
 
-  it('uses polygon shapes for the perspective-warped flag look', () => {
+  it('draws the registered start-flag map instead of its own geometry', () => {
     render(<Harness />);
-    const startBtn = screen.getByRole('button', { name: /^start$/i });
-    const svg = startBtn.querySelector('svg.win95-start-btn__icon');
-    const polygons = svg.querySelectorAll('polygon');
-    expect(polygons.length).toBeGreaterThanOrEqual(4);
+    const svg = startFlagSvg();
+    const viewBox = svg.getAttribute('viewBox') ?? svg.getAttribute('viewbox');
+
+    expect(viewBox).toBe('0 0 16 16');
+    expect(svg.querySelectorAll('polygon')).toHaveLength(0);
+    expect(svg.querySelectorAll('rect').length).toBeGreaterThan(0);
+    // The drawn size, not the box: win95.css holds the svg in a 16px box so
+    // the map lands on whole pixels, and win95.test.js pins that. jsdom
+    // computes no CSS, so neither number can be read off the element here.
+    expect(svg.getAttribute('width')).toBe('16');
   });
 
-  it('renders the four Win95 muted-palette quadrant colors', () => {
+  // Colour-set equality rather than a spot check on four fills: an id typo
+  // falls back to generic-exe, which still paints palette colours and still
+  // fills the button with something flag-shaped enough to pass a rect count.
+  it('paints the four boot-splash panes, in the icon palette', () => {
     render(<Harness />);
-    const startBtn = screen.getByRole('button', { name: /^start$/i });
-    const svg = startBtn.querySelector('svg.win95-start-btn__icon');
-    const fills = Array.from(svg.querySelectorAll('[fill]')).map(el => el.getAttribute('fill'));
-    expect(fills).toContain('#bf1700'); // brick red
-    expect(fills).toContain('#1e7800'); // forest green
-    expect(fills).toContain('#1040c0'); // deep blue
-    expect(fills).toContain('#cc9800'); // amber yellow
+    const fills = new Set(
+      Array.from(startFlagSvg().querySelectorAll('rect')).map((rect) =>
+        rect.getAttribute('fill'),
+      ),
+    );
+    const mapColours = new Set(
+      [...ICONS['start-flag'].join('')]
+        .filter((ch) => ch !== TRANSPARENT)
+        .map((ch) => PALETTE[ch]),
+    );
+
+    expect(fills).toEqual(mapColours);
+    for (const pane of [PALETTE.r, PALETTE.l, PALETTE.b, PALETTE.y]) {
+      expect(fills, `${pane} pane is missing`).toContain(pane);
+    }
+    expect(fills, 'the outline is missing').toContain(PALETTE.k);
+  });
+
+  // The assertion above builds its expectation out of the map, so a map
+  // scrambled into a blob still matches itself and still ships green. These
+  // two rows are the silhouette: the corner the wave starts from, and a
+  // mid-band row carrying the black cross between the panes and the dark twin
+  // a pixel in from each pane's left edge.
+  it('keeps the wave silhouette the boot flag was folded into', () => {
+    const flag = ICONS['start-flag'];
+    expect(flag[0], 'the top-right corner of the wave moved').toBe(
+      '............kkkk',
+    );
+    expect(flag[9], 'the pane cross or a dark-twin fold moved').toBe(
+      'kbBbbbbkyYyyyyyk',
+    );
+  });
+
+  // The flag was the last colour this component mixed by hand, and an
+  // off-palette one here is the one that would not match the boot splash.
+  // Named CSS colours ("red", "silver") are deliberately not guarded: a name
+  // list long enough to be worth having also fires on ordinary prose in the
+  // JSX and its comments, so those are left to review.
+  it('leaves no hand-mixed colour behind in the taskbar source', () => {
+    const PALETTE_RULE =
+      'Taskbar.jsx takes colour from the palette, not literals';
+    for (const colour of RETIRED_FLAG_COLOURS) {
+      expect(taskbarSource, `${colour} is still in Taskbar.jsx`).not.toContain(
+        colour,
+      );
+    }
+    const literal = taskbarSource.match(
+      /#[0-9a-f]{3,8}\b|\brgba?\(|\bhsla?\(|\bcolor-mix\(/i,
+    );
+    expect(literal, `${PALETTE_RULE} — found ${literal?.[0]}`).toBeNull();
+    expect(taskbarSource, PALETTE_RULE).not.toContain('rgba(');
   });
 });
 

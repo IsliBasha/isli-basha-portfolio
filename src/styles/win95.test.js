@@ -193,6 +193,20 @@ describe('chrome foundation — caption buttons', () => {
   });
 });
 
+describe('taskbar chrome — Start button flag', () => {
+  it('holds the flag on a whole-pixel 16px box', () => {
+    // The flag is a 16x16 map. Squeezed into any box that is not a multiple
+    // of 16 the browser resamples it, and image-rendering: pixelated then
+    // rounds each source pixel to a different width — the outline goes 1px on
+    // one column and 2px on the next. 16px is the smallest box where the grid
+    // lands on whole pixels at every display density.
+    const body = topLevelRuleBody('.win95-start-btn__icon');
+    expect(body).toMatch(/width\s*:\s*16px/);
+    expect(body).toMatch(/height\s*:\s*16px/);
+    expect(body).toMatch(/image-rendering\s*:\s*pixelated/);
+  });
+});
+
 describe('chrome foundation — token roles', () => {
   it('makes the outer bevel edge pure black', () => {
     expect(tokensCss).toMatch(/--c-gray-darker:\s*#000000;/);
