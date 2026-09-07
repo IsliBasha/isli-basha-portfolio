@@ -11,6 +11,15 @@ import { CATEGORY_ICONS, ALL_ICON, ALL_OPEN_ICON } from './categories.js';
 import system from './system.js';
 import games from './games.js';
 import projectIcons from './projects.js';
+import { projects } from '../../data/projects.js';
+
+// Named pairs rather than three bare objects: a cross-registry failure has to
+// say which file to open, and "projects/proj-medt" does that.
+const REGISTRIES = [
+  ['system', system],
+  ['games', games],
+  ['projects', projectIcons],
+];
 
 const REQUIRED_SYSTEM_ICONS = [
   'folder',
@@ -146,11 +155,27 @@ describe('icon registry', () => {
     expect(Object.keys(ICONS)).toHaveLength(ids.length);
   });
 
-  it('keeps games and project registries free for the orders that own them', () => {
-    // A guard on the split, not on emptiness: if a later order fills these,
-    // the ids must still land in ICONS, which the duplicate test above covers.
-    expect(games).toBeTypeOf('object');
-    expect(projectIcons).toBeTypeOf('object');
+  // Distinct ids are not distinct pictures. A project map pasted out of
+  // system.js keeps its own id, so the per-registry duplicate check in
+  // "project icons" below never sees it — and the explorer draws a briefcase
+  // for a project that was supposed to get its own object.
+  it('draws no two icons identically, in any registry', () => {
+    const byDrawing = new Map();
+    for (const [section, registry] of REGISTRIES) {
+      for (const [id, rows] of Object.entries(registry)) {
+        const drawing = rows.join('\n');
+        const twin = byDrawing.get(drawing);
+        expect(twin, `${section}/${id} is drawn identically to ${twin}`).toBeUndefined();
+        byDrawing.set(drawing, `${section}/${id}`);
+      }
+    }
+  });
+
+  // games.js is blank on purpose — the order that owns it has not landed — and
+  // scripts/icon-sheet.js now refuses to render an empty projects registry, so
+  // this is the one place that records which registry is legitimately bare.
+  it('leaves the games registry empty for the order that owns it', () => {
+    expect(Object.keys(games)).toHaveLength(0);
   });
 
   it('uses at least three colours per icon, so nothing ships as a silhouette', () => {
@@ -166,6 +191,86 @@ describe('icon registry', () => {
   it('inherits nothing from Object.prototype', () => {
     expect(Object.getPrototypeOf(ICONS)).toBeNull();
     expect(ICONS.toString).toBeUndefined();
+  });
+});
+
+// The project icons are hand-drawn text. Nothing about a 16x16 map fails
+// loudly: a row a character short shears the rows below it, a map pasted twice
+// gives two projects the same picture, and an outline forgotten leaves a
+// coloured smear that only shows up on the navy selection highlight. Each of
+// those is a separate assertion here because each fails on its own.
+describe('project icons', () => {
+  const entries = Object.entries(projectIcons);
+
+  it('draws one icon per project and nothing spare', () => {
+    expect(entries).toHaveLength(projects.length);
+  });
+
+  it('names every icon after a project that exists', () => {
+    const projectIds = new Set(projects.map((p) => p.id));
+    for (const [id] of entries) {
+      expect(id.startsWith('proj-'), `${id} is not namespaced proj-`).toBe(true);
+      expect(
+        projectIds.has(id.slice('proj-'.length)),
+        `${id} names no project in src/data/projects.js`,
+      ).toBe(true);
+    }
+  });
+
+  it('registers only valid 16x16 maps', () => {
+    for (const [id, rows] of entries) {
+      expect(isValidMap(rows), `${id} is not a valid 16x16 map`).toBe(true);
+    }
+  });
+
+  // Two projects sharing a drawing is invisible in the suite and obvious on the
+  // explorer grid, which is the wrong way round.
+  it('gives no two projects the same drawing', () => {
+    const byDrawing = new Map();
+    for (const [id, rows] of entries) {
+      const drawing = rows.join('\n');
+      const twin = byDrawing.get(drawing);
+      expect(twin, `${id} is drawn identically to ${twin}`).toBeUndefined();
+      byDrawing.set(drawing, id);
+    }
+  });
+
+  // The set reads as one set only if every icon is outlined and lit from the
+  // same side. A fill with no outline dissolves into the navy highlight; a fill
+  // with no highlight sits flat next to the eight system icons.
+  it('outlines and lights every icon the way system.js does', () => {
+    for (const [id, rows] of entries) {
+      const pixels = rows.join('');
+      const outline = [...pixels].filter((ch) => ch === 'k').length;
+      const highlight = [...pixels].filter((ch) => ch === 'w').length;
+      expect(outline, `${id} has only ${outline} outline pixels`).toBeGreaterThanOrEqual(12);
+      expect(highlight, `${id} has no highlight pixels`).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  // An icon drawn too small for its cell reads as a smudge at 32px beside the
+  // system set, whose thinnest drawing (wrench) paints 100 of its 256 pixels.
+  // The floor sits below that so a genuinely spare subject stays possible, but
+  // above the size at which a map is a speck in the corner of an empty grid.
+  it('paints enough of the grid to read as an icon on the explorer', () => {
+    const MIN_PAINTED = 80;
+    for (const [id, rows] of entries) {
+      const painted = [...rows.join('')].filter((ch) => ch !== TRANSPARENT).length;
+      expect(
+        painted,
+        `${id} paints only ${painted} of ${ICON_SIZE * ICON_SIZE} pixels`,
+      ).toBeGreaterThanOrEqual(MIN_PAINTED);
+    }
+  });
+
+  // Six is what the eight system icons stay under. Past that an icon starts
+  // looking rendered rather than drawn, and stops matching the row it sits in.
+  it('keeps each icon inside the six-colour budget the system icons use', () => {
+    for (const [id, rows] of entries) {
+      const used = new Set(rows.join('').split('').filter((ch) => ch !== TRANSPARENT));
+      expect(used.size, `${id} uses ${used.size} colours: ${[...used].join('')}`)
+        .toBeLessThanOrEqual(6);
+    }
   });
 });
 
