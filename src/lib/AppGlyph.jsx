@@ -1,3 +1,5 @@
+// The kinds handled below are listed in ./glyphKinds.js; anything else lands
+// on the generic-application fallback at the bottom of this file.
 export function AppGlyph({ kind, size = 32 }) {
   const props = {
     width: size,
@@ -117,5 +119,17 @@ export function AppGlyph({ kind, size = 32 }) {
       </svg>
     );
   }
-  return null;
+  // Unknown kind: a generic application window rather than nothing at all.
+  // Returning null left a 16px hole plus the titlebar's gap, which reads as a
+  // layout bug rather than a missing icon.
+  return (
+    <svg {...props}>
+      <rect x="4" y="5" width="24" height="22" fill="#c0c0c0" stroke="#000000" />
+      <rect x="5" y="6" width="22" height="5" fill="#000080" />
+      <rect x="22" y="7" width="4" height="3" fill="#c0c0c0" stroke="#000000" />
+      <rect x="7" y="14" width="18" height="1" fill="#808080" />
+      <rect x="7" y="17" width="18" height="1" fill="#808080" />
+      <rect x="7" y="20" width="12" height="1" fill="#808080" />
+    </svg>
+  );
 }

@@ -5,13 +5,15 @@ import { dirname, resolve } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const css = readFileSync(resolve(here, 'win95.css'), 'utf8');
+const tokensCss = readFileSync(resolve(here, '..', 'index.css'), 'utf8');
 
 function ruleBody(selector) {
   const pattern = new RegExp(
     `${selector.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`,
   );
   const match = css.match(pattern);
-  return match ? match[1] : '';
+  if (!match) throw new Error(`no rule for ${selector}`);
+  return match[1];
 }
 
 describe('contact window CSS', () => {
@@ -54,7 +56,8 @@ function topLevelRuleBody(selector) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const pattern = new RegExp(`(?:^|\\n)${escaped}\\s*\\{([^}]*)\\}`);
   const match = css.match(pattern);
-  return match ? match[1] : '';
+  if (!match) throw new Error(`no rule for ${selector}`);
+  return match[1];
 }
 
 function mobileCssBlock() {
@@ -126,5 +129,145 @@ describe('window flex layout for natural resize', () => {
     const body = topLevelRuleBody('.win95-window__content');
     expect(body).toMatch(/flex\s*:\s*1/);
     expect(body).toMatch(/min-height\s*:\s*0/);
+  });
+});
+
+// Unlike ruleBody() above, this tolerates a selector that shares its
+// declaration block with other selectors in a comma-separated list. It is
+// anchored to the start of a line and requires a selector boundary after the
+// match, so `.win95-desktop-icon` cannot silently resolve to the block of
+// `.win95-desktop-icon__label`.
+function declarationBlockFor(selector) {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = css.match(
+    new RegExp(`(?:^|\\n)${escaped}(?=[\\s,{])[^{}]*\\{([^}]*)\\}`),
+  );
+  if (!match) throw new Error(`no rule for ${selector}`);
+  return match[1];
+}
+
+describe('chrome foundation — no rotated OS chrome', () => {
+  it('leaves no non-zero --tilt override anywhere in the stylesheet', () => {
+    // Windows sat at -1.4deg..+1.6deg on desktop. A rotated element cannot
+    // land its 1px bevel on a device pixel, so every edge was resampled.
+    // The custom property and `rotate: var(--tilt)` stay so the effect is
+    // one value away from coming back; only non-zero values are gone.
+    const tilts = css.match(/--tilt:\s*[^;]+;/g) ?? [];
+    expect(tilts.length).toBeGreaterThan(0);
+    for (const decl of tilts) {
+      expect(decl).toMatch(/--tilt:\s*0deg;/);
+    }
+  });
+
+  it('keeps the reversible rotate hook on the window frame', () => {
+    const body = topLevelRuleBody('.win95-window');
+    expect(body).toMatch(/rotate\s*:\s*var\(--tilt\)/);
+    expect(body).toMatch(/--tilt:\s*0deg/);
+  });
+});
+
+describe('chrome foundation — flat titlebars', () => {
+  it('fills the active titlebar with a flat navy, not a gradient', () => {
+    const body = topLevelRuleBody('.win95-window__titlebar');
+    expect(body).toMatch(/background\s*:\s*var\(--c-title-from\)/);
+    expect(body).not.toMatch(/linear-gradient/);
+  });
+
+  it('defines the inactive titlebar state driven by the active window id', () => {
+    const body = declarationBlockFor(
+      '.win95-window--inactive .win95-window__titlebar',
+    );
+    expect(body).toMatch(/background\s*:\s*var\(--c-title-inactive\)/);
+    expect(body).toMatch(/color\s*:\s*var\(--c-title-inactive-text\)/);
+  });
+});
+
+describe('chrome foundation — caption buttons', () => {
+  it('gives the caption button a color for its glyphs to inherit', () => {
+    // The glyph rects fill with currentColor. Without an explicit color the
+    // button would inherit the titlebar's white and the glyphs would vanish.
+    const body = topLevelRuleBody('.win95-titlebar-btn');
+    expect(body).toMatch(/color\s*:\s*var\(--c-text\)/);
+    expect(body).toMatch(/width\s*:\s*16px/);
+    expect(body).toMatch(/height\s*:\s*14px/);
+  });
+
+  it('keeps the close glyph readable on its red hover instead of white-out', () => {
+    const body = topLevelRuleBody('.win95-titlebar-btn--close:hover');
+    expect(body).toMatch(/background\s*:\s*#d44/);
+    expect(body).not.toMatch(/color\s*:/);
+  });
+});
+
+describe('chrome foundation — token roles', () => {
+  it('makes the outer bevel edge pure black', () => {
+    expect(tokensCss).toMatch(/--c-gray-darker:\s*#000000;/);
+  });
+
+  it('defines a dedicated muted-text token', () => {
+    expect(tokensCss).toMatch(/--c-text-muted:\s*#404040;/);
+  });
+
+  it('defines the inactive titlebar tokens', () => {
+    expect(tokensCss).toMatch(/--c-title-inactive:\s*#808080;/);
+    expect(tokensCss).toMatch(/--c-title-inactive-text:\s*#c0c0c0;/);
+  });
+
+  it('raises inactive-titlebar contrast when the reader asks for it', () => {
+    // The period-accurate default is 2.2:1. prefers-contrast: more is the
+    // escape hatch, so it must keep overriding both halves of the pair.
+    const block = tokensCss.match(
+      /@media\s*\(prefers-contrast:\s*more\)\s*\{\s*:root\s*\{([^}]*)\}/,
+    );
+    expect(block).not.toBeNull();
+    expect(block[1]).toMatch(/--c-title-inactive:\s*#5a5a5a;/);
+    expect(block[1]).toMatch(/--c-title-inactive-text:\s*#ffffff;/);
+  });
+
+  it('never paints text with the bevel-edge token', () => {
+    // --c-gray-darker is a line colour now. Anything that used it as a text
+    // colour would silently turn pure black when the token flipped.
+    expect(css).not.toMatch(/(^|\n)\s*color:\s*var\(--c-gray-darker\)/);
+  });
+});
+
+describe('chrome foundation — desktop icon selection', () => {
+  it('sizes the icon slot so only a long single word wraps', () => {
+    // 96px slot - 2x4 slot padding - 2x2 label padding = 84px of label box.
+    // At 12px IBM Plex Mono (~7.2px/char) that holds "contact.exe" (79.2px)
+    // on one line; only "minesweeper.exe" (108px) still wraps. Back at 72px
+    // four of the seven labels orphaned a character onto a second line.
+    const slot = topLevelRuleBody('.win95-desktop-icon');
+    expect(slot).toMatch(/width\s*:\s*96px/);
+  });
+
+  it('highlights the label, not the 96px icon slot', () => {
+    const slot = topLevelRuleBody('.win95-desktop-icon');
+    expect(slot).toMatch(/background\s*:\s*transparent/);
+    expect(slot).not.toMatch(/rgba\(0,\s*0,\s*128/);
+
+    const highlight = declarationBlockFor(
+      '.win95-desktop-icon:hover .win95-desktop-icon__label',
+    );
+    expect(highlight).toMatch(/background\s*:\s*var\(--c-title-from\)/);
+    expect(highlight).toMatch(/outline\s*:\s*1px dotted #ffffff/);
+  });
+
+  it('gives keyboard focus the same visible highlight as hover', () => {
+    // .win95-desktop-icon:focus-visible sets outline: none, so the label
+    // highlight is the entire keyboard focus indicator. If it ever drops out
+    // of this selector list, tabbing the desktop becomes invisible.
+    const focus = declarationBlockFor(
+      '.win95-desktop-icon:focus-visible .win95-desktop-icon__label',
+    );
+    expect(focus).toMatch(/background\s*:\s*var\(--c-title-from\)/);
+    expect(focus).toMatch(/outline\s*:\s*1px dotted #ffffff/);
+  });
+
+  it('wraps a label that is wider than the 96px slot', () => {
+    const label = topLevelRuleBody('.win95-desktop-icon__label');
+    expect(label).toMatch(/max-width\s*:\s*100%/);
+    expect(label).toMatch(/overflow-wrap\s*:\s*anywhere/);
+    expect(label).toMatch(/white-space\s*:\s*normal/);
   });
 });

@@ -14,11 +14,17 @@
   --font-hand: 'Caveat', cursive;
   --c-gray: #c0c0c0;
   --c-gray-dark: #808080;
-  --c-gray-darker: #404040;
+  /* Bevel edge only: the outer shadow edge of every bevel is pure black,
+     as it was on real Win95 chrome. Text never uses this token. */
+  --c-gray-darker: #000000;
   --c-gray-light: #dfdfdf;
   --c-gray-lighter: #ececec;
+  /* De-emphasised text (status bars, hints). Was what --c-gray-darker used
+     to be before it became the bevel edge. */
+  --c-text-muted: #404040;
   --c-title-from: #000080;
-  --c-title-to: #1084d0;
+  --c-title-inactive: #808080;
+  --c-title-inactive-text: #c0c0c0;
   --c-accent: #1a73e8;
   --c-text: #1a1a2e;
   --c-win-bg: #fdfdfd;
@@ -28,6 +34,17 @@
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --shadow-win: 4px 4px 0px rgba(0, 0, 0, 0.18);
+}
+
+/* #c0c0c0 on #808080 is 2.2:1 -- period-accurate, and deliberate: the window
+   title is also carried by the region's aria-label and its taskbar task, so
+   the colour is not the only channel. Readers who ask for more contrast get
+   a darker fill and white text instead. */
+@media (prefers-contrast: more) {
+  :root {
+    --c-title-inactive: #5a5a5a;
+    --c-title-inactive-text: #ffffff;
+  }
 }
 
 *,
