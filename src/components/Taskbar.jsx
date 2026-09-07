@@ -10,29 +10,6 @@ import {
   subscribeChimeMuted,
 } from '../lib/bootChime.js';
 
-function StartIcon() {
-  return (
-    <svg
-      className="win95-start-btn__icon"
-      viewBox="0 0 16 15"
-      shapeRendering="crispEdges"
-      aria-hidden="true"
-    >
-      {/* Win95 waving-flag perspective — left column leans slightly */}
-      <polygon points="1,0 7,0 7,6 0,7"    fill="#bf1700" /> {/* brick red   */}
-      <polygon points="8,0 14,0 14,6 8,6"   fill="#1e7800" /> {/* forest green */}
-      <polygon points="0,8 7,7 7,13 0,13"   fill="#1040c0" /> {/* deep blue   */}
-      <polygon points="8,8 14,8 14,14 8,14" fill="#cc9800" /> {/* amber yellow */}
-      {/* 1-px cream divider cross */}
-      <rect x="7"  y="0" width="1" height="14" fill="#c0b890" />
-      <rect x="0"  y="7" width="7" height="1"  fill="#c0b890" />
-      <rect x="8"  y="7" width="6" height="1"  fill="#c0b890" />
-      {/* 1-px drop shadow at bottom-right for depth */}
-      <rect x="1"  y="14" width="13" height="1" fill="rgba(0,0,0,0.35)" />
-    </svg>
-  );
-}
-
 /**
  * The notification area: the boot-sound toggle and the clock, in one sunken
  * well at the right-hand end of the taskbar.
@@ -147,7 +124,17 @@ export function Taskbar({ reload }) {
         }}
         onKeyDown={handleStartKeyDown}
       >
-        <StartIcon />
+        {/* The boot splash's flag on the 16-grid, from the one registry the
+            tray and the task list already draw from. The class holds it at
+            16px — one screen pixel per map pixel, so nothing is resampled
+            away. The 14px box the hand-drawn polygons used lost three rows of
+            the drawing. Whole pixels cost the button 2px of width, which
+            pushes the label and the task list right by the same. */}
+        <PixelIcon
+          id="start-flag"
+          size={16}
+          className="win95-start-btn__icon"
+        />
         <span>Start</span>
       </button>
       <StartMenu

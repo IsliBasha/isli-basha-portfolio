@@ -53,9 +53,13 @@ const REQUIRED_SHELL_ICONS = [
   'speaker-muted',
   'programs',
   'folder-docs',
+  'start-flag',
 ];
 
-// The eight that order 07 hangs on window titlebars as well as in the menu.
+// The eight that order 07 hangs on window titlebars as well as in the menu,
+// plus the Start button's flag: Taskbar.jsx indexes ICONS['start-flag']
+// directly, so a renamed key throws a TypeError with no id in it rather than
+// naming the icon that went missing.
 const APP_ICONS = [
   'notepad',
   'dos',
@@ -65,6 +69,7 @@ const APP_ICONS = [
   'snake',
   'stats',
   'display',
+  'start-flag',
 ];
 
 // The Minesweeper board and status bar draw these by id. A missing one renders
@@ -306,9 +311,12 @@ describe('project icons', () => {
     }
   });
 
-  // Six is what the eight system icons stay under. Past that an icon starts
-  // looking rendered rather than drawn, and stops matching the row it sits in.
-  it('keeps each icon inside the six-colour budget the system icons use', () => {
+  // Six is the budget for a project icon: past that one starts looking
+  // rendered rather than drawn, and stops matching the row it sits in. The
+  // loop below runs over this registry only, so it is a rule about project
+  // icons and not about the shell — system.js keeps to six by habit rather
+  // than by assertion, and start-flag spends nine on purpose.
+  it('keeps each project icon inside its six-colour budget', () => {
     for (const [id, rows] of entries) {
       const used = new Set(rows.join('').split('').filter((ch) => ch !== TRANSPARENT));
       expect(used.size, `${id} uses ${used.size} colours: ${[...used].join('')}`)
