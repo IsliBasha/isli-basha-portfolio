@@ -8,6 +8,7 @@
     "build": "vite build",
     "prebuild": "node scripts/dither-screenshots.js && node scripts/generate-static.js",
     "dither": "node scripts/dither-screenshots.js",
+    "icon-sheet": "node scripts/icon-sheet.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
