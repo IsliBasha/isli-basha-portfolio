@@ -12,6 +12,7 @@ import system from './system.js';
 import games from './games.js';
 import projectIcons from './projects.js';
 import { projects } from '../../data/projects.js';
+import { FRAMES } from '../bootFlagFrames.js';
 
 // Named pairs rather than three bare objects: a cross-registry failure has to
 // say which file to open, and "projects/proj-medt" does that.
@@ -205,6 +206,25 @@ describe('icon registry', () => {
     for (const [id, rows] of Object.entries(ICONS)) {
       const used = new Set(rows.join('').split('').filter((ch) => ch !== TRANSPARENT));
       expect(used.size, `${id} uses only ${[...used].join('')}`).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  // Fuchsia is the damage marker: runs.js paints PALETTE.m for any character
+  // that is not a palette key, and that only reads as "something is broken"
+  // for as long as nothing draws with it on purpose. One icon using it for a
+  // magenta detail turns every future typo into a plausible pixel.
+  it('leaves the fuchsia sentinel unused so an unknown character stands out', () => {
+    const SENTINEL = 'm';
+    const drawings = [
+      ...Object.entries(ICONS),
+      ...FRAMES.map((rows, i) => [`boot flag frame ${i + 1}`, rows]),
+    ];
+    expect(drawings.length).toBeGreaterThan(FRAMES.length);
+    for (const [id, rows] of drawings) {
+      expect(
+        rows.join(''),
+        `${id} draws with "${SENTINEL}", which runs.js reserves for unknown characters`,
+      ).not.toContain(SENTINEL);
     }
   });
 

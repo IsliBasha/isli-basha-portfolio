@@ -98,17 +98,53 @@
   to { opacity: 1; transform: scale(1); }
 }
 
-.boot-splash__logo {
-  width: 160px;
-  height: 150px;
-  image-rendering: pixelated;
+/* The flag is three stacked 48x28 SVGs, one per wave frame; the animation
+   swaps which one is opaque. 5px per pixel keeps every edge on a whole device
+   pixel at 1x and 2x, which is what `crispEdges` needs to stay crisp. */
+.boot-flag {
+  --boot-flag-cycle: 1.05s;
+  position: relative;
+  width: calc(48 * 5px);
+  height: calc(28 * 5px);
+  /* A flex item in .boot-splash: the default shrink would put the 5px pixels on
+     fractional boundaries as soon as the column runs short of room, which is
+     exactly the resampling the whole pixel grid exists to avoid. */
+  flex-shrink: 0;
   filter: drop-shadow(4px 6px 0 rgba(0, 0, 0, 0.45));
-  animation: boot-logo-wave 1.6s ease-in-out infinite alternate;
 }
 
-@keyframes boot-logo-wave {
-  from { transform: skewX(-2deg) skewY(1deg); }
-  to   { transform: skewX(2deg)  skewY(-1deg); }
+.boot-flag__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: boot-flag-wave var(--boot-flag-cycle) steps(1, end) infinite;
+}
+
+/* One frame is opaque for one third of the cycle. A negative delay starts an
+   animation that far in, so the frame that should show SECOND has to be two
+   thirds already elapsed — hence -2/3 on frame 2 and -1/3 on frame 3. */
+.boot-flag__frame--2 {
+  animation-delay: calc(var(--boot-flag-cycle) / -3 * 2);
+}
+
+.boot-flag__frame--3 {
+  animation-delay: calc(var(--boot-flag-cycle) / -3);
+}
+
+/* Opacity only, and deliberately no transform: the flag it replaced was
+   sheared back and forth, which resampled every pixel edge the SVG was drawn
+   to keep sharp. The wave now lives in the three maps themselves. */
+@keyframes boot-flag-wave {
+  /* 33.34 and not 33.33: with steps(1, end) a frame stays opaque right up to
+     this stop, so a hair over a third makes consecutive frames overlap for
+     under a millisecond instead of leaving a gap. The frames are stacked, so
+     an overlap is invisible — a gap would flash the teal through three times
+     a second. */
+  0% { opacity: 1; }
+  33.34% { opacity: 0; }
+  100% { opacity: 0; }
 }
 
 .boot-splash__tag {
@@ -159,8 +195,20 @@
   .boot-overlay,
   .boot-bios,
   .boot-splash,
-  .boot-splash__logo,
+  .boot-flag__frame,
   .boot-splash__bar > span {
     animation: none !important;
+  }
+
+  /* Stopping the animation is not enough: the frames are stacked and start at
+     opacity 0, so without this the flag disappears entirely. Frame 1 is the
+     still. */
+  .boot-flag__frame--1 {
+    opacity: 1;
+  }
+
+  .boot-flag__frame--2,
+  .boot-flag__frame--3 {
+    opacity: 0;
   }
 }

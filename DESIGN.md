@@ -108,6 +108,7 @@ A faithful Win95 environment with two expressive additions: the sky desktop grad
 
 ### Secondary
 - **Phosphor Green** (#33ff33): Terminal foreground only. High chroma against near-black; immediately signals active computation.
+- **VGA Icon Primaries** (`r` #ff0000, `l` #00ff00, `b` #0000ff, `y` #ffff00, each with a dark twin): the 16-colour pixel-icon palette in `src/lib/pixelIcons/palette.js`. Confined to icon art and to the boot splash flag, whose four panes are those same four keys — outside Minesweeper's number colours (#0000ff on a 1, #ff0000 on a 3), which are Win95's own, no pure primary appears anywhere in the running chrome. Pixel art is the one place besides bevel edges where outlines are pure #000000 and highlights pure #ffffff.
 
 ### Tertiary
 - **Panic Blue** (#0000aa): BSOD background only. A single-use emergency color that owns its moment completely and appears nowhere else.
@@ -267,6 +268,15 @@ One sunken well at the right end of the taskbar. The clock used to carry its own
 - **Speaker:** 18px hit area around a 16px glyph, two drawn states rather than one dimmed one. The muted glyph swaps the sound arcs for a red cross, so the state survives at 16px and without colour.
 - **States:** no hover fill, which is what a real tray icon did. Pressing shifts the glyph 1px down-right; keyboard focus is a 1px dotted rectangle. Both leave the well itself alone.
 - **Clock:** IBM Plex Mono 0.8125rem, 42px minimum width so the digits do not shuffle the tray as the minute changes.
+
+### Boot Splash Flag
+
+The Windows flag on the splash, drawn as pixel art rather than as geometry: three 48x28 character maps over the icon palette, one per wave frame, painted as merged 1px-tall rects at 5px per pixel with `shapeRendering="crispEdges"`.
+
+- **Composition:** four panes — red and lime over blue and yellow — inside a black outline that follows the wave, split by a 2px black divider down the middle and a 1px one across it. Each pane's dark twin (maroon, green, navy, olive) shades the columns the fold turns away from the light, and one white pixel glints on each crest. The left third is the trail: 1px, 2px and 3px squares in the same four colours flying off to the left, smaller and sparser with distance.
+- **Motion:** a frame swap, not a transform. From frame to frame the wave advances one column and every trail square drifts one pixel left; the three frames are stacked and cycled on opacity alone, 350ms each. Doing the waving with a transform is what made the flag it replaced look soft — it resampled the pixel edges the whole system exists to keep hard.
+- **Shadow:** the same `drop-shadow(4px 6px 0 rgba(0,0,0,0.45))` the old logo carried. Pixel-offset, no blur, the win drop shadow's rule applied to an irregular silhouette.
+- **Reduced motion:** frame 1 alone, animation off. The still is a whole flag, not an empty stack.
 
 ## 6. Do's and Don'ts
 

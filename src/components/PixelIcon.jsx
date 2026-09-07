@@ -1,23 +1,16 @@
 import { memo } from 'react';
 import {
   PALETTE,
-  TRANSPARENT,
   ICON_SIZE,
   getIcon,
   resolveIconId,
 } from '../lib/pixelIcons/index.js';
+import { pixelRuns, UNKNOWN_COLOUR } from '../lib/pixelIcons/runs.js';
 
-// A 16x16 map is up to 256 rects if drawn a pixel at a time. Merging runs of
-// the same colour along a row cuts the folder icon to 52, which matters
-// because the explorer paints one icon per project plus the category list on
-// every filter change.
+// pixelRuns is pure, so its result only has to be computed once per icon: the
+// explorer paints one icon per project plus the category list on every filter
+// change, and the folder map alone is 164 painted pixels.
 const runCache = new Map();
-
-// An unregistered palette character would otherwise reach the SVG with
-// fill=undefined, which paints black and reads as a stray outline pixel.
-// Fuchsia is in the palette, is never used for an outline, and is impossible
-// to mistake for intent.
-const UNKNOWN_COLOUR = PALETTE.m;
 
 function iconRuns(id) {
   // Key the cache on the resolved id: caching under a missing id would grow an
@@ -26,23 +19,10 @@ function iconRuns(id) {
   const cached = runCache.get(resolved);
   if (cached) return cached;
 
-  const rows = getIcon(resolved);
-  const runs = [];
-  rows.forEach((row, y) => {
-    let x = 0;
-    while (x < row.length) {
-      const ch = row[x];
-      if (ch === TRANSPARENT) {
-        x += 1;
-        continue;
-      }
-      let end = x + 1;
-      while (end < row.length && row[end] === ch) end += 1;
-      runs.push({ x, y, width: end - x, fill: PALETTE[ch] ?? UNKNOWN_COLOUR });
-      x = end;
-    }
-  });
-
+  // Palette and fallback passed explicitly rather than left to pixelRuns'
+  // defaults: this component is the one that promises a damaged map paints
+  // fuchsia instead of black, and that promise should be readable here.
+  const runs = pixelRuns(getIcon(resolved), PALETTE, UNKNOWN_COLOUR);
   runCache.set(resolved, runs);
   return runs;
 }
