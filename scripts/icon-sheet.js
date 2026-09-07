@@ -57,11 +57,11 @@ const SECTIONS = [
 // sheet repeats the choice rather than importing out of a component.
 const UNKNOWN_COLOUR = PALETTE.m;
 
-// `games` is empty until the order that owns it lands, and `system` has been
-// populated since the shell order, so a blanket "no icons anywhere" check
-// either fires on a healthy tree or can never fire at all. The projects
-// registry is the one that can quietly empty out, and a contact sheet showing
-// eight system tiles says nothing about the work being reviewed.
+// `system` and `games` are drawn once and left alone, so a check on them could
+// never fire on anything but a healthy tree. `projects` is the registry that
+// moves with the work, and an empty one is the failure this catches: a contact
+// sheet of system and game tiles renders happily and says nothing at all about
+// the icons under review.
 const SECTIONS_THAT_MUST_DRAW = ['projects'];
 
 /**

@@ -28,3 +28,23 @@ describe('Snake component', () => {
     expect(screen.getByLabelText(/score/i)).toHaveTextContent('Score: 0');
   });
 });
+
+describe('Snake board cells', () => {
+  it('marks exactly one head cell and one food cell', () => {
+    const { container } = render(<Snake />);
+
+    expect(container.querySelectorAll('.snake-cell--head')).toHaveLength(1);
+    expect(container.querySelectorAll('.snake-cell--food')).toHaveLength(1);
+  });
+
+  // Both used to be inline-free but CSS-decorated: the food was a 50% radius
+  // dot and the head carried a 4px glow, the only blurred shadow in the whole
+  // desktop. Nothing here should carry its own paint.
+  it('leaves the appearance of every cell to the stylesheet', () => {
+    const { container } = render(<Snake />);
+    const cells = [...container.querySelectorAll('.snake-cell')];
+
+    expect(cells.length).toBe(20 * 15);
+    expect(cells.every((cell) => cell.getAttribute('style') === null)).toBe(true);
+  });
+});

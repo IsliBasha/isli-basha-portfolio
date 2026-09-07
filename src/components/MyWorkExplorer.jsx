@@ -4,46 +4,23 @@ import { ALL_OPEN_ICON } from '../lib/pixelIcons/categories.js';
 import { CATEGORIES } from './myWorkCategories.js';
 import { PixelIcon } from './PixelIcon.jsx';
 
-function folderItemStyle(active) {
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '3px 8px',
-    cursor: 'default',
-    background: active ? '#000080' : 'transparent',
-    color: active ? '#ffffff' : 'inherit',
-    border: 'none',
-    width: '100%',
-    textAlign: 'left',
-    fontFamily: 'inherit',
-    fontSize: 'inherit',
-  };
-}
+// A tile is a 32px icon over up to three lines of 0.65rem label — 91px at its
+// tallest — and the grid pads 8px above and below it. The body row is floored
+// there so the fixed 140px detail pane cannot take the last of the height on a
+// window dragged to its 220x140 minimum and leave a file list with no files in
+// it; .win-mywork__content scrolls to reach the rest.
+const TILE_ROW_FLOOR_PX = 107;
 
-function tileStyle(selected) {
-  return {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '4px',
-    padding: '6px 4px',
-    cursor: 'default',
-    border: '1px solid transparent',
-    background: selected ? '#000080' : 'transparent',
-    fontFamily: 'inherit',
-  };
-}
-
-function tileLabelStyle(selected) {
-  return {
-    fontSize: '0.65rem',
-    textAlign: 'center',
-    color: selected ? '#ffffff' : '#1a1a2e',
-    lineHeight: 1.3,
-    maxWidth: '100px',
-    wordBreak: 'break-word',
-  };
+/**
+ * Where a project's link goes, taken from the label the data already carries.
+ * The trailing arrow in that label is a desktop affordance and nothing else —
+ * the Nokia build writes its own "Visit" soft key — so it is stripped here and
+ * "GitHub →" reads "GitHub" on a chrome button. The word matters: "Open" on
+ * its own gave no clue whether the tile led to a repository, a live site or a
+ * company page, which is exactly what the pill it replaced used to say.
+ */
+function openLabel(label) {
+  return label.replace(/\s*→\s*$/u, '');
 }
 
 const chrome = {
@@ -75,14 +52,17 @@ const chrome = {
     display: 'grid',
     gridTemplateColumns: '140px 1fr',
     flex: 1,
-    minHeight: 0,
+    minHeight: `${TILE_ROW_FLOOR_PX}px`,
     overflow: 'hidden',
   },
   sidebar: {
     borderRight: '2px solid #808080',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
+    // A grid item defaults to min-height: auto, which would let the category
+    // list set the height of the whole body row instead of scrolling in it.
+    minHeight: 0,
+    overflowY: 'auto',
   },
   sidebarHeading: {
     padding: '2px 8px 4px',
@@ -92,15 +72,6 @@ const chrome = {
     textTransform: 'uppercase',
     borderBottom: '1px solid #808080',
     marginBottom: '2px',
-  },
-  grid: {
-    background: '#fdfdfd',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
-    alignContent: 'start',
-    gap: '2px',
-    padding: '8px',
-    overflowY: 'auto',
   },
   detail: {
     display: 'grid',
@@ -165,21 +136,6 @@ const chrome = {
     lineHeight: 1.4,
     display: 'inline-block',
   },
-  btn: {
-    padding: '2px 10px',
-    background: '#c0c0c0',
-    borderTop: '2px solid #dfdfdf',
-    borderLeft: '2px solid #dfdfdf',
-    borderRight: '2px solid #404040',
-    borderBottom: '2px solid #404040',
-    fontFamily: 'inherit',
-    fontSize: '0.68rem',
-    cursor: 'pointer',
-    color: '#1a1a2e',
-    textDecoration: 'none',
-    display: 'inline-block',
-    lineHeight: 1.4,
-  },
   addressBar: {
     display: 'flex',
     alignItems: 'center',
@@ -213,14 +169,6 @@ const chrome = {
     cursor: 'pointer',
     lineHeight: 1.6,
     color: '#1a1a2e',
-  },
-  statusbar: {
-    borderTop: '1px solid #808080',
-    padding: '2px 8px',
-    fontSize: '0.65rem',
-    color: '#404040',
-    display: 'flex',
-    gap: '12px',
   },
 };
 
@@ -279,7 +227,8 @@ export function MyWorkExplorer() {
               <button
                 key={cat.id}
                 type="button"
-                style={folderItemStyle(isSelected)}
+                className="explorer-folder-item"
+                data-selected={isSelected ? 'true' : 'false'}
                 onClick={() => handleFilter(cat.id)}
               >
                 <PixelIcon
@@ -287,24 +236,29 @@ export function MyWorkExplorer() {
                   id={isSelected && cat.id === 'all' ? ALL_OPEN_ICON : cat.icon}
                   size={16}
                 />
-                {cat.label}
+                <span className="explorer-folder-item__label">{cat.label}</span>
               </button>
             );
           })}
         </div>
 
-        <div style={chrome.grid}>
-          {visible.map(p => (
-            <button
-              key={p.id}
-              type="button"
-              style={tileStyle(effectiveSelected?.id === p.id)}
-              onClick={() => setSelected(p)}
-            >
-              <PixelIcon className="explorer-tile-icon" id={p.icon} size={32} />
-              <span style={tileLabelStyle(effectiveSelected?.id === p.id)}>{p.name}</span>
-            </button>
-          ))}
+        <div className="explorer-tile-grid">
+          {visible.map(p => {
+            const isSelected = effectiveSelected?.id === p.id;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                className="explorer-tile"
+                data-selected={isSelected ? 'true' : 'false'}
+                aria-current={isSelected ? 'true' : undefined}
+                onClick={() => setSelected(p)}
+              >
+                <PixelIcon className="explorer-tile-icon" id={p.icon} size={32} />
+                <span className="explorer-tile__label">{p.name}</span>
+              </button>
+            );
+          })}
           {visible.length === 0 && (
             <div style={{ padding: '12px', fontSize: '0.7rem', color: '#808080', gridColumn: '1 / -1' }}>
               No results for &ldquo;{query}&rdquo;
@@ -331,17 +285,13 @@ export function MyWorkExplorer() {
             <div style={chrome.actions}>
               {effectiveSelected.link ? (
                 <a
+                  className="win-btn explorer-open-btn"
                   href={effectiveSelected.link.href}
                   target="_blank"
-                  rel="noopener"
-                  style={{
-                    ...chrome.btn,
-                    background: effectiveSelected.link.label.startsWith('GitHub') ? '#1a1a2e' : '#1a73e8',
-                    color: '#fff',
-                    borderColor: effectiveSelected.link.label.startsWith('GitHub') ? '#000' : '#0d47a1',
-                  }}
+                  rel="noreferrer noopener"
+                  aria-label={`${openLabel(effectiveSelected.link.label)} — ${effectiveSelected.name}`}
                 >
-                  {effectiveSelected.link.label}
+                  {openLabel(effectiveSelected.link.label)}
                 </a>
               ) : (
                 <span style={chrome.privatePill}>{effectiveSelected.privateNote}</span>
@@ -351,14 +301,19 @@ export function MyWorkExplorer() {
         </div>
       )}
 
-      <div style={chrome.statusbar}>
-        <span>
+      <div className="explorer-statusbar">
+        <span className="explorer-statusbar__panel">
           {q
             ? `${visible.length} object${visible.length !== 1 ? 's' : ''} matching '${query.trim()}'`
             : `${visible.length} object${visible.length !== 1 ? 's' : ''}`
           }
         </span>
-        {effectiveSelected && <span>1 object selected</span>}
+        {/* Empty rather than absent when nothing is selected: Win95's status
+            bar kept its panels and blanked the text, so the first panel does
+            not jump wider the moment a selection clears. */}
+        <span className="explorer-statusbar__panel">
+          {effectiveSelected ? '1 object selected' : ''}
+        </span>
       </div>
     </div>
   );

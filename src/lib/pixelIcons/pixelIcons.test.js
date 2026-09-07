@@ -66,6 +66,18 @@ const APP_ICONS = [
   'display',
 ];
 
+// The Minesweeper board and status bar draw these by id. A missing one renders
+// the generic program placeholder, which looks like a deliberate square button
+// rather than a bug.
+const REQUIRED_GAME_ICONS = [
+  'face-idle',
+  'face-o',
+  'face-win',
+  'face-dead',
+  'ms-flag',
+  'ms-mine',
+];
+
 describe('palette', () => {
   it('defines the 16 VGA system colours', () => {
     expect(Object.keys(PALETTE)).toHaveLength(16);
@@ -171,11 +183,22 @@ describe('icon registry', () => {
     }
   });
 
-  // games.js is blank on purpose — the order that owns it has not landed — and
-  // scripts/icon-sheet.js now refuses to render an empty projects registry, so
-  // this is the one place that records which registry is legitimately bare.
-  it('leaves the games registry empty for the order that owns it', () => {
-    expect(Object.keys(games)).toHaveLength(0);
+  it('draws every glyph the games ask for', () => {
+    for (const id of REQUIRED_GAME_ICONS) {
+      expect(Object.hasOwn(games, id), `missing game icon ${id}`).toBe(true);
+    }
+  });
+
+  // The four faces are built from one shared disc, so a copy-paste that forgot
+  // to change the mouth would leave two ids pointing at the same picture and
+  // the button would look frozen mid-game.
+  it('gives every registered icon its own drawing, not just its own id', () => {
+    const seen = new Map();
+    for (const [id, rows] of Object.entries(ICONS)) {
+      const key = rows.join('|');
+      expect(seen.has(key), `${id} is pixel-for-pixel ${seen.get(key)}`).toBe(false);
+      seen.set(key, id);
+    }
   });
 
   it('uses at least three colours per icon, so nothing ships as a silhouette', () => {

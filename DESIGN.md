@@ -201,6 +201,28 @@ Raised panels inside the Projects window. Unique interaction: cards press in on 
 - **Hover:** Bevel-in — borders and shadows invert. The card presses like a held button.
 - **Internal:** Name in Mono 700/1rem, description in Sans 0.8125rem/1.45, stack pills as win-sunken chips. Min height 160px.
 
+### Explorer (my work)
+
+The file-browser window: category pane on the left, a grid of project tiles on the right, a detail pane under both and a status bar at the foot. It is the one window that has to hold 25 items, so everything in it is sized to be read at a glance rather than to fill the frame.
+
+- **Tiles:** 32px pixel icon over a 0.65rem Mono label, transparent at rest with a 1px transparent border so selection never shifts the layout.
+- **Selection:** the **label** fills with titlebar navy under white text — the icon and the tile box stay untouched, the same rule the desktop shortcuts follow.
+- **Keyboard focus:** a 1px dotted marquee in Ink, 1px outside the label, painting nothing. Selection says which project the detail pane is showing; focus says where the keyboard is; they are not the same claim and sharing one highlight made arrowing through the grid read as changing the selection. On the tile that is *also* selected the marquee turns white and tucks 1px inside the navy — at +1px it would sit on the near-white grid, where white is invisible. The tile's own outline is suppressed so there are never two rings.
+- **Categories pane:** the same treatment one size down — navy behind the category name only, the 16px folder icon left out of it, the same dotted marquee on focus.
+- **Grid:** `overflow-y: auto` with `min-height: 0`. The second declaration is the load-bearing one — as a grid item the tile grid defaults to `min-height: auto`, sizes itself to all 25 tiles and gets clipped by the body instead of scrolling.
+- **Detail pane:** fixed 140px, preview on the left and name/description/type/stack on the right. Fixed so the grid, not the pane, absorbs a resize.
+- **Open button:** a plain `.win-btn` in Mono 0.6875rem carrying the destination the data already names — "GitHub", "Visit" or "Company" with the trailing arrow stripped, and the project name behind it in the accessible name. It used to be a filled #1a73e8 pill (near-black for GitHub), the only saturated fill in the window and a second focus competing with the titlebar; a button reading "Open" fixed the colour and lost the address. Projects with no public link keep a sunken pill carrying the reason instead.
+- **Status bar:** `.explorer-statusbar` is a flex row of sunken panels, Muted Ink on POST Gray — object count on the left, "1 object selected" on the right. The right panel keeps its 140px whether or not it has anything to say, so the left one does not resize as the selection changes. contact.exe and SiteCounter.exe share the class with a single panel that spans the bar; text sitting loose in that row is a bug, not a variant.
+
+### Game Windows
+
+minesweeper.exe and snake.exe. Both are the plain window chrome around a bevelled playfield; the only thing they add to the vocabulary is the LED readout.
+
+- **Glyphs:** the four faces, the flag and the mine are 16x16 `PixelIcon` maps in `src/lib/pixelIcons/games.js`, never font characters. The faces share one yellow disc so a swap reads as an expression change and not as a different button: idle, "oh" while a cell is held down, sunglasses on a win, X eyes on a loss.
+- **Counters:** `SevenSegment` — SVG rectangles, `#ff0000` lit on `#400000` unlit over black, in a 1px bevel-in frame. Drawn rather than set in a seven-segment webfont: a third type family for six numerals would break the Mono/Sans split, and at 24px a hinted glyph lands its strokes on fractional pixels. Unlit segments are painted, not omitted, so a `1` reads as a numeral in a slot. More flags down than mines drives the mine counter below zero and it shows `-01`, spending the leading cell on a minus rather than clamping at `000` and making an over-flagged board look solved.
+- **Menu bar:** the shared `.explorer-menubar`, flush against the top of the client area. Minesweeper's `Game` resets and `Help` opens a system dialog — the two menu bars on this site that are not decorative.
+- **Snake cells:** square, always. The food was a 50% radius dot and the head carried a 4px glow; both were resampled edges on a desktop whose whole contract is that nothing is.
+
 ### Terminal
 
 The stack window. A phosphor CRT display.
