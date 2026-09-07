@@ -15,7 +15,6 @@ colors:
   ink: "#1a1a2e"
   text-muted: "#404040"
   win-bg: "#fdfdfd"
-  memo-canary: "#fff9c4"
   phosphor-green: "#33ff33"
   term-bg: "#0c0c0c"
   panic-blue: "#0000aa"
@@ -87,7 +86,7 @@ components:
 
 This is a 1990s operating system shell running on modern React, fully aware of what it is. The portfolio does not simulate Windows 95 as a novelty trick — it commits to the metaphor completely: draggable windows, a functioning taskbar, a boot sequence, a BSOD, Minesweeper, Snake. The visitor is not looking at a portfolio with a retro skin. They are using a machine.
 
-The design system is built from the bevel. Every surface — buttons, windows, inputs, cards, the taskbar — uses the same four-layer double-border technique that Win95 used. Elevation is theatrical, not ambient: shadows exist because they are part of the performance. The system makes you feel like you are touching embossed plastic hardware. Typography follows a strict split: IBM Plex Mono for anything that belongs to the OS (titlebar labels, terminal output, sticky notes, clock, taskbar) and IBM Plex Sans for anything that is human-facing content (body copy, contact, project descriptions). One font family, two registers, complete discipline.
+The design system is built from the bevel. Every surface — buttons, windows, inputs, cards, the taskbar — uses the same four-layer double-border technique that Win95 used. Elevation is theatrical, not ambient: shadows exist because they are part of the performance. The system makes you feel like you are touching embossed plastic hardware. Typography follows a strict split: IBM Plex Mono for anything that belongs to the OS (titlebar labels, terminal output, clock, taskbar) and IBM Plex Sans for anything that is human-facing content (body copy, contact, project descriptions). One font family, two registers, complete discipline.
 
 The system explicitly rejects: generic dark-mode developer portfolios with hero sections and glowing stack badges; AI-assembled layouts that read as interchangeable across a thousand portfolios; maximalist agency scroll experiences that prioritize spectacle over information; anything that could have been assembled from a template in an afternoon.
 
@@ -112,7 +111,6 @@ A faithful Win95 environment with two expressive additions: the sky desktop grad
 
 ### Tertiary
 - **Panic Blue** (#0000aa): BSOD background only. A single-use emergency color that owns its moment completely and appears nowhere else.
-- **Memo Canary** (#fff9c4): The sticky note. The only warm color on the desktop. Its warmth signals human presence inside the machine.
 
 ### Neutral
 - **Bootup Horizon** (gradient: #d6eaf8 → #aed6f1): The desktop background. Cool, pale, ambient. The environment everything lives inside.
@@ -217,14 +215,6 @@ The stack window. A phosphor CRT display.
 
 - **Hover/Focus/Active:** the **label** highlights, not the slot — solid titlebar navy (#000080) behind white text with a 1px dotted white rectangle inset 1px. The 32px glyph and the slot itself stay untouched, exactly as Win95 drew a selected shortcut.
 - **Label:** IBM Plex Mono 0.75rem, white text with 1px black text-shadow for legibility against the sky. A name wider than the slot wraps to a second line rather than bleeding past it. The text-shadow drops while the label is highlighted — the navy fill already carries the contrast.
-
-### Sticky Note
-
-The hero introduction. The only element that breaks from the OS aesthetic — warm, off-center, human.
-
-- **Background:** Memo Canary (#fff9c4), 3deg clockwise rotation, irregular torn bottom via clip-path polygon.
-- **Shadow:** Two-layer: `2px 3px 0 rgba(0,0,0,0.12), 5px 8px 12px rgba(0,0,0,0.1)`.
-- **Font:** IBM Plex Mono throughout (name 700/1.125rem, role 500/0.875rem, body 0.8125rem).
 
 ## 6. Do's and Don'ts
 
