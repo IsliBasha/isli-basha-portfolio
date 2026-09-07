@@ -1685,3 +1685,214 @@ textarea.win-field {
     height: 84%;
   }
 }
+
+/* ============================================================
+   Display Properties (control-panel property sheet)
+   ============================================================ */
+/* The sheet paints its own tab frame, so the window's default sunken white
+   well would be a second frame around a first. Win95 put the tab control
+   straight onto the dialog's gray face; the border stays for layout and goes
+   the colour of the surface. */
+.win95-window__content.win-display__content {
+  padding: 8px;
+  background: var(--c-gray);
+  border-color: var(--c-gray);
+  box-shadow: none;
+}
+
+.display-props__tabs {
+  display: flex;
+  gap: 2px;
+  padding-left: 3px;
+  /* The selected tab has to sit on top of the sheet's top edge -- that broken
+     line is what makes a tab read as the front page of a stack. */
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+.display-props__tab {
+  margin-top: 2px;
+  padding: 3px 11px 4px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--c-text);
+  background: var(--c-gray);
+  border: 1px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: var(--c-gray-darker);
+  border-bottom-color: var(--c-gray);
+  box-shadow:
+    inset 1px 1px 0 var(--c-gray-light),
+    inset -1px 0 0 var(--c-gray-dark);
+  cursor: pointer;
+}
+
+.display-props__tab:hover {
+  background: var(--c-gray-light);
+}
+
+/* Selected: 2px taller, so it stands proud of its neighbours and covers the
+   sheet edge below it. */
+.display-props__tab[aria-selected='true'] {
+  margin-top: 0;
+  padding-bottom: 6px;
+}
+
+.display-props__sheet {
+  background: var(--c-gray);
+  border: 1px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: var(--c-gray-darker);
+  border-bottom-color: var(--c-gray-darker);
+  box-shadow:
+    inset 1px 1px 0 var(--c-gray-light),
+    inset -1px -1px 0 var(--c-gray-dark);
+  padding: 12px;
+}
+
+.display-props__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 150px;
+}
+
+/* Tailwind's preflight does not carry a [hidden] rule, and `display: flex`
+   above would otherwise win over the attribute and show both pages at once. */
+.display-props__panel[hidden] {
+  display: none;
+}
+
+.display-props__monitor {
+  display: block;
+  margin: 0 auto;
+}
+
+.display-props__list {
+  list-style: none;
+  margin: 0;
+  padding: 2px;
+  /* Tall enough for all four wallpapers at once. At 84px the last one was
+     clipped through the middle of its glyphs, which reads as broken rather
+     than as a list that scrolls. */
+  height: 96px;
+  overflow-y: auto;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+}
+
+.display-props__option {
+  padding: 1px 4px;
+  cursor: default;
+}
+
+/* Selection is the only state a Win95 listbox draws -- no hover tint. */
+.display-props__option[aria-selected='true'] {
+  background: var(--c-title-from);
+  color: #ffffff;
+}
+
+.display-props__check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.display-props__check input[type='checkbox'] {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  background: var(--c-win-bg);
+  border: 1px solid;
+  border-top-color: var(--c-gray-dark);
+  border-left-color: var(--c-gray-dark);
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  box-shadow:
+    inset 1px 1px 0 var(--c-gray-darker),
+    inset -1px -1px 0 var(--c-gray-light);
+  cursor: pointer;
+}
+
+/* The tick as pixel art rather than a rotated pair of borders: at -45deg a
+   2px border is a resampled smear, and this chrome is meant to land on whole
+   pixels. One 1px box, fourteen offsets:
+
+     . . . . . . X
+     . . . . . X X
+     X . . . X X .
+     X X . X X . .
+     . X X X . . .
+     . . X . . . .                                                        */
+.display-props__check input[type='checkbox']::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 1px;
+  width: 1px;
+  height: 1px;
+  box-shadow:
+    6px 1px 0 var(--c-text),
+    5px 2px 0 var(--c-text),
+    6px 2px 0 var(--c-text),
+    0 3px 0 var(--c-text),
+    4px 3px 0 var(--c-text),
+    5px 3px 0 var(--c-text),
+    0 4px 0 var(--c-text),
+    1px 4px 0 var(--c-text),
+    3px 4px 0 var(--c-text),
+    4px 4px 0 var(--c-text),
+    1px 5px 0 var(--c-text),
+    2px 5px 0 var(--c-text),
+    3px 5px 0 var(--c-text),
+    2px 6px 0 var(--c-text);
+  opacity: 0;
+}
+
+.display-props__check input[type='checkbox']:checked::after {
+  opacity: 1;
+}
+
+.display-props__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  padding-top: 10px;
+}
+
+/* Submenu marker, replacing the U+25B6 the menu used to print. currentColor so
+   it turns white with the label on the navy hover fill. */
+.win95-context-menu__item--submenu {
+  position: relative;
+}
+
+.win95-context-menu__item--submenu::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  margin-top: -4px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid currentColor;
+}
+
+@media (min-width: 1024px) {
+  /* Centred on the desktop the way a control-panel dialog opened, without a
+     transform: the drag offset already rides on `translate`. */
+  .win-display {
+    top: 12%;
+    left: calc(50% - 210px);
+    width: 420px;
+  }
+}
