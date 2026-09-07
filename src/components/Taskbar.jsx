@@ -163,10 +163,10 @@ export function Taskbar({ reload }) {
                 onClick={() => handleTaskClick(entry)}
               >
                 {/* The same 16-unit icon the window's own titlebar draws, from
-                    the one map both read. The 32-unit AppGlyph that used to be
-                    here was scaled to half, so every 1px rule in it landed on
-                    a half-pixel — and Display Properties, which AppGlyph has
-                    no artwork for, got the generic-application fallback. */}
+                    the one map both read. The 32-unit shortcut artwork that
+                    used to be here was scaled to half, so every 1px rule in it
+                    landed on a half-pixel — and Display Properties, which has
+                    no shortcut, got the generic-application fallback. */}
                 <span className="win95-taskbar__task-icon" aria-hidden="true">
                   <PixelIcon id={WINDOW_ICONS[entry.id]} size={16} />
                 </span>

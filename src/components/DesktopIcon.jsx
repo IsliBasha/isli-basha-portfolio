@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useWindowStack } from '../context/windowStackContext.js';
 import { useIconPosition } from '../hooks/useIconPosition.js';
-import { AppGlyph } from '../lib/AppGlyph.jsx';
+import { DesktopGlyph } from './DesktopGlyph.jsx';
 
 const DESKTOP_MIN_WIDTH = 1024;
 
@@ -121,7 +121,7 @@ export function DesktopIcon({ kind, label, target, href, defaultPos = { x: 16, y
       onPointerUp={handlePointerUp}
     >
       <span className="win95-desktop-icon__glyph">
-        <AppGlyph kind={kind} />
+        <DesktopGlyph kind={kind} size={32} />
       </span>
       <span className="win95-desktop-icon__label">{label}</span>
     </Tag>

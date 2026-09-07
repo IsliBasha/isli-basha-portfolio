@@ -7,7 +7,8 @@
 //
 // It lives in its own module rather than in DesktopApp.jsx because a file that
 // exports both a component and a constant breaks Vite's Fast Refresh
-// (react-refresh/only-export-components), the same reason glyphKinds.js exists.
+// (react-refresh/only-export-components), the same reason windowIcons.js sits
+// in its own module.
 export const WINDOW_ORDER = [
   'about',
   'stack',
