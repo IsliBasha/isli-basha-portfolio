@@ -12,24 +12,34 @@ export function WindowStackProvider({
   const [maximized, setMaximized] = useState(() => new Set());
   const [titles, setTitles] = useState(() => new Map());
 
-  const bringToFront = useCallback((id) => {
-    setOrder((prev) => {
-      const without = prev.filter((x) => x !== id);
-      return [...without, id];
-    });
-    setHidden((prev) => {
-      if (!prev.has(id)) return prev;
-      const next = new Map(prev);
-      next.delete(id);
-      return next;
-    });
-    setClosed((prev) => {
-      if (!prev.has(id)) return prev;
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
-  }, []);
+  // Only ids the desktop actually renders may enter the stack. The Start menu
+  // and the Run box can both name ids the desktop does not render (e.g. a typo,
+  // or a launcher for a window that was removed), and an unknown id pushed onto
+  // `order` sits at the top of it:
+  // getZ hands the phantom the highest z-index on the desktop and every real
+  // window is then measured against a stacking slot nothing occupies.
+  const bringToFront = useCallback(
+    (id) => {
+      if (!initialOrder.includes(id)) return;
+      setOrder((prev) => {
+        const without = prev.filter((x) => x !== id);
+        return [...without, id];
+      });
+      setHidden((prev) => {
+        if (!prev.has(id)) return prev;
+        const next = new Map(prev);
+        next.delete(id);
+        return next;
+      });
+      setClosed((prev) => {
+        if (!prev.has(id)) return prev;
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    },
+    [initialOrder],
+  );
 
   const hide = useCallback((id, title = id) => {
     setHidden((prev) => {
@@ -94,11 +104,11 @@ export function WindowStackProvider({
   // The topmost window that is neither minimized nor closed. Drives both the
   // pressed taskbar task and the active/inactive titlebar colour.
   //
-  // bringToFront() accepts any id -- the start menu and the desktop icons can
-  // both name a window that is not mounted. Electing such an id would leave
-  // every real window matching `activeId !== id`, so the whole desktop would
-  // go inactive with no titlebar and no taskbar task to click back. Only ids
-  // that are actually rendered (i.e. in initialOrder) may win.
+  // The initialOrder test is belt and braces: bringToFront now refuses an id
+  // the desktop does not render, so nothing unknown reaches `order` in the
+  // first place. It stays because electing a phantom is the expensive failure
+  // -- every real window would match `activeId !== id`, leaving the desktop
+  // with no active titlebar and no pressed taskbar task to click back.
   const activeId = useMemo(
     () =>
       [...order]

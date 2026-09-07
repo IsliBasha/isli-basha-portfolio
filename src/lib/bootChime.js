@@ -11,6 +11,90 @@ const BOOT_NOTES = [
 const ATTACK = 0.02;
 const RELEASE_TAIL = 0.25;
 
+// Set from the taskbar's tray speaker. Absent means audible: a first-time
+// visitor should hear the machine start up, and only someone who has said
+// otherwise gets silence.
+export const CHIME_MUTE_KEY = 'isli-chime-muted';
+
+// What the visitor chose when storage would not take it. Null means storage
+// is the authority; anything else is a session-only answer standing in for a
+// write that was refused.
+let mutedFallback = null;
+
+/** True when the visitor has switched the boot sound off. */
+export function isChimeMuted() {
+  // The session copy wins while it exists: it is only set when a write was
+  // refused, so storage cannot be holding anything newer than it.
+  if (mutedFallback !== null) return mutedFallback;
+  try {
+    return window.localStorage.getItem(CHIME_MUTE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+// Everyone currently rendering the mute state. localStorage fires no event in
+// the tab that wrote it, so without this the tray reads the key once at mount
+// and then shows whatever it showed at boot for the rest of the session.
+const muteListeners = new Set();
+
+function announceMuteChange() {
+  for (const listener of muteListeners) listener();
+}
+
+// A second copy of the desktop in another tab. `key` is null when a whole
+// storage area is cleared, which changes this preference too.
+function onStorageChanged(event) {
+  if (event.key === null || event.key === CHIME_MUTE_KEY) announceMuteChange();
+}
+
+/**
+ * Watch the mute preference. Returns the unsubscribe, shaped for
+ * useSyncExternalStore.
+ *
+ * The cross-tab listener is attached only while somebody is watching, so a
+ * page that never renders the tray -- the static export, a test -- carries no
+ * window listener at all.
+ */
+export function subscribeChimeMuted(onChange) {
+  const isFirst = muteListeners.size === 0;
+  muteListeners.add(onChange);
+  if (isFirst && typeof window !== 'undefined') {
+    window.addEventListener('storage', onStorageChanged);
+  }
+  return () => {
+    muteListeners.delete(onChange);
+    if (muteListeners.size === 0 && typeof window !== 'undefined') {
+      window.removeEventListener('storage', onStorageChanged);
+    }
+  };
+}
+
+/**
+ * Persist the tray's mute state. Storage failing costs the preference at the
+ * next visit, not the page and not the toggle: the choice is kept in memory
+ * for this session, so subscribers re-reading isChimeMuted() see it.
+ *
+ * Display settings (order 05) writes this same key through its own helper for
+ * now; order 07 is what makes it call this one, so both surfaces agree without
+ * a reload.
+ */
+export function setChimeMuted(muted) {
+  try {
+    if (muted) window.localStorage.setItem(CHIME_MUTE_KEY, '1');
+    else window.localStorage.removeItem(CHIME_MUTE_KEY);
+    // Storage now holds the answer, so drop any stand-in from an earlier
+    // refusal rather than letting it outrank a real write.
+    mutedFallback = null;
+  } catch {
+    // Private mode or a full quota. Remember the choice here instead: the tray
+    // renders isChimeMuted(), so without this the speaker would re-read the
+    // stale stored value and look like a dead button.
+    mutedFallback = muted;
+  }
+  announceMuteChange();
+}
+
 function nowOrNull() {
   if (typeof window === 'undefined') return null;
   const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -40,6 +124,7 @@ function scheduleNote(ctx, master, { freq, start, dur }) {
 }
 
 export async function playBootChime() {
+  if (isChimeMuted()) return false;
   const ctx = nowOrNull();
   if (!ctx) return false;
   try {

@@ -227,6 +227,25 @@ The control-panel property sheet, opened from the desktop's right-click Properti
 - **Hover/Focus/Active:** the **label** highlights, not the slot — solid titlebar navy (#000080) behind white text with a 1px dotted white rectangle inset 1px. The 32px glyph and the slot itself stay untouched, exactly as Win95 drew a selected shortcut.
 - **Label:** IBM Plex Mono 0.75rem, white text with 1px black text-shadow for legibility against the sky. A name wider than the slot wraps to a second line rather than bleeding past it. The text-shadow drops while the label is highlighted — the navy fill already carries the contrast.
 
+### Start Menu
+
+The Win95 tree, not a shortlist: Programs, Documents and Settings open fly-outs; Find, Help, Run and Shut Down sit below them, with Shut Down alone under a separator. The navy stripe down the left reads `sys95` bottom-to-top and is the only rotated text on the desktop.
+
+- **Items:** 16px PixelIcon, label in IBM Plex Sans 0.875rem, 5px/12px padding. A parent carries a `▸` hard against the right edge; the label stays ragged-left of it.
+- **Highlight:** solid titlebar navy (#000080) behind white text. Hover, keyboard focus and "this item's fly-out is open" are the same visual state, because in Win95 they were the same state — the pointer arriving on a row moves focus there too, so there is only ever one highlighted item and the keyboard picks up wherever the mouse left off.
+- **Fly-outs:** anchored at the parent row's top-right corner, 168px minimum, same bevel and 3px hard shadow as the root panel. Placement is CSS; only the correction that keeps a panel inside the viewport is scripted, and it is applied as a `translate` so the menu behind it never reflows. The correction stops at the top margin: a fly-out with more items than the screen has room for scrolls rather than losing its first one off the top.
+- **Motion:** the root panel rises 8px over 140ms. Fly-outs fade only, at 90ms: the viewport clamp owns `transform` on those, and an animation on the same property would cancel it.
+- **Keyboard:** ArrowDown from the Start button enters the menu, ArrowUp enters at the bottom. Arrows wrap and step over the separator, ArrowRight opens a fly-out onto its first item, ArrowLeft and Escape close one level, and Escape at the root puts focus back on the Start button. So does closing Run or Shut Down: the menu is gone by then, and the button is the one thing left that the trip started from. Launching a window puts focus in the window instead, a frame later, once it exists.
+
+### System Tray
+
+One sunken well at the right end of the taskbar. The clock used to carry its own bevel; it now sits inside the tray's, because Win95 never drew two wells side by side.
+
+- **Well:** bevel-in, 2px/6px padding, 6px between the speaker and the clock. Pushed right with `margin-left: auto` so the task list keeps the space it needs.
+- **Speaker:** 18px hit area around a 16px glyph, two drawn states rather than one dimmed one. The muted glyph swaps the sound arcs for a red cross, so the state survives at 16px and without colour.
+- **States:** no hover fill, which is what a real tray icon did. Pressing shifts the glyph 1px down-right; keyboard focus is a 1px dotted rectangle. Both leave the well itself alone.
+- **Clock:** IBM Plex Mono 0.8125rem, 42px minimum width so the digits do not shuffle the tray as the minute changes.
+
 ## 6. Do's and Don'ts
 
 ### Do:

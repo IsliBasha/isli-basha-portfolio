@@ -32,6 +32,40 @@ const REQUIRED_SYSTEM_ICONS = [
   'generic-exe',
 ];
 
+// The Start menu, the Run dialog and the tray name these directly. A missing
+// id there costs a silent fallback to the generic placeholder, which looks
+// like a design choice rather than a bug.
+const REQUIRED_SHELL_ICONS = [
+  'notepad',
+  'dos',
+  'mail',
+  'pdf',
+  'mine',
+  'snake',
+  'stats',
+  'display',
+  'find',
+  'help',
+  'run',
+  'shutdown',
+  'speaker',
+  'speaker-muted',
+  'programs',
+  'folder-docs',
+];
+
+// The eight that order 07 hangs on window titlebars as well as in the menu.
+const APP_ICONS = [
+  'notepad',
+  'dos',
+  'mail',
+  'pdf',
+  'mine',
+  'snake',
+  'stats',
+  'display',
+];
+
 describe('palette', () => {
   it('defines the 16 VGA system colours', () => {
     expect(Object.keys(PALETTE)).toHaveLength(16);
@@ -86,6 +120,20 @@ describe('icon registry', () => {
   it('draws every icon this order promised', () => {
     for (const id of REQUIRED_SYSTEM_ICONS) {
       expect(Object.hasOwn(ICONS, id), `missing icon ${id}`).toBe(true);
+    }
+  });
+
+  it('draws every shell glyph the Start menu, Run dialog and tray name', () => {
+    for (const id of REQUIRED_SHELL_ICONS) {
+      expect(Object.hasOwn(ICONS, id), `missing icon ${id}`).toBe(true);
+    }
+  });
+
+  // An app icon that resolves to the fallback would still render, so nothing
+  // else in the suite would notice it had gone missing.
+  it('never lets an app icon resolve to the generic placeholder', () => {
+    for (const id of APP_ICONS) {
+      expect(resolveIconId(id), `${id} fell back`).toBe(id);
     }
   });
 
