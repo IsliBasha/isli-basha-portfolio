@@ -111,7 +111,7 @@ function processCommand(raw, cwd) {
           output: [
             '',
             'ISLI BASHA',
-            'Agent & Automation Specialist -- Ofive Global',
+            'Software Engineer -- Ofive Global',
             '',
             'Builds software end-to-end, from database schema to pixel on screen.',
             'Focused on caching, indexing, bundle size, and render cost.',

@@ -229,8 +229,8 @@ describe('index.html prerendered content for non-JS crawlers', () => {
     expect(rootContent()).toMatch(/Isli Basha/);
   });
 
-  it('static content names the agent and automation role', () => {
-    expect(rootContent()).toMatch(/Automation Specialist/);
+  it('static content names the current role', () => {
+    expect(rootContent()).toMatch(/Software Engineer at Ofive Global/);
   });
 
   it('static content links real project repos', () => {
@@ -260,8 +260,10 @@ describe('index.html JSON-LD location and education', () => {
     const html = indexHtml();
     expect(html).toMatch(/"hasOccupation"/);
     expect(html).toMatch(/"occupationLocation"/);
-    expect(html).toMatch(/"name": "Software Engineer"/);
-    expect(html).toMatch(/"name": "Agent & Automation Specialist"/);
+    expect(html).toMatch(/"jobTitle": "Software Engineer"/);
+    // The title is stated at two scopes, so both places must carry it.
+    expect(html).toMatch(/"name": "Software Engineer",\s*"occupationLocation": \{\s*"@type": "City"/);
+    expect(html).toMatch(/"name": "Software Engineer",\s*"occupationLocation": \{\s*"@type": "Country"/);
   });
 
   it('resolves place names to Wikidata rather than leaving them as strings', () => {
@@ -294,5 +296,29 @@ describe('public/ SEO files', () => {
 
   it('sitemap.xml contains islibasha.dev URL', () => {
     expect(readFileSync(join(ROOT, 'public', 'sitemap.xml'), 'utf8')).toMatch(/islibasha\.dev/);
+  });
+});
+
+// The job title changed from "Agent & Automation Specialist" to "Software
+// Engineer" (2026-11). The old title lived in hand-written meta tags, the CV,
+// the README and four data modules, and a stale copy on any one of them is a
+// second, contradicting answer to "what does he do". Describing the work as
+// agents and automation is fine; naming it as the title is not.
+describe('the retired job title', () => {
+  const SURFACES = [
+    'index.html',
+    'README.md',
+    'public/llms.txt',
+    'public/cv.html',
+    'src/data/bio.js',
+    'src/data/identity.js',
+    'src/data/resume.js',
+    'src/data/projects.js',
+    'src/components/StackCmd.jsx',
+  ];
+
+  it.each(SURFACES)('%s no longer names Isli an Automation Specialist', (file) => {
+    const text = readFileSync(join(ROOT, file), 'utf8');
+    expect(text).not.toMatch(/Automation Specialist/i);
   });
 });
