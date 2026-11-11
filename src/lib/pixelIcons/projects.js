@@ -6,7 +6,7 @@
 // The icons in categories.js label the explorer's sidebar folders and nothing
 // else; no project draws one.
 //
-// Drawn to the same rule as system.js so a grid of 25 reads as one set: a 1px
+// Drawn to the same rule as system.js so a grid of 30 reads as one set: a 1px
 // black outline, light from the top-left (`w` on the lit edge, `d` or a dark
 // palette pair on the shaded one), flat fills, at most six colours each. The
 // subject is a silhouette first — at 32px on the explorer grid the outline is
@@ -89,6 +89,30 @@ const cloudProvisioning = [
 ];
 
 /**
+ * OFive Agents Hub — a signpost with two boards pointing opposite ways: a page
+ * that holds nothing itself and only sends staff on to each agent. Two boards
+ * rather than one so it cannot be read as a single arrow or a road sign.
+ */
+const agentsHub = [
+  '......kkkk......',
+  '.kkkkkkkkkkkk...',
+  '.kwBBBBBBBBBBk..',
+  '.kwBBBBBBBBBBBk.',
+  '.kwBBBBBBBBBBk..',
+  '.kkkkkkkkkkkk...',
+  '......kwdk......',
+  '...kkkkkkkkkkkk.',
+  '..kwLLLLLLLLLLk.',
+  '.kwLLLLLLLLLLLk.',
+  '..kwLLLLLLLLLLk.',
+  '...kkkkkkkkkkkk.',
+  '......kwdk......',
+  '......kwdk......',
+  '....kwggggdk....',
+  '....kkkkkkkk....',
+];
+
+/**
  * MOS VONO — a price tag with a green tick: a marketplace where a job is
  * priced and then confirmed. Dark green over yellow, not lime, because lime on
  * yellow is the one pairing in this palette that vanishes at icon size.
@@ -137,6 +161,30 @@ const ecovolt = [
 ];
 
 /**
+ * Liper — a pendant lamp throwing light downward: an LED-lighting catalogue.
+ * The cord and the rays are what keep the dome from reading as a bell or a
+ * hard hat, which meridian-build already is.
+ */
+const liper = [
+  '.......kk.......',
+  '.......kk.......',
+  '.......kk.......',
+  '.....kkkkkk.....',
+  '....kwwggggk....',
+  '...kwggggggdk...',
+  '..kwggggggggdk..',
+  '.kwgggggggggddk.',
+  'kkkkkkkkkkkkkkkk',
+  '....kyyyyyyk....',
+  '.....kyyyyk.....',
+  '......kkkk......',
+  '...y...yy...y...',
+  '..y....yy....y..',
+  '.y.....yy.....y.',
+  '................',
+];
+
+/**
  * PreVisit — a clipboard carrying a red cross: intake paperwork done before a
  * clinic visit. The cross sits on the board rather than beside it because two
  * separate objects at 16px read as two icons crammed into one tile.
@@ -158,6 +206,31 @@ const previsit = [
   '.kwwwwwwwwwwwdk.',
   '.kddddddddddddk.',
   '.kkkkkkkkkkkkkk.',
+];
+
+/**
+ * Agent Fleet Console — a terminal split into four panes over a status bar:
+ * one tmux pane per agent session, state shown as coloured text rather than a
+ * light. The black screen is what separates it from the silver browser window
+ * of playwright-saas-automator.
+ */
+const fleetConsole = [
+  '.kkkkkkkkkkkkkk.',
+  '.kwggggggggggdk.',
+  '.kkkkkkkkkkkkkk.',
+  '.kllkkkkdyykkkk.',
+  '.kkkkkkkdkkkkkk.',
+  '.klllkkkdyyykkk.',
+  '.kkkkkkkdkkkkkk.',
+  '.kddddddddddddk.',
+  '.kyykkkkdllkkkk.',
+  '.kkkkkkkdkkkkkk.',
+  '.kyyykkkdlllkkk.',
+  '.kkkkkkkdkkkkkk.',
+  '.kkkkkkkkkkkkkk.',
+  '.kwllgyygllggdk.',
+  '.kkkkkkkkkkkkkk.',
+  '................',
 ];
 
 /**
@@ -455,6 +528,54 @@ const miraStudy = [
 ];
 
 /**
+ * RpgGame — a skull with a red glint in each socket: a horror RPG. Bone white
+ * shaded silver on the right, so it keeps the set's top-left light and does
+ * not read as the hamster's round face.
+ */
+const rpgGame = [
+  '................',
+  '....kkkkkkkk....',
+  '...kwwwwwwwwk...',
+  '..kwwwwwwwwwgk..',
+  '..kwwwwwwwwwgk..',
+  '..kwkkkwwkkkgk..',
+  '..kwkRkwwkRkgk..',
+  '..kwkkkwwkkkgk..',
+  '..kwwwwkkwwwgk..',
+  '...kwwwkkwwgk...',
+  '....kwwwwwgk....',
+  '....kwkwkwkk....',
+  '....kkkkkkkk....',
+  '................',
+  '................',
+  '................',
+];
+
+/**
+ * Limb Brawler — a boxing glove over its white cuff: a brawler. A glove rather
+ * than a fighter because a ragdoll's limbs are one pixel wide at this size and
+ * vanish on the navy selection highlight.
+ */
+const limbBrawler = [
+  '................',
+  '....kkkkkkk.....',
+  '...kwrrrrrrkk...',
+  '..kwrrrrrrrrrk..',
+  '..kwrrrrrrrrrRk.',
+  '.kwrkkkrrrrrrRk.',
+  '.kwrrrkrrrrrrRk.',
+  '.kwrrrkrrrrrrRk.',
+  '.kwrrrrrrrrrrRk.',
+  '..kRrrrrrrrrRRk.',
+  '..kRRRRRRRRRRk..',
+  '...kkkkkkkkkk...',
+  '...kwwwwwwwdk...',
+  '...kwgggggggk...',
+  '...kwwwwwwwdk...',
+  '...kkkkkkkkkk...',
+];
+
+/**
  * Win95 Architecture Deck — a presentation screen on its stand, carrying a bar
  * chart. The stand is what keeps this from reading as the same framed
  * rectangle as the schema table and the browser window.
@@ -586,8 +707,11 @@ export default {
   'proj-ofive-lead-engine': leadEngine,
   'proj-ofive-shared-schema': sharedSchema,
   'proj-ofive-cloud-provisioning': cloudProvisioning,
+  'proj-ofive-agents-hub': agentsHub,
   'proj-mos-vono': mosVono,
   'proj-ecovolt': ecovolt,
+  'proj-liper': liper,
+  'proj-agent-fleet-console': fleetConsole,
   'proj-previsit': previsit,
   'proj-publer-mcp': publerMcp,
   'proj-mcp-odoo-fintech': odooFintech,
@@ -602,6 +726,8 @@ export default {
   'proj-meridian-build': meridianBuild,
   'proj-floracare': floracare,
   'proj-mira-study': miraStudy,
+  'proj-rpg-game': rpgGame,
+  'proj-limb-brawler': limbBrawler,
   'proj-win95-arch': win95Arch,
   'proj-java-advanced': javaAdvanced,
   'proj-mips-voting': mipsVoting,

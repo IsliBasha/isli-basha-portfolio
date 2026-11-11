@@ -17,7 +17,7 @@ describe('About', () => {
     setup();
     expect(screen.getByText(bio.name)).toBeInTheDocument();
     // Anchor on the "title · employer" separator: the prose paragraph says
-    // "Specialist at Ofive Global", so only the title line has " · ".
+    // "Software Engineer at Ofive Global", so only the title line has " · ".
     const titleLine = new RegExp(`${escapeRegExp(bio.title)} · `, 'i');
     expect(screen.getByText(titleLine)).toBeInTheDocument();
   });

@@ -122,7 +122,7 @@ export function applyBlock(source, body, marker = 'projects') {
 // The JSON-LD carries a dateModified, so it is pinned to the data's last
 // change rather than to "now" — otherwise every run would report the files as
 // stale and --check could never pass.
-const SCHEMA_DATE = '2026-08-23';
+const SCHEMA_DATE = '2026-11-11';
 
 // Emits the complete <script> element. The markers live outside it on purpose:
 // an HTML comment inside a ld+json block makes the block invalid JSON, and every

@@ -1,6 +1,6 @@
 # islibasha.dev
 
-Personal portfolio of **Isli Basha** — Agent & Automation Specialist at Ofive Global, Tirana — built as an interactive **Windows 95 desktop simulation** in React 19.
+Personal portfolio of **Isli Basha** — Software Engineer at Ofive Global, Tirana — built as an interactive **Windows 95 desktop simulation** in React 19.
 
 **Live: [islibasha.dev](https://islibasha.dev)**
 
@@ -15,7 +15,7 @@ Personal portfolio of **Isli Basha** — Agent & Automation Specialist at Ofive 
 - Display Properties on the desktop's right-click Properties: four wallpapers with live preview, and the boot-sound switch it shares with the tray speaker
 - DOS-style terminal (`cmd`) with real commands
 - Playable Minesweeper and Snake
-- `my work` explorer with 25 projects, `resume.pdf` viewer, contact window
+- `my work` explorer with 30 projects, `resume.pdf` viewer, contact window
 
 **Mobile (Nokia 3310):**
 

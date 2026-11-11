@@ -75,11 +75,19 @@ describe('schema graph', () => {
     }
   });
 
-  it('covers both target phrasings: engineer in the city, specialist in the country', () => {
+  it('covers both target phrasings: engineer in the city, engineer in the country', () => {
     const occ = buildPerson().hasOccupation;
     const pairs = occ.map((o) => `${o.name} @ ${o.occupationLocation.name}`);
     expect(pairs).toContain('Software Engineer @ Tirana');
-    expect(pairs).toContain('Agent & Automation Specialist @ Albania');
+    expect(pairs).toContain('Software Engineer @ Albania');
+  });
+
+  // The occupations restate the job title at two scopes; a title the Person
+  // node does not hold would be a second, contradicting claim about the role.
+  it('names the current job title among the occupations', () => {
+    const person = buildPerson();
+    expect(person.jobTitle).toBe('Software Engineer');
+    expect(person.hasOccupation.map((o) => o.name)).toContain(person.jobTitle);
   });
 
   it('expresses topics as linked entities, not bare strings', () => {

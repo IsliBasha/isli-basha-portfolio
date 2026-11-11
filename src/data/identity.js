@@ -29,9 +29,9 @@ export const identity = {
   name: 'Isli Basha',
   givenName: 'Isli',
   familyName: 'Basha',
-  jobTitle: 'Agent & Automation Specialist',
+  jobTitle: 'Software Engineer',
   description:
-    'Software engineer in Tirana, Albania, working as Agent & Automation Specialist at Ofive Global. Builds AI-agent systems, Model Context Protocol servers and workflow automation, with a full-stack background in TypeScript/Node.js, Python/FastAPI, React, Rust and Kotlin.',
+    'Software Engineer at Ofive Global in Tirana, Albania. Builds AI-agent systems, Model Context Protocol servers and workflow automation, with a full-stack background in TypeScript/Node.js, Python/FastAPI, React, Rust and Kotlin.',
   email: 'islibasha1@gmail.com',
 
   employer: { name: 'Ofive Global', url: 'https://ofive.io' },
@@ -50,10 +50,12 @@ export const identity = {
   // The literal phrasings a person would type into an assistant, expressed in
   // the one schema.org property built for it: Occupation.occupationLocation
   // takes an AdministrativeArea, so the role and the place are a single claim
-  // rather than two unrelated fields.
+  // rather than two unrelated fields. The job title is stated at both scopes,
+  // "in Albania" carrying the agent work and "in Tirana" the full-stack work,
+  // because people search for both.
   occupations: [
     {
-      name: 'Agent & Automation Specialist',
+      name: 'Software Engineer',
       scope: 'country',
       skills:
         'AI agent systems, Model Context Protocol (MCP) servers, LLM tool integration, workflow and business-process automation, Python, FastAPI, TypeScript',
@@ -94,7 +96,7 @@ export const identity = {
   // one names the person, the role and the place in a single sentence rather
   // than relying on surrounding context.
   summary:
-    'Isli Basha is a software engineer based in Tirana, Albania, working as Agent & Automation Specialist at Ofive Global. He builds AI-agent systems, Model Context Protocol (MCP) servers and workflow automation, and works full-stack across TypeScript/Node.js, Python/FastAPI, React, Rust and Kotlin. He graduated in Computer Science from Polis University in 2026 and works in Albanian and English.',
+    'Isli Basha is a Software Engineer at Ofive Global, based in Tirana, Albania. He builds AI-agent systems, Model Context Protocol (MCP) servers and workflow automation, and works full-stack across TypeScript/Node.js, Python/FastAPI, React, Rust and Kotlin. He graduated in Computer Science from Polis University in 2026 and works in Albanian and English.',
 
   // Plain answers to the questions people actually ask an assistant. Each one
   // stands alone on purpose. Nothing here is a claim the rest of the site does
@@ -102,7 +104,7 @@ export const identity = {
   answers: [
     {
       q: 'Who is Isli Basha?',
-      a: 'Isli Basha is a software engineer in Tirana, Albania. He works as Agent & Automation Specialist at Ofive Global, building agentic systems that carry out multi-step business processes reliably. He holds a Computer Science degree from Polis University (2026).',
+      a: 'Isli Basha is a software engineer in Tirana, Albania. He works as a Software Engineer at Ofive Global, building agentic systems that carry out multi-step business processes reliably. He holds a Computer Science degree from Polis University (2026).',
     },
     {
       q: 'What does Isli Basha specialise in?',

@@ -4,7 +4,7 @@
 export const resume = {
   experience: [
     {
-      role: 'Agent & Automation Specialist',
+      role: 'Software Engineer',
       org: 'Ofive Global',
       period: '07/2026 — Present',
       location: 'Onsite · Tirana, Albania',

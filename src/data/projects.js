@@ -28,7 +28,7 @@ export const projects = [
     category: 'work',
     type: 'Work · Ofive Global',
     description:
-      'AI lead generation platform. Automates the top of the sales funnel — researches prospective companies, qualifies them against ideal-customer criteria, and orchestrates outreach — ending in a human review-and-approve step rather than blind automation.',
+      'AI lead generation platform. Automates the top of the sales funnel — researches prospective companies, qualifies them against ideal-customer criteria, and orchestrates outreach — ending in a human review-and-approve step rather than blind automation. Runs in production.',
     stack: ['Python', 'FastAPI', 'PostgreSQL', 'LLM agents'],
     link: { href: 'https://ofive.io', label: 'Company →' },
     privateNote: null,
@@ -66,6 +66,21 @@ export const projects = [
     icon: 'proj-ofive-cloud-provisioning',
     preview: null,
   },
+  {
+    id: 'ofive-agents-hub',
+    name: 'OFive Agents Hub',
+    tag: 'agents',
+    category: 'work',
+    type: 'Work · Ofive Global',
+    description:
+      "One page where staff find every one of the company's internal agents: a card per agent saying, in words, whether its cloud service is up and how its scheduled jobs last ran, read live from Google Cloud. The agents are declared in a single YAML registry validated at start, so a bad entry stops the service before it serves a page. In development.",
+    stack: ['Python', 'FastAPI', 'Jinja2', 'YAML', 'Google Cloud'],
+    link: { href: 'https://ofive.io', label: 'Company →' },
+    privateNote: null,
+    iconType: 'python',
+    icon: 'proj-ofive-agents-hub',
+    preview: null,
+  },
 
   // ── Products and client platforms ────────────────────────────────────────
   {
@@ -75,7 +90,7 @@ export const projects = [
     category: 'work',
     type: 'Work · Marketplace',
     description:
-      'Albanian marketplace for tasks and local services. A client posts a task, verified workers bid, the client picks one, and the job runs in a private shared space with payment held in escrow until completion. Express API over raw SQL on PostgreSQL, with a React Native app for both stores.',
+      'Albanian marketplace for tasks and local services. A client posts a task, verified workers bid, the client picks one, and the job runs in a private shared space with payment held in escrow until completion. Express API over raw SQL on PostgreSQL, with a React Native app for Android and iOS, in store testing.',
     stack: ['Node.js', 'Express', 'PostgreSQL', 'React Native', 'Expo'],
     link: { href: 'https://mosvono.al', label: 'Visit →' },
     privateNote: null,
@@ -98,8 +113,38 @@ export const projects = [
     icon: 'proj-ecovolt',
     preview: null,
   },
+  {
+    id: 'liper',
+    name: 'Liper',
+    tag: 'catalogue',
+    category: 'web',
+    type: 'Web · Client',
+    description:
+      "Bilingual Albanian/English B2B catalogue and partner lead-generation site for Liper's LED lighting. Next.js 16 App Router with next-intl, a typed product catalogue validated by Zod schemas behind a repository port, and Playwright end-to-end tests.",
+    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'next-intl', 'Zod', 'Playwright'],
+    link: { href: 'https://liperalbania.com', label: 'Visit →' },
+    privateNote: null,
+    iconType: 'globe',
+    icon: 'proj-liper',
+    preview: null,
+  },
 
   // ── AI / agent work ──────────────────────────────────────────────────────
+  {
+    id: 'agent-fleet-console',
+    name: 'Agent Fleet Console',
+    tag: 'agents',
+    category: 'tool',
+    type: 'Tool · Agent orchestration',
+    description:
+      "Terminal console for running several coding-agent sessions side by side: one Ghostty window, one tmux pane per session, and a status bar and dashboard fed by the agents' lifecycle hooks, so it shows what each session is doing and which one needs a person. It serves a review loop: a planning agent splits the work into cards a human approves, builder agents implement each card in its own git worktree, reviewer agents gate every change, and the human merges.",
+    stack: ['Bash', 'tmux', 'Ghostty', 'Python', 'Textual', 'Claude Code'],
+    link: null,
+    privateNote: 'Personal tooling · not published',
+    iconType: 'terminal',
+    icon: 'proj-agent-fleet-console',
+    preview: null,
+  },
   {
     id: 'previsit',
     name: 'PreVisit',
@@ -319,6 +364,38 @@ export const projects = [
     privateNote: null,
     iconType: 'book',
     icon: 'proj-mira-study',
+    preview: null,
+  },
+
+  // ── Games ────────────────────────────────────────────────────────────────
+  {
+    id: 'rpg-game',
+    name: 'RpgGame',
+    tag: 'RPG',
+    category: 'app',
+    type: 'Game · Team · Tech lead',
+    description:
+      'Turn-based horror RPG in Godot (working title): top-down pixel art in the line of Fear & Hunger and Look Outside, made by a team of six. Tech lead. Enemies, items and dialogue are authored as data rather than code so six people can produce in parallel, and the gdUnit4 gate fails if fewer than 585 tests run.',
+    stack: ['Godot 4.7', 'GDScript', 'gdUnit4'],
+    link: null,
+    privateNote: 'Private repo · team project',
+    iconType: 'godot',
+    icon: 'proj-rpg-game',
+    preview: null,
+  },
+  {
+    id: 'limb-brawler',
+    name: 'Limb Brawler',
+    tag: 'game jam',
+    category: 'app',
+    type: 'Game · Game jam',
+    description:
+      'Local couch arena brawler for up to four players, built in Godot 4.7.2 for a 48–72 hour game jam. Every fighter is an active ragdoll whose limbs are driven toward a pose on each physics tick; players dash, aim in 360°, grab weapons from parachuted crates and parry, and the first to five rounds wins.',
+    stack: ['Godot 4.7', 'GDScript', 'gdUnit4'],
+    link: null,
+    privateNote: 'Private repo · game jam',
+    iconType: 'godot',
+    icon: 'proj-limb-brawler',
     preview: null,
   },
 
