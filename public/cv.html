@@ -387,7 +387,7 @@
   <!-- ── Header ── -->
   <div class="cv-header">
     <div class="cv-name">Isli Basha</div>
-    <div class="cv-title">Software Engineer &mdash; Ofive Global &middot; TypeScript &middot; Python &middot; React</div>
+    <div class="cv-title">Software Engineer at Ofive Global &middot; TypeScript &middot; Python &middot; React</div>
     <div class="cv-contact">
       <span class="cv-contact-item">
         <i class="cv-contact-icon">&#9993;</i>
@@ -427,11 +427,10 @@
         <div class="entry-org">Ofive Global</div>
         <div class="entry-meta">&#128197; 07/2026 &ndash; Present &nbsp;&middot;&nbsp; Onsite &middot; Tirana, Albania</div>
         <ul class="entry-bullets">
-          <li>Design and operate agentic automation workflows, building tooling that lets AI agents execute multi-step business processes reliably.</li>
-          <li>Built the AI lead generation platform end to end &mdash; automated company research, qualification against ideal-customer criteria, and outreach orchestration, with a human review-and-approve gate before anything is sent; it runs in production.</li>
+          <li>Built the lead-generation platform end to end: company research, qualification against ideal-customer criteria and outreach, with a human review-and-approve gate before anything is sent. It runs in production.</li>
           <li>Building the company&rsquo;s agents hub: one page listing every internal agent with its live service and job status read from Google Cloud, driven by a single YAML registry validated at start (FastAPI; in development).</li>
-          <li>Established migration governance for a database schema jointly owned by two independent service teams: explicit ownership boundaries, review-before-apply on every migration, and least-privilege runtime roles with no DDL capability at all.</li>
-          <li>Hardened cloud provisioning and CI identity &mdash; duty-separated service accounts and keyless CI authentication through federated workload identity, eliminating long-lived credentials; written up as a cross-team review adopted by a second engineering team.</li>
+          <li>Established migration governance for a database schema jointly owned by two independent service teams: explicit ownership boundaries, review-before-apply on every migration, and least-privilege runtime roles that cannot run DDL.</li>
+          <li>Hardened cloud provisioning and CI identity: duty-separated service accounts and keyless CI authentication through workload identity federation, so no long-lived credential exists. Written up as a review for a second engineering team to adopt.</li>
         </ul>
         <div class="entry-stack">Agentic Systems &middot; Automation &middot; Python &middot; FastAPI &middot; PostgreSQL &middot; TypeScript &middot; Cloud IAM &middot; LLM Tooling</div>
 
@@ -441,8 +440,8 @@
         <div class="entry-org">Self-Employed</div>
         <div class="entry-meta">&#128197; 01/2022 &ndash; 12/2024 &nbsp;&middot;&nbsp; Tirana, Albania</div>
         <ul class="entry-bullets">
-          <li>Delivered full-stack web projects for 5+ independent clients &mdash; landing pages, e-commerce builds, and portfolio sites &mdash; owning requirements, timelines, and client revisions end to end.</li>
-          <li>Integrated third-party REST APIs and payment services; deployed to Vercel and Cloudflare Pages; adopted React and Node.js on projects requiring dynamic functionality.</li>
+          <li>Delivered full-stack web projects for 5+ independent clients (landing pages, e-commerce builds and portfolio sites), owning requirements, timelines and client revisions.</li>
+          <li>Integrated third-party REST APIs and payment services; deployed to Vercel and Cloudflare Pages; used React and Node.js where a project needed server logic or interactive pages.</li>
         </ul>
         <div class="entry-stack">TypeScript &middot; React &middot; Node.js &middot; REST API &middot; PostgreSQL &middot; Git &middot; Vercel &middot; Client Management</div>
 
@@ -452,8 +451,8 @@
         <div class="entry-org">BS Concept</div>
         <div class="entry-meta">&#128197; 01/2021 &ndash; 12/2021 &nbsp;&middot;&nbsp; Tirana, Albania</div>
         <ul class="entry-bullets">
-          <li>Shipped front-end features for client web projects in a small team, consistently meeting production deadlines.</li>
-          <li>Resolved cross-browser rendering bugs across Chrome, Firefox, and Safari via DevTools inspection; contributed to production delivery through pull requests, code reviews, and Agile sprint tracking.</li>
+          <li>Shipped front-end features for client web projects in a three-person team.</li>
+          <li>Fixed cross-browser rendering bugs in Chrome, Firefox and Safari with DevTools; worked through pull requests, code review and Agile sprints.</li>
         </ul>
         <div class="entry-stack">HTML &middot; CSS &middot; JavaScript &middot; Git &middot; Code Review &middot; Agile</div>
       </section>
@@ -468,7 +467,7 @@
         <div class="entry-meta">&#128197; 2026 &ndash; Present &nbsp;&middot;&nbsp; <a href="https://mosvono.al" target="_blank">mosvono.al</a></div>
         <ul class="entry-bullets">
           <li>Built an Albanian marketplace for tasks and local services: clients post a task, verified workers bid, and the awarded job runs in a private shared space with payment held in escrow until completion.</li>
-          <li>Express API over raw parameterised SQL on PostgreSQL &mdash; every monetary calculation isolated in a single module, and status transitions routed through explicit state machines rather than inline conditionals.</li>
+          <li>Express API over raw parameterised SQL on PostgreSQL. Every money calculation lives in one module, and status changes go through explicit state machines instead of inline conditionals.</li>
           <li>React Native (Expo) client for Android and iOS against the same API, in store testing.</li>
         </ul>
         <div class="entry-stack">Node.js &middot; Express &middot; PostgreSQL &middot; React Native &middot; Expo &middot; Payments &middot; Escrow</div>
@@ -477,19 +476,19 @@
 
         <!-- EcoVolt Platform -->
         <div class="entry-role">Maintenance-Contract Platform</div>
-        <div class="entry-org">EcoVolt &mdash; private client project</div>
+        <div class="entry-org">EcoVolt (private client project)</div>
         <div class="entry-meta">&#128197; 2026 &ndash; Present &nbsp;&middot;&nbsp; Private repository</div>
         <ul class="entry-bullets">
-          <li>Four product surfaces &mdash; public site, owner portal, offline-first crew app, and admin console &mdash; over a single per-building equipment register as the shared data spine.</li>
+          <li>Four product surfaces (public site, owner portal, offline-first crew app and admin console) over one per-building equipment register.</li>
           <li>Dispatch board with drag-assign on a crew timeline, where double-booking is refused by a database constraint rather than by UI validation; contract tiers auto-generate the preventive-maintenance calendar.</li>
-          <li>Emergency escalation modelled as a server-side state machine with SMS and voice fallback, so push notification is an accelerant rather than the mechanism of record.</li>
+          <li>Emergency escalation modelled as a server-side state machine with SMS and voice fallback, so an emergency never depends on a push notification arriving.</li>
         </ul>
         <div class="entry-stack">TypeScript &middot; Next.js &middot; PostgreSQL &middot; Drizzle &middot; Expo &middot; Turborepo &middot; Offline Sync</div>
 
         <hr class="dash" />
 
         <!-- ME-DT Framework -->
-        <div class="entry-role">Bachelor Thesis &mdash; Multi-Domain Anomaly Detection</div>
+        <div class="entry-role">Bachelor Thesis: Multi-Domain Anomaly Detection</div>
         <div class="entry-org">ME-DT Framework</div>
         <div class="entry-meta">&#128197; 09/2025 &ndash; 06/2026 &nbsp;&middot;&nbsp; Polis University, Tirana &nbsp;&middot;&nbsp; <a href="https://github.com/IsliBasha/me-dt-framework" target="_blank">github.com/IsliBasha/me-dt-framework</a></div>
         <ul class="entry-bullets">
@@ -503,9 +502,9 @@
         <!-- Other Projects -->
         <div class="entry-org" style="margin-bottom:0.35rem;">Other Projects</div>
         <ul class="other-projects">
-          <li><a href="https://liperalbania.com" target="_blank"><strong>Liper</strong></a> &mdash; client project: bilingual B2B catalogue and partner lead-generation site for LED lighting (Next.js 16, Zod, Playwright).</li>
-          <li><strong>Agent Fleet Console</strong> &mdash; Ghostty + tmux console for coding agents in parallel: planner, builder and reviewer agents on human-approved cards, one git worktree each.</li>
-          <li><a href="https://github.com/IsliBasha/rust-scraper" target="_blank"><strong>rust-scraper</strong></a> &mdash; Rust crawler with TUI and web dashboard, one binary &middot; <a href="https://github.com/IsliBasha/cf-worker-rust" target="_blank"><strong>cf-worker-rust</strong></a> &mdash; JWT and rate limiting on Cloudflare Workers (WASM)</li>
+          <li><a href="https://liperalbania.com" target="_blank"><strong>Liper</strong></a>: client project, a bilingual B2B catalogue and partner lead-generation site for LED lighting (Next.js 16, Zod, Playwright).</li>
+          <li><strong>Agent Fleet Console</strong>: my Ghostty + tmux harness for running coding agents in parallel, driven by Claude Code hooks. Planner, builder and reviewer agents work on cards I approve, one git worktree each.</li>
+          <li><a href="https://github.com/IsliBasha/rust-scraper" target="_blank"><strong>rust-scraper</strong></a>: Rust crawler with TUI and web dashboard, one binary &middot; <a href="https://github.com/IsliBasha/cf-worker-rust" target="_blank"><strong>cf-worker-rust</strong></a>: JWT and rate limiting on Cloudflare Workers (WASM)</li>
         </ul>
 
       </section>
@@ -519,7 +518,7 @@
       <section>
         <div class="section-title">Profile</div>
         <p style="font-size:9pt;line-height:1.6;">
-          Software Engineer at Ofive Global, building agentic systems for real business processes, with 3+ years of production experience across full-stack TypeScript/Node.js, Python, and systems programming in Rust. Built: a lead-generation platform now in production at Ofive (Python + FastAPI + PostgreSQL); MOS VONO, a services marketplace with escrowed payments (Node.js + Express + PostgreSQL); a cyberphysical anomaly detection system for smart-city infrastructure (Flask + Isolation Forest, 68 TDD tests); and a Cloudflare edge security service compiled to WASM. CS graduate (Polis University, 2026) &mdash; comfortable owning features end-to-end, working across ambiguous requirements, and shipping clean, tested code fast.
+          Software Engineer at Ofive Global, building agent systems and the services around them, with 3+ years of production experience across full-stack TypeScript/Node.js, Python, and systems programming in Rust. Built: a lead-generation platform now in production at Ofive (Python + FastAPI + PostgreSQL); MOS VONO, a services marketplace with escrowed payments (Node.js + Express + PostgreSQL); a cyberphysical anomaly detection system for smart-city infrastructure (Flask + Isolation Forest, 68 TDD tests); and a Cloudflare edge security service compiled to WASM. CS graduate (Polis University, 2026).
         </p>
       </section>
 
@@ -530,7 +529,7 @@
           <span class="tag">Full-Stack Dev</span>
           <span class="tag">Backend APIs</span>
           <span class="tag">Edge &amp; Cloud</span>
-          <span class="tag">AI / LLMs</span>
+          <span class="tag">Agents / LLMs</span>
           <span class="tag">Android</span>
           <span class="tag">Automation</span>
         </div>
@@ -544,13 +543,13 @@
         <div class="edu-degree">Bachelor&rsquo;s in Computer Science</div>
         <div class="edu-meta">&#128197; 09/2022 &ndash; 06/2026</div>
         <ul style="list-style:disc;padding-left:1.2rem;font-size:8.5pt;">
-          <li>Thesis: ME-DT Framework &mdash; cyberphysical threat detection for smart-city infrastructure using machine learning anomaly detection</li>
+          <li>Thesis: ME-DT Framework, cyberphysical threat detection for smart-city infrastructure using machine learning anomaly detection</li>
         </ul>
 
         <hr class="dash" />
 
         <div class="edu-inst">Harry T. Fultz, Tirana</div>
-        <div class="edu-degree">High School &mdash; Electronics</div>
+        <div class="edu-degree">High School, Electronics</div>
         <div class="edu-meta">&#128197; 09/2018 &ndash; 06/2022</div>
       </section>
 
